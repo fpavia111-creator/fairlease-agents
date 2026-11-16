@@ -165,14 +165,14 @@ export const TENANT_INSURANCE_FIELDS = Object.freeze({
 
 export const INSPECTION_FIELDS = Object.freeze({
   property: PROPERTY, unit: { ...UNIT, required: true },
-  inspected_at: date(['Inspection Date', 'Date', 'Inspected', 'Inspected On'], 'date'),
-  inspection_type: text(['Inspection Type', 'Type', 'Kind']),
-  area: text(['Area', 'Room', 'Location', 'Section'], 'location'),
-  item: text(['Item', 'Component', 'Feature', 'Element', 'Question'], 'item'),
-  condition: text(['Condition', 'Rating', 'Result', 'Status', 'Score'], 'status'),
-  notes: text(['Notes', 'Comment', 'Comments', 'Description', 'Remarks'], 'description'),
-  photo: text(['Photo', 'Photos', 'Image', 'Photo URL', 'Attachment']),
-  inspector: text(['Inspector', 'Inspected By', 'Completed By']),
+  inspected_at: date(['Inspection Date', 'Date', 'Inspected', 'Inspected On', 'Prüfdatum', 'Begehung am', "Date d'inspection", 'Fecha de inspección', 'Data da vistoria', "Data dell'ispezione", '点検日', '检查日期', '점검일'], 'date'),
+  inspection_type: text(['Inspection Type', 'Type', 'Kind', 'Art', 'Prüfungsart', "Type d'inspection", 'Tipo', 'Tipo de inspección', 'Tipo de vistoria', "Tipo di ispezione", '点検種別', '检查类型', '점검 유형']),
+  area: text(['Area', 'Room', 'Location', 'Section', 'Raum', 'Zimmer', 'Pièce', 'Habitación', 'Estancia', 'Cômodo', 'Ambiente', 'Stanza', 'Locale', '部屋', '房间', '공간'], 'location'),
+  item: text(['Item', 'Component', 'Feature', 'Element', 'Question', 'Bauteil', 'Élément', 'Elemento', 'Componente', '項目', '部位', '项目', '항목'], 'item'),
+  condition: text(['Condition', 'Rating', 'Result', 'Status', 'Score', 'Bewertung', 'Condition état', 'Condición', 'Condição', 'Condizione', '評価', '状况', '평가'], 'status'),
+  notes: text(['Notes', 'Comment', 'Comments', 'Description', 'Remarks', 'Bemerkung', 'Bemerkungen', 'Remarques', 'Observaciones', 'Observações', 'Note', '備考', '备注', '비고'], 'description'),
+  photo: text(['Photo', 'Photos', 'Image', 'Photo URL', 'Attachment', 'Foto', 'Fotos', 'Bild', '写真', '照片', '사진']),
+  inspector: text(['Inspector', 'Inspected By', 'Completed By', 'Prüfer', 'Inspecteur', 'Vistoriador', 'Ispettore', '点検者', '检查员', '점검자']),
 });
 
 export const CAPEX_FIELDS = Object.freeze({

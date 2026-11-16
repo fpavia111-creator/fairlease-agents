@@ -1,0 +1,9 @@
+{
+  "interval_days": 365,
+  "due_soon_days": 30,
+  "followup_days": 14,
+  "poor_at": 2,
+  "require_photo": true,
+  "skip_vacant": true,
+  "notice_hours": 24
+}
