@@ -1,0 +1,7 @@
+{
+  "closing": "2026-12-15",
+  "max_age_days": 45,
+  "required_pct": 75,
+  "major_sqft": 5000,
+  "rent_tolerance": 1
+}

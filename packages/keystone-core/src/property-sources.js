@@ -163,6 +163,21 @@ export const TENANT_INSURANCE_FIELDS = Object.freeze({
   additional_insured: text(['Additional Insured', 'Additional Interest', 'Landlord Named', 'Interested Party', 'Mitversichert', 'Assuré additionnel', 'Asegurado adicional', 'Segurado adicional', 'Assicurato aggiuntivo', '追加被保険者', '附加被保险人', '추가 피보험자']),
 });
 
+export const ESTOPPEL_FIELDS = Object.freeze({
+  property: PROPERTY, unit: { ...UNIT, required: true }, tenant: TENANT, lease_id: LEASE,
+  rent: money(['Monthly Base Rent', 'Base Rent', 'Current Rent', 'Monthly Rent', 'Rent', 'Current Monthly Rent'], 'rent'),
+  lease_start: date(['Commencement Date', 'Lease Start', 'Commencement', 'Lease Commencement', 'Start Date', 'Lease From'], 'lease_start'),
+  lease_end: date(['Expiration Date', 'Lease Expiration', 'Lease End', 'Termination Date', 'End Date', 'Lease To'], 'lease_end'),
+  deposit: money(['Security Deposit', 'Deposit', 'Deposit Held', 'Letter of Credit'], 'deposit'),
+  sqft: num(['Square Feet', 'Rentable SF', 'RSF', 'Sq Ft', 'Premises SF', 'Area'], 'sqft'),
+  paid_through: date(['Rent Paid Through', 'Paid Through', 'Paid To', 'Bezahlt bis', 'Payé jusqu’au', 'Pagado hasta', 'Pago até', 'Pagato fino al', '支払済期間', '已付至', '납부 완료일']),
+  defaults: text(['Landlord Default', 'Landlord Defaults', 'Defaults', 'Claims', 'Claims or Offsets', 'Offsets', 'Disputes', 'Einwendungen', 'Ansprüche', 'Réclamations', 'Litiges', 'Reclamaciones', 'Reclamações', 'Contestazioni', '異議', '請求', '异议', '이의']),
+  amendments: text(['Amendments', 'Lease Amendments', 'Modifications', 'Nachträge', 'Avenants', 'Enmiendas', 'Aditivos', 'Modifiche', '変更契約', '补充协议', '변경계약']),
+  options: text(['Options', 'Renewal Options', 'Rights', 'ROFR/ROFO', 'Purchase Option', 'Optionen', 'Options de renouvellement', 'Opciones', 'Opções', 'Opzioni', 'オプション', '续租选择权', '옵션']),
+  signed: date(['Signed', 'Signed On', 'Date Signed', 'Execution Date', 'Dated', 'Unterzeichnet am', 'Signé le', 'Firmado', 'Fecha de firma', 'Assinado em', 'Firmato il', '署名日', '签署日期', '서명일']),
+  received: date(['Received', 'Date Received', 'Returned', 'Eingegangen', 'Reçu le', 'Recibido', 'Recebido', 'Ricevuto', '受領日', '收到日期', '수령일']),
+});
+
 export const INSPECTION_FIELDS = Object.freeze({
   property: PROPERTY, unit: { ...UNIT, required: true },
   inspected_at: date(['Inspection Date', 'Date', 'Inspected', 'Inspected On', 'Prüfdatum', 'Begehung am', "Date d'inspection", 'Fecha de inspección', 'Data da vistoria', "Data dell'ispezione", '点検日', '检查日期', '점검일'], 'date'),
