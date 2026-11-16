@@ -1,0 +1,55 @@
+{
+  "name": "topaz-of-utilities",
+  "version": "0.1.0",
+  "description": "Topaz of Utilities: re-works RUBS utility billbacks from the bills and occupancy, by your own method, and finds over-recovery, vacant units billed, bills that spike, and charges that differ from the split.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "topaz-of-utilities": "bin/topaz-of-utilities.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/topaz-of-utilities.js demo",
+    "eval": "node bin/topaz-of-utilities.js eval"
+  },
+  "dependencies": {
+    "keystone-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/keystone-agents.git",
+    "directory": "packages/topaz-of-utilities"
+  },
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/topaz-of-utilities#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/keystone-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "rubs",
+    "utilities",
+    "billback"
+  ]
+}

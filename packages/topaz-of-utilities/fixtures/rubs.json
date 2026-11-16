@@ -1,0 +1,29 @@
+{
+ "utilities": {
+  "water_sewer": {
+   "method": {
+    "occupants": 0.5,
+    "sqft": 0.5
+   },
+   "common_area_pct": 5,
+   "words": [
+    "water",
+    "sewer",
+    "\u4e0a\u4e0b\u6c34\u9053",
+    "\u6c34\u9053"
+   ]
+  },
+  "trash": {
+   "method": "units",
+   "words": [
+    "trash",
+    "refuse",
+    "garbage"
+   ]
+  }
+ },
+ "vacant_occupants": 1,
+ "billing_window_days": 45,
+ "spike_pct": 25,
+ "tolerance": 1
+}

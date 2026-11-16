@@ -154,3 +154,9 @@ test('periodKey reads reporting months in many shapes', async () => {
   const got = ['2025-03', '2025/3', '03/2025', 'Mar 2025', 'März 2025', '2025年3月', '2025년 3월', '202503', '2025-03-31', 'Dec-25', 'junk', '13/2025'].map(periodKey);
   assert.deepEqual(got, ['2025-03', '2025-03', '2025-03', '2025-03', '2025-03', '2025-03', '2025-03', '2025-03', '2025-03', '2025-12', null, null]);
 });
+
+test('headers that are the agent\'s own names in another spelling ("Move In", "Sq Ft") are renamed', async () => {
+  const { adaptRecords, UNIT_FIELDS } = await import('../src/index.js');
+  const r = adaptRecords({ format: 'csv', matrix: [['Unit', 'Sq Ft', 'Move In'], ['7', '650', '2026-01-02']] }, { fields: UNIT_FIELDS, profiles: [] }, { kind: 'occupancy' });
+  assert.equal(Number(r.rows[0].sqft), 650); assert.equal(r.rows[0].move_in, '2026-01-02'); assert.equal(r.report.adapted, true);
+});

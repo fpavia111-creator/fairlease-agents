@@ -285,13 +285,13 @@ export function percentageRent(sales, breakpoint, ratePct) {
 
 /**
  * Split a bill among units (RUBS: ratio utility billing). Methods: sqft, occupants,
- * units (equal), or a weighted mix { sqft: 0.5, occupants: 0.5 }. Vacant units carry
+ * units (equal, or each unit's `units` weight, e.g. a fraction of the period), or a weighted mix { sqft: 0.5, occupants: 0.5 }. Vacant units carry
  * their share (owner pays); returns cents that add up exactly to `amount`.
  */
 export function rubsSplit(amount, units, method = 'sqft') {
   const weights = typeof method === 'string' ? { [method]: 1 } : method;
-  const tot = {}; for (const k of Object.keys(weights)) tot[k] = units.reduce((s, u) => s + (k === 'units' ? 1 : num(u[k]) || 0), 0);
-  const raw = units.map((u) => Object.entries(weights).reduce((s, [k, w]) => s + (tot[k] ? (w * (k === 'units' ? 1 : num(u[k]) || 0)) / tot[k] : 0), 0) / Object.values(weights).reduce((a, b) => a + b, 0));
+  const tot = {}; for (const k of Object.keys(weights)) tot[k] = units.reduce((s, u) => s + (k === 'units' ? num(u.units) ?? 1 : num(u[k]) || 0), 0);
+  const raw = units.map((u) => Object.entries(weights).reduce((s, [k, w]) => s + (tot[k] ? (w * (k === 'units' ? num(u.units) ?? 1 : num(u[k]) || 0)) / tot[k] : 0), 0) / Object.values(weights).reduce((a, b) => a + b, 0));
   const cents = Math.round(amount * 100); const base = raw.map((r) => Math.floor(r * cents)); let left = cents - base.reduce((a, b) => a + b, 0);
   const order = raw.map((r, i) => [r * cents - base[i], i]).sort((a, b) => b[0] - a[0]);
   for (let i = 0; left > 0 && i < order.length; i++, left--) base[order[i][1]]++;
