@@ -1,0 +1,9 @@
+Company Name,Vendor Trades,Tax ID,Send 1099?,Liability Ins. Expires,Workers Comp Expires,Auto Insurance Expires,State Lic. Expires,Email,Phone Numbers
+FlowRight Plumbing (fictional),Plumbing,12-3456781,Yes,03/31/2027,03/31/2027,03/31/2027,06/30/2027,office@flowright.example,555-0101
+QuickFix HVAC (fictional),HVAC,12-3456782,Yes,10/31/2026,01/15/2027,01/15/2027,12/05/2026,service@quickfix.example,555-0102
+ApplianceCare (fictional),Appliance Repair,12-3456783,Yes,12/01/2026,,,,help@appliancecare.example,555-0103
+Volt Electric (fictional),Electrical,,Yes,05/31/2027,05/31/2027,,09/30/2026,jobs@volt.example,555-0104
+NoBugs Pest (fictional),Pest Control,12-3456785,Yes,04/30/2027,04/30/2027,,04/30/2027,team@nobugs.example,555-0105
+BrightWall Painting (fictional),Painting,12-3456786,Yes,02/28/2027,,,,paint@brightwall.example,555-0106
+Sparkle Cleaners (fictional),Cleaning,12-3456787,Yes,08/31/2027,,,,hello@sparkle.example,555-0107
+FloorCo (fictional),Flooring,12-3456788,Yes,02/01/2027,02/01/2027,,,orders@floorco.example,555-0108

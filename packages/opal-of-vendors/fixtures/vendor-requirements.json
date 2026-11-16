@@ -1,0 +1,11 @@
+{
+  "warn_days": 30,
+  "default": { "gl": true, "wc": true, "license": false, "tax_id": true },
+  "trades": {
+    "Plumbing": { "license": true },
+    "HVAC": { "license": true },
+    "Electrical": { "license": true },
+    "Pest": { "license": true }
+  },
+  "exempt": { "Sparkle Cleaners (fictional)": ["wc"] }
+}

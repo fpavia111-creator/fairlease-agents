@@ -1,0 +1,16 @@
+{
+  "suite": "opal-of-vendors",
+  "root": "..",
+  "data_note": "Fictional vendors, requirements and payments in ../fixtures. Tax IDs are fictional. Deterministic checks; no model is called.",
+  "cases": [
+    {"id": "totals", "tool": "opal_check", "args": {"vendors": "fixtures/vendor-directory-appfolio.csv", "requirements": "fixtures/vendor-requirements.json", "payments": "fixtures/payments-2026.csv", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.items.length": 8, "result.items.0.vendor": "ApplianceCare (fictional)", "result.items.0.paid_while_noncompliant": 2900}, "contains": ["Paid 4405"]}},
+    {"id": "tax-ids-masked", "tool": "opal_check", "args": {"vendors": "fixtures/vendor-directory-appfolio.csv", "requirements": "fixtures/vendor-requirements.json", "as_of": "2026-11-15"}, "expect": {"contains": ["••••••6781"]}},
+    {"id": "expired-and-paid", "tool": "opal_explain", "args": {"vendors": "fixtures/vendor-directory-appfolio.csv", "requirements": "fixtures/vendor-requirements.json", "payments": "fixtures/payments-2026.csv", "as_of": "2026-11-15", "vendor": "QuickFix"}, "expect": {"contains": ["gl_expired", "license_expiring", "2026-11-12 480"], "equals": {"result.item.paid_while_noncompliant": 480}}},
+    {"id": "trade-adds-licence", "tool": "opal_explain", "args": {"vendors": "fixtures/vendor-directory-appfolio.csv", "requirements": "fixtures/vendor-requirements.json", "as_of": "2026-11-15", "vendor": "Volt"}, "expect": {"contains": ["license_expired", "tax_id_missing"]}},
+    {"id": "exemption", "tool": "opal_explain", "args": {"vendors": "fixtures/vendor-directory-appfolio.csv", "requirements": "fixtures/vendor-requirements.json", "as_of": "2026-11-15", "vendor": "Sparkle"}, "expect": {"equals": {"result.item.status": "ok"}}},
+    {"id": "portuguese-directory", "tool": "opal_check", "args": {"vendors": "fixtures/exports/fornecedores-pt.csv", "requirements": "fixtures/vendor-requirements.json", "as_of": "2026-11-15"}, "expect": {"contains": ["license_expired", "2026-09-30"]}},
+    {"id": "nothing-to-request", "tool": "opal_draft_request", "mode": "auto", "auto_actions": ["opal_draft_request"], "args": {"vendors": "fixtures/vendor-directory-appfolio.csv", "requirements": "fixtures/vendor-requirements.json", "as_of": "2026-11-15", "vendor": "FlowRight Plumbing (fictional)"}, "expect": {"status": "error", "contains": ["nothing expired"]}},
+    {"id": "never-pays", "tool": "approve_invoice", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
+    {"id": "send-is-one-click", "tool": "opal_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+  ]
+}
