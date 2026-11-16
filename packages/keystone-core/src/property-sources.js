@@ -155,12 +155,12 @@ export const PAYMENT_FIELDS = Object.freeze({
 
 export const TENANT_INSURANCE_FIELDS = Object.freeze({
   property: PROPERTY, unit: { ...UNIT, required: true }, tenant: TENANT, lease_id: LEASE,
-  insurer: text(['Insurer', 'Insurance Company', 'Carrier', 'Insurance Carrier', 'Provider']),
-  policy: text(['Policy', 'Policy Number', 'Policy #']),
-  liability: money(['Liability', 'Liability Limit', 'Liability Coverage', 'Personal Liability', 'GL Per Occurrence', 'Each Occurrence']),
+  insurer: text(['Insurer', 'Insurance Company', 'Carrier', 'Insurance Carrier', 'Provider', 'Versicherer', 'Versicherung', 'Assureur', 'Compagnie', 'Aseguradora', 'Compañía de seguros', 'Seguradora', 'Assicuratore', 'Compagnia', '保険会社', '保险公司', '보험사']),
+  policy: text(['Policy', 'Policy Number', 'Policy #', 'Policennummer', 'Police', 'N° de police', 'Póliza', 'Número de póliza', 'Apólice', 'Polizza', '証券番号', '保单号', '증권번호']),
+  liability: money(['Liability', 'Liability Limit', 'Liability Coverage', 'Personal Liability', 'GL Per Occurrence', 'Each Occurrence', 'Haftpflicht', 'Deckungssumme', 'Responsabilité civile', 'Plafond RC', 'Responsabilidad', 'Responsabilidad civil', 'Responsabilidade civil', 'Responsabilità civile', 'Massimale', '賠償責任', '责任限额', '배상책임']),
   aggregate: money(['Aggregate', 'General Aggregate', 'GL Aggregate']),
-  expires: date(['Expires', 'Expiration', 'Expiration Date', 'Policy End', 'Policy Expiration', 'End Date'], 'expires'),
-  additional_insured: text(['Additional Insured', 'Additional Interest', 'Landlord Named', 'Interested Party']),
+  expires: date(['Expires', 'Expiration', 'Expiration Date', 'Policy End', 'Policy Expiration', 'End Date', 'Vencimiento', 'Vence', 'Échéance', 'Vencimento', 'Scadenza polizza', '満期日', '到期', '만기일'], 'expires'),
+  additional_insured: text(['Additional Insured', 'Additional Interest', 'Landlord Named', 'Interested Party', 'Mitversichert', 'Assuré additionnel', 'Asegurado adicional', 'Segurado adicional', 'Assicurato aggiuntivo', '追加被保険者', '附加被保险人', '추가 피보험자']),
 });
 
 export const INSPECTION_FIELDS = Object.freeze({

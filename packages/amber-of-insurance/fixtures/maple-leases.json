@@ -1,0 +1,412 @@
+{
+ "portfolio": "Maple Court Apartments (fictional)",
+ "currency": "USD",
+ "as_of": "2026-11-15",
+ "properties": [
+  {
+   "id": "MC",
+   "name": "Maple Court Apartments",
+   "address": "200 Maple Court, Springfield (fictional)",
+   "state": "XX"
+  }
+ ],
+ "leases": [
+  {
+   "lease_id": "MC-101",
+   "property": "Maple Court Apartments",
+   "unit": "101",
+   "tenant": "Aiko Tanaka",
+   "type": "residential",
+   "sqft": 650,
+   "start": "2025-12-01",
+   "end": "2026-11-30",
+   "rent": {
+    "monthly": 1400
+   },
+   "deposit": 1400,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-102",
+   "property": "Maple Court Apartments",
+   "unit": "102",
+   "tenant": "Ben Okafor",
+   "type": "residential",
+   "sqft": 650,
+   "start": "2026-05-01",
+   "end": "2027-04-30",
+   "rent": {
+    "monthly": 1350
+   },
+   "deposit": 1350,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-103",
+   "property": "Maple Court Apartments",
+   "unit": "103",
+   "tenant": "Carla Mendes",
+   "type": "residential",
+   "sqft": 900,
+   "start": "2026-10-01",
+   "end": "2027-09-30",
+   "rent": {
+    "monthly": 1850
+   },
+   "deposit": 1850,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-104",
+   "property": "Maple Court Apartments",
+   "unit": "104",
+   "tenant": "Dmitri Volkov",
+   "type": "residential",
+   "sqft": 900,
+   "start": "2026-03-01",
+   "end": "2027-02-28",
+   "rent": {
+    "monthly": 1800
+   },
+   "deposit": 1800,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-105",
+   "property": "Maple Court Apartments",
+   "unit": "105",
+   "tenant": "Elena Rossi",
+   "type": "residential",
+   "sqft": 1150,
+   "start": "2025-06-01",
+   "end": "2026-05-31",
+   "rent": {
+    "monthly": 2150
+   },
+   "deposit": 2150,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   },
+   "notes": "Month-to-month since the lease ended."
+  },
+  {
+   "lease_id": "MC-106",
+   "property": "Maple Court Apartments",
+   "unit": "106",
+   "tenant": "Farah Haddad",
+   "type": "residential",
+   "sqft": 900,
+   "start": "2026-01-01",
+   "end": "2026-12-31",
+   "rent": {
+    "monthly": 1850
+   },
+   "deposit": 1850,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-201",
+   "property": "Maple Court Apartments",
+   "unit": "201",
+   "tenant": "Gabriel Silva",
+   "type": "residential",
+   "sqft": 650,
+   "start": "2026-06-01",
+   "end": "2027-05-31",
+   "rent": {
+    "monthly": 1350
+   },
+   "deposit": 1350,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-202",
+   "property": "Maple Court Apartments",
+   "unit": "202",
+   "tenant": "Hannah Becker",
+   "type": "residential",
+   "sqft": 650,
+   "start": "2026-11-01",
+   "end": "2027-10-31",
+   "rent": {
+    "monthly": 1450
+   },
+   "deposit": 1450,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-203",
+   "property": "Maple Court Apartments",
+   "unit": "203",
+   "tenant": "Ivan Petrov",
+   "type": "residential",
+   "sqft": 900,
+   "start": "2026-04-01",
+   "end": "2027-03-31",
+   "rent": {
+    "monthly": 1800
+   },
+   "deposit": 1800,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-205",
+   "property": "Maple Court Apartments",
+   "unit": "205",
+   "tenant": "Julia Novak",
+   "type": "residential",
+   "sqft": 1150,
+   "start": "2026-09-01",
+   "end": "2027-08-31",
+   "rent": {
+    "monthly": 2250
+   },
+   "deposit": 2250,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-206",
+   "property": "Maple Court Apartments",
+   "unit": "206",
+   "tenant": "Kwame Mensah",
+   "type": "residential",
+   "sqft": 900,
+   "start": "2026-02-01",
+   "end": "2027-01-31",
+   "rent": {
+    "monthly": 1800
+   },
+   "deposit": 1800,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-301",
+   "property": "Maple Court Apartments",
+   "unit": "301",
+   "tenant": "Lina Park",
+   "type": "residential",
+   "sqft": 650,
+   "start": "2026-07-01",
+   "end": "2027-06-30",
+   "rent": {
+    "monthly": 1450
+   },
+   "deposit": 1450,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-302",
+   "property": "Maple Court Apartments",
+   "unit": "302",
+   "tenant": "Marco Bianchi",
+   "type": "residential",
+   "sqft": 650,
+   "start": "2025-12-01",
+   "end": "2026-11-30",
+   "rent": {
+    "monthly": 1400
+   },
+   "deposit": 1400,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-303",
+   "property": "Maple Court Apartments",
+   "unit": "303",
+   "tenant": "Nadia Rahman",
+   "type": "residential",
+   "sqft": 900,
+   "start": "2026-05-01",
+   "end": "2027-04-30",
+   "rent": {
+    "monthly": 1750
+   },
+   "deposit": 1750,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-304",
+   "property": "Maple Court Apartments",
+   "unit": "304",
+   "tenant": "Oscar Lindqvist",
+   "type": "residential",
+   "sqft": 900,
+   "start": "2026-10-01",
+   "end": "2027-09-30",
+   "rent": {
+    "monthly": 1850
+   },
+   "deposit": 1850,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-306",
+   "property": "Maple Court Apartments",
+   "unit": "306",
+   "tenant": "Priya Nair",
+   "type": "residential",
+   "sqft": 900,
+   "start": "2026-03-01",
+   "end": "2027-02-28",
+   "rent": {
+    "monthly": 1750
+   },
+   "deposit": 1750,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-401",
+   "property": "Maple Court Apartments",
+   "unit": "401",
+   "tenant": "Quinn Murphy",
+   "type": "residential",
+   "sqft": 650,
+   "start": "2026-08-01",
+   "end": "2027-07-31",
+   "rent": {
+    "monthly": 1400
+   },
+   "deposit": 1400,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-402",
+   "property": "Maple Court Apartments",
+   "unit": "402",
+   "tenant": "Rosa Delgado",
+   "type": "residential",
+   "sqft": 650,
+   "start": "2026-01-01",
+   "end": "2026-12-31",
+   "rent": {
+    "monthly": 1350
+   },
+   "deposit": 1350,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-403",
+   "property": "Maple Court Apartments",
+   "unit": "403",
+   "tenant": "Sam Whitfield",
+   "type": "residential",
+   "sqft": 900,
+   "start": "2026-06-01",
+   "end": "2027-05-31",
+   "rent": {
+    "monthly": 1850
+   },
+   "deposit": 1850,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-404",
+   "property": "Maple Court Apartments",
+   "unit": "404",
+   "tenant": "Tomas Horvat",
+   "type": "residential",
+   "sqft": 900,
+   "start": "2026-11-01",
+   "end": "2027-10-31",
+   "rent": {
+    "monthly": 1800
+   },
+   "deposit": 1800,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-405",
+   "property": "Maple Court Apartments",
+   "unit": "405",
+   "tenant": "Uma Shah",
+   "type": "residential",
+   "sqft": 1150,
+   "start": "2026-04-01",
+   "end": "2027-03-31",
+   "rent": {
+    "monthly": 2150
+   },
+   "deposit": 2150,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  },
+  {
+   "lease_id": "MC-406",
+   "property": "Maple Court Apartments",
+   "unit": "406",
+   "tenant": "Victor Chen",
+   "type": "residential",
+   "sqft": 900,
+   "start": "2026-09-01",
+   "end": "2027-08-31",
+   "rent": {
+    "monthly": 1850
+   },
+   "deposit": 1850,
+   "deposit_type": "cash",
+   "insurance": {
+    "renters_liability": 100000
+   }
+  }
+ ]
+}
