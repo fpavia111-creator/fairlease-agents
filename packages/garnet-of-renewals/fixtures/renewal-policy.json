@@ -1,0 +1,7 @@
+{
+  "max_increase_pct": 5,
+  "min_increase_pct": 0,
+  "notice_days": 60,
+  "round_to": 5,
+  "due_soon_days": 21
+}
