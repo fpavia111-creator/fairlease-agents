@@ -1,0 +1,10 @@
+Unit,Tenant,Item,Category,Amount,Age (years),Useful Life (years),Photo
+204,Wren Adler,Replace living room carpet (pet stains),damage,1200.00,6,10,photos/204-carpet.jpg
+204,Wren Adler,Move-out cleaning,cleaning,250.00,,,invoice INV-3381
+204,Wren Adler,Repaint entire unit,paint,900.00,,,
+204,Wren Adler,Replace lost keys and fob,keys,75.00,,,
+305,Yusuf Karim,Patch and paint wall hole in bedroom,damage,180.00,,,photos/305-wall.jpg
+305,Yusuf Karim,Replace broken blinds (2),damage,120.00,,,photos/305-blinds.jpg
+305,Yusuf Karim,Move-out cleaning,cleaning,300.00,,,invoice INV-3402
+105,Elena Rossi,Move-out cleaning,cleaning,200.00,,,invoice INV-3410
+105,Elena Rossi,Fill nail holes and touch-up paint,paint,150.00,,,photos/105-walls.jpg

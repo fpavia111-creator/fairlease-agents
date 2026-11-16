@@ -1,0 +1,8 @@
+Unit,Tenant,Date,Charge Code,Description,Charges,Payments
+204,Wren Adler,2026-09-01,RENT,Rent,1850.00,
+204,Wren Adler,2026-09-02,PMT,Payment,,1850.00
+204,Wren Adler,2026-09-10,UTIL,Water and sewer (RUBS),64.20,
+305,Yusuf Karim,2026-10-01,RENT,Rent,2250.00,
+305,Yusuf Karim,2026-10-03,PMT,Payment,,2250.00
+105,Elena Rossi,2026-10-01,RENT,Rent,2150.00,
+105,Elena Rossi,2026-10-02,PMT,Payment,,2150.00

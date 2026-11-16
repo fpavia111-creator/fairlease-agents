@@ -364,12 +364,12 @@ export const TURN_FIELDS = Object.freeze({
 
 export const MOVE_OUT_FIELDS = Object.freeze({
   unit: { ...UNIT, required: true }, tenant: TENANT, lease_id: LEASE,
-  item: text(['Item', 'Charge', 'Description', 'Damage', 'Deduction'], 'item', { required: true }),
+  item: text(['Item', 'Charge', 'Description', 'Damage', 'Deduction', 'Position', 'Posten', 'Poste', 'Désignation', 'Partida', 'Concepto', 'Descrição', 'Voce', 'Descrizione', '項目', '内容', '明细', '项目', '항목', '내역'], 'item', { required: true }),
   category: text(['Category', 'Type', 'Charge Type', 'Reason'], 'category'),
   amount: money(['Amount', 'Cost', 'Charge Amount', 'Deduction Amount'], 'amount'),
   age_years: num(['Age', 'Age (years)', 'Item Age', 'Years in Service', 'Installed Years']),
   useful_life_years: num(['Useful Life', 'Useful Life (years)', 'Life', 'Expected Life']),
-  evidence: text(['Photo', 'Photos', 'Evidence', 'Invoice', 'Receipt', 'Attachment']),
+  evidence: text(['Photo', 'Photos', 'Evidence', 'Invoice', 'Receipt', 'Attachment', 'Beleg', 'Belege', 'Foto', 'Fotos', 'Preuve', 'Justificatif', 'Photo(s)', 'Evidencia', 'Comprobante', 'Comprovante', 'Prova', '証憑', '写真', '凭证', '照片', '증빙', '사진']),
 });
 
 // --------------------------------------------------- named export layouts ----

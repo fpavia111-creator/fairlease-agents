@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "return_days": 30,
+    "deduct_unpaid_balance": true,
+    "due_soon_days": 7,
+    "require_evidence": true,
+    "wear_words": ["nail holes", "touch-up", "touch up", "faded", "minor scuffs", "carpet wear", "full repaint", "repaint entire"]
+  },
+  "move_outs": [
+    { "unit": "204", "tenant": "Wren Adler", "move_out": "2026-09-30", "deposit_held": 1850, "move_in": "2023-10-01", "forwarding_address": "14 Birch Lane, Springfield (fictional)" },
+    { "unit": "305", "tenant": "Yusuf Karim", "move_out": "2026-10-20", "deposit_held": 2250, "move_in": "2024-11-01", "forwarding_address": "88 Cedar Ave, Riverton (fictional)" },
+    { "unit": "105", "tenant": "Elena Rossi", "move_out": "2026-10-31" }
+  ]
+}
