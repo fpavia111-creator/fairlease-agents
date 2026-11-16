@@ -353,11 +353,11 @@ export const RECERT_FIELDS = Object.freeze({
 export const TURN_FIELDS = Object.freeze({
   property: PROPERTY, unit: { ...UNIT, required: true },
   move_out: date(['Move-out', 'Move Out', 'Vacated', 'Move-Out Date', 'Vacate Date'], 'move_out'),
-  ready: date(['Ready', 'Make Ready', 'Ready Date', 'Made Ready', 'Rent Ready', 'Completed'], 'completed_date'),
+  ready: date(['Ready', 'Make Ready', 'Ready Date', 'Made Ready', 'Rent Ready', 'Completed', 'Bezugsfertig', 'Fertig am', 'Prêt le', 'Remis en état', 'Lista', 'Listo', 'Pronta', 'Pronto', '準備完了', '完工日期', '준비완료'], 'completed_date'),
   move_in: date(['Move-in', 'Move In', 'Next Move-In', 'New Move-In', 'Move-In Date'], 'move_in'),
   category: text(['Category', 'Item', 'Trade', 'Type', 'Scope'], 'category'),
   vendor: text(['Vendor', 'Contractor', 'Assigned To'], 'vendor'),
-  cost: money(['Cost', 'Amount', 'Total', 'Invoice Amount', 'Turn Cost'], 'amount'),
+  cost: money(['Cost', 'Amount', 'Total', 'Invoice Amount', 'Turn Cost', 'Kosten', 'Coût', 'Costo', 'Coste', 'Custo', '費用', '费用', '비용'], 'amount'),
   chargeable: text(['Chargeable', 'Tenant Chargeable', 'Bill to Tenant', 'Damage']),
   rent: money(['Rent', 'Market Rent', 'Monthly Rent'], 'rent'),
 });

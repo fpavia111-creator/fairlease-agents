@@ -1,0 +1,55 @@
+{
+  "name": "basalt-of-turns",
+  "version": "0.1.0",
+  "description": "Basalt of Turns: tracks unit turns from move-out to make-ready to move-in: days against your target, cost by trade against your budget, tenant-chargeable items and the rent lost while the unit sits.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "basalt-of-turns": "bin/basalt-of-turns.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/basalt-of-turns.js demo",
+    "eval": "node bin/basalt-of-turns.js eval"
+  },
+  "dependencies": {
+    "keystone-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/keystone-agents.git",
+    "directory": "packages/basalt-of-turns"
+  },
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/basalt-of-turns#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/keystone-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "unit-turns",
+    "make-ready",
+    "maintenance"
+  ]
+}

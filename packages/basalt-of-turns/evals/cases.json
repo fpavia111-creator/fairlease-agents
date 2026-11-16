@@ -1,0 +1,15 @@
+{
+  "suite": "basalt-of-turns",
+  "root": "..",
+  "data_note": "Fictional unit turns, vendors and a turn policy for a fictional apartment building in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {"id": "totals", "tool": "basalt_check", "args": {"turns": "fixtures/turns-2026.csv", "policy": "fixtures/turn-policy.json", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.items.length": 5, "result.average_days_to_ready": 10.5, "result.cost_by_category.Flooring": 3850, "result.items.0.unit": "204"}}},
+    {"id": "open-over-target-and-budget", "tool": "basalt_explain", "args": {"turns": "fixtures/turns-2026.csv", "policy": "fixtures/turn-policy.json", "as_of": "2026-11-15", "unit": "204"}, "expect": {"contains": ["open_over_target", "over_budget", "cost_missing", "chargeable_unknown"], "equals": {"result.item.days_to_ready": 46, "result.item.chargeable": 1450}}},
+    {"id": "partial-chargeable", "tool": "basalt_explain", "args": {"turns": "fixtures/turns-2026.csv", "policy": "fixtures/turn-policy.json", "as_of": "2026-11-15", "unit": "404"}, "expect": {"contains": ["chargeable_partial", "Flooring 2650"], "equals": {"result.item.days_to_ready": 19}}},
+    {"id": "ready-not-leased-later", "tool": "basalt_explain", "args": {"turns": "fixtures/turns-2026.csv", "policy": "fixtures/turn-policy.json", "as_of": "2026-11-30", "unit": "105"}, "expect": {"contains": ["ready_not_leased"]}},
+    {"id": "no-policy-defaults", "tool": "basalt_check", "args": {"turns": "fixtures/turns-2026.csv", "as_of": "2026-11-15"}, "expect": {"equals": {"result.items.0.budget": null}}},
+    {"id": "italian-lines", "tool": "basalt_explain", "args": {"turns": "fixtures/exports/turns-it.csv", "policy": "fixtures/turn-policy.json", "as_of": "2026-11-15", "unit": "204"}, "expect": {"equals": {"result.item.cost": 1450, "result.item.move_out": "2026-09-30"}}},
+    {"id": "never-dispatches", "tool": "vendor_dispatch", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
+    {"id": "never-pays", "tool": "approve_invoice", "mode": "auto", "args": {}, "expect": {"status": "blocked"}}
+  ]
+}
