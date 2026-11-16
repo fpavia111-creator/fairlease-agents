@@ -1,0 +1,17 @@
+{
+  "suite": "slate-of-leases",
+  "root": "..",
+  "data_note": "Fictional lease texts in ../fixtures. Deterministic pattern checks; no model is called.",
+  "cases": [
+    {"id": "full-abstract", "tool": "slate_abstract", "args": {"text": "fixtures/lease-acme-bagels.txt", "lease_id": "L-101"}, "expect": {"status": "executed", "equals": {"result.lease.start": "2023-03-01", "result.lease.end": "2028-02-29", "result.lease.rent.monthly": 4000, "result.lease.escalation.pct": 3, "result.lease.deposit": 8000, "result.lease.cam.share_pct": 5, "result.lease.cam.cap.pct": 5, "result.lease.options.0.notice_months": 6, "result.lease.insurance.gl_aggregate": 2000000, "result.open.length": 0}}},
+    {"id": "citations", "tool": "slate_abstract", "args": {"text": "fixtures/lease-acme-bagels.txt"}, "expect": {"equals": {"result.terms.rent_monthly.citation": "Sec. 4.1, p. 5, line 18", "result.terms.cap_pct.citation": "Sec. 6.3, p. 9, line 34", "result.lease.source.percentage_rent": "Sec. 5.1, p. 7, line 28"}}},
+    {"id": "docx-same-as-text", "tool": "slate_abstract", "args": {"text": "fixtures/lease-acme-bagels.docx"}, "expect": {"equals": {"result.found": 27, "result.lease.rent.monthly": 4000, "result.lease.tenant": "Acme Bagels LLC"}}},
+    {"id": "conflict-and-abatement", "tool": "slate_abstract", "args": {"text": "fixtures/lease-delta-phone.txt"}, "expect": {"contains": ["more than one rent monthly", "2750"], "equals": {"result.lease.free_rent.0.to": "2024-06-30"}}},
+    {"id": "ai-directed-text-reported", "tool": "slate_abstract", "args": {"text": "fixtures/lease-delta-phone.txt"}, "expect": {"contains": ["override_instructions", "aimed at an AI"], "equals": {"result.injection.length": 1}}},
+    {"id": "compare-finds-differences", "tool": "slate_compare", "args": {"text": "fixtures/lease-acme-bagels.txt", "leases": "fixtures/leases-with-errors.json", "lease_id": "L-101"}, "expect": {"equals": {"result.diffs.length": 3, "result.status": "issue"}, "contains": ["\"field\":\"deposit\"", "\"field\":\"end\"", "\"field\":\"escalation\""]}},
+    {"id": "compare-clean", "tool": "slate_compare", "args": {"text": "fixtures/lease-acme-bagels.txt", "leases": "fixtures/leases.json", "lease_id": "L-101"}, "expect": {"equals": {"result.status": "ok"}}},
+    {"id": "pdf-refused-plainly", "tool": "slate_abstract", "args": {"text": "fixtures/lease.pdf"}, "expect": {"status": "error", "contains": ["pdftotext"]}},
+    {"id": "never-enters-system", "tool": "pm_system_update", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
+    {"id": "never-sends-for-signature", "tool": "esign_send", "mode": "auto", "args": {}, "expect": {"status": "blocked"}}
+  ]
+}
