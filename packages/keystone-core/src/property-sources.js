@@ -206,15 +206,15 @@ export const CAPEX_FIELDS = Object.freeze({
 
 export const TAX_FIELDS = Object.freeze({
   property: { ...PROPERTY, required: true },
-  parcel: text(['Parcel', 'Parcel ID', 'Parcel Number', 'APN', 'PIN', 'Folio', 'Tax ID', 'Account Number']),
-  tax_year: num(['Tax Year', 'Year', 'Assessment Year']),
-  assessed_value: money(['Assessed Value', 'Assessment', 'Total Assessed', 'Market Value', 'Appraised Value', 'Taxable Value'], 'assessed_value'),
-  prior_assessed_value: money(['Prior Assessed Value', 'Prior Year Value', 'Previous Assessment', 'Prior Value']),
-  tax_amount: money(['Tax', 'Tax Amount', 'Total Tax', 'Annual Tax', 'Tax Due'], 'amount'),
+  parcel: text(['Parcel', 'Parcel ID', 'Parcel Number', 'APN', 'PIN', 'Folio', 'Tax ID', 'Account Number', 'Parcelle', 'Référence cadastrale', 'Flurstück', 'Aktenzeichen', 'Parcela', 'Referencia catastral', 'Inscrição imobiliária', 'Particella', '地番', '宗地号', '필지']),
+  tax_year: num(['Tax Year', 'Year', 'Assessment Year', 'Jahr', 'Steuerjahr', 'Année', 'Año', 'Ano', 'Anno', '年度', '연도']),
+  assessed_value: money(['Assessed Value', 'Assessment', 'Total Assessed', 'Market Value', 'Appraised Value', 'Taxable Value', 'Einheitswert', 'Grundsteuerwert', 'Valeur locative cadastrale', 'Valor catastral', 'Valor venal', 'Rendita catastale', '評価額', '固定資産税評価額', '评估价值', '공시가격', '과세표준'], 'assessed_value'),
+  prior_assessed_value: money(['Prior Assessed Value', 'Prior Year Value', 'Previous Assessment', 'Prior Value', 'Vorjahreswert', 'Valeur précédente', 'Valor anterior', 'Valore precedente', '前年度評価額', '上年评估价值', '전년도 공시가격']),
+  tax_amount: money(['Tax', 'Tax Amount', 'Total Tax', 'Annual Tax', 'Tax Due', 'Installment Amount', 'Steuerbetrag', 'Grundsteuer', 'Montant', 'Cotisation', 'Cuota', 'IBI', 'IPTU', 'IMU', '税額', '税额', '세액'], 'amount'),
   notice_date: date(['Notice Date', 'Notice Mailed', 'Mailing Date', 'Notice of Value Date']),
-  appeal_deadline: date(['Appeal Deadline', 'Protest Deadline', 'Appeal By', 'Filing Deadline']),
-  due_date: date(['Due Date', 'Installment Due', 'Payment Due'], 'due_date'),
-  paid: money(['Paid', 'Amount Paid', 'Paid Amount'], 'payment'),
+  appeal_deadline: date(['Appeal Deadline', 'Protest Deadline', 'Appeal By', 'Filing Deadline', 'Einspruchsfrist', 'Date limite de réclamation', 'Plazo de recurso', 'Prazo de impugnação', 'Termine ricorso', '審査申出期限', '复议期限', '이의신청 기한']),
+  due_date: date(['Due Date', 'Installment Due', 'Payment Due', 'Fälligkeit', 'Échéance', 'Vencimiento', 'Vencimento', 'Scadenza', '納期限', '缴纳期限', '납부기한'], 'due_date'),
+  paid: money(['Paid', 'Amount Paid', 'Paid Amount', 'Bezahlt', 'Payé', 'Pagado', 'Pago', 'Pagato', '納付済', '已缴', '납부액'], 'payment'),
 });
 
 export const SALES_FIELDS = Object.freeze({
