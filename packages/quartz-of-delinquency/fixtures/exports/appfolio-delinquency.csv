@@ -1,0 +1,8 @@
+Unit,Name,Tenant Status,Amount Receivable,00 - 30,30 - 60,60 - 90,90+,Last Payment,In Collections
+-> Maple Court Apartments - 200 Maple Court Springfield,,,,,,,,,
+104,Dmitri Volkov,Current,"3,600.00","1,800.00","1,800.00",0.00,0.00,09/03/2026,No
+106,Farah Haddad,Current,"5,550.00","1,850.00","1,850.00","1,850.00",0.00,08/02/2026,No
+205,Julia Novak,Current,475.00,475.00,0.00,0.00,0.00,11/04/2026,No
+402,Rosa Delgado,Current,750.00,750.00,0.00,0.00,0.00,11/02/2026,No
+112,Former Resident (fictional),Past,"2,310.00",0.00,0.00,0.00,"2,310.00",03/15/2026,Yes
+Total Maple Court Apartments,,,"12,685.00",,,,,,

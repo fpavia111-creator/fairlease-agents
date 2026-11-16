@@ -1,0 +1,7 @@
+{
+  "grace_days": 5,
+  "late_fee": { "type": "flat", "amount": 75, "max": 75 },
+  "min_balance": 25,
+  "stages": [ { "days": 1, "name": "reminder" }, { "days": 15, "name": "second_reminder" }, { "days": 30, "name": "manager_review" } ],
+  "payment_plans": [ { "unit": "402", "until": "2027-01-31", "note": "an extra 300 a month (fictional example)" } ]
+}

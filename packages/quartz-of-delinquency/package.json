@@ -1,0 +1,56 @@
+{
+  "name": "quartz-of-delinquency",
+  "version": "0.1.0",
+  "description": "Quartz of Delinquency: turns an aging report or tenant ledger into a delinquency worklist with stages from your own policy, late-fee checks and reminder drafts. Never serves notices or files evictions.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "quartz-of-delinquency": "bin/quartz-of-delinquency.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/quartz-of-delinquency.js demo",
+    "eval": "node bin/quartz-of-delinquency.js eval"
+  },
+  "dependencies": {
+    "keystone-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/keystone-agents.git",
+    "directory": "packages/quartz-of-delinquency"
+  },
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/quartz-of-delinquency#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/keystone-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "delinquency",
+    "collections",
+    "aging",
+    "late-fees"
+  ]
+}
