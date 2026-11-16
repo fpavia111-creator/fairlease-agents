@@ -1,0 +1,7 @@
+{
+  "complete_days": { "emergency": 1, "high": 3, "normal": 7, "low": 14 },
+  "repeat_days": 90,
+  "stale_days": 30,
+  "unassigned_days": 2,
+  "outlier_factor": 4
+}

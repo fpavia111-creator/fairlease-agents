@@ -1,0 +1,16 @@
+{
+  "suite": "agate-of-workorders",
+  "root": "..",
+  "data_note": "Fictional AppFolio-style work orders, vendors and a policy for a fictional apartment building in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {"id": "totals", "tool": "agate_check", "args": {"work_orders": "fixtures/work-orders-appfolio.csv", "policy": "fixtures/workorder-policy.json", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.items.length": 20, "result.items.0.work_order": "4112", "result.vendors.0.vendor": "QuickFix HVAC (fictional)", "result.vendors.0.on_time_pct": 0}}},
+    {"id": "possible-emergency", "tool": "agate_explain", "args": {"work_orders": "fixtures/work-orders-appfolio.csv", "as_of": "2026-11-15", "work_order": "4104"}, "expect": {"contains": ["possible_emergency", "leaking"]}},
+    {"id": "stale-unassigned", "tool": "agate_explain", "args": {"work_orders": "fixtures/work-orders-appfolio.csv", "policy": "fixtures/workorder-policy.json", "as_of": "2026-11-15", "work_order": "4114"}, "expect": {"contains": ["overdue", "stale", "unassigned"], "equals": {"result.item.days_open": 44}}},
+    {"id": "repeat", "tool": "agate_explain", "args": {"work_orders": "fixtures/work-orders-appfolio.csv", "policy": "fixtures/workorder-policy.json", "as_of": "2026-11-15", "work_order": "4103"}, "expect": {"contains": ["repeat", "3 Plumbing orders"]}},
+    {"id": "cost-outlier", "tool": "agate_explain", "args": {"work_orders": "fixtures/work-orders-appfolio.csv", "policy": "fixtures/workorder-policy.json", "as_of": "2026-11-15", "work_order": "4110"}, "expect": {"contains": ["cost_outlier", "11.6×"]}},
+    {"id": "own-targets", "tool": "agate_explain", "args": {"work_orders": "fixtures/work-orders-appfolio.csv", "policy": "fixtures/workorder-policy.json", "as_of": "2026-11-15", "work_order": "4106"}, "expect": {"contains": ["completed_late", "normal target is 7"]}},
+    {"id": "german-orders", "tool": "agate_check", "args": {"work_orders": "fixtures/exports/auftraege-de.csv", "as_of": "2026-11-15"}, "expect": {"contains": ["tropft"], "equals": {"result.items.0.work_order": "A-77", "result.items.1.open": false}}},
+    {"id": "never-dispatches", "tool": "vendor_dispatch", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
+    {"id": "never-closes", "tool": "close_work_order", "mode": "auto", "args": {}, "expect": {"status": "blocked"}}
+  ]
+}

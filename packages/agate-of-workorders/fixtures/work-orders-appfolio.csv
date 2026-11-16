@@ -1,0 +1,21 @@
+Work Order Number,Property,Unit,Priority,Status,Vendor,Job Description,Work Order Issue,Created At,Completed On,Amount
+4101,Maple Court Apartments,304,Normal,Completed,FlowRight Plumbing (fictional),Kitchen sink draining slowly,Plumbing,2026-08-12,2026-08-14,145.00
+4102,Maple Court Apartments,304,Normal,Completed,FlowRight Plumbing (fictional),Kitchen sink clogged again,Plumbing,2026-09-20,2026-09-23,160.00
+4103,Maple Court Apartments,304,High,Completed,FlowRight Plumbing (fictional),Sink backing up into dishwasher,Plumbing,2026-11-02,2026-11-04,310.00
+4104,Maple Court Apartments,203,Normal,Assigned,FlowRight Plumbing (fictional),Water leaking from bathroom ceiling,Plumbing,2026-11-10,,
+4105,Maple Court Apartments,106,High,Completed,QuickFix HVAC (fictional),No heat in unit,HVAC,2026-11-03,2026-11-12,480.00
+4106,Maple Court Apartments,405,Normal,Completed,QuickFix HVAC (fictional),AC not cooling,HVAC,2026-08-20,2026-09-08,390.00
+4107,Maple Court Apartments,101,Normal,Completed,QuickFix HVAC (fictional),Thermostat not responding,HVAC,2026-10-05,2026-10-21,140.00
+4108,Maple Court Apartments,206,High,Completed,ApplianceCare (fictional),Refrigerator not cooling,Appliance,2026-09-14,2026-09-16,240.00
+4109,Maple Court Apartments,402,Normal,Completed,ApplianceCare (fictional),Dishwasher leaking,Appliance,2026-10-01,2026-10-06,260.00
+4110,Maple Court Apartments,303,Normal,Completed,ApplianceCare (fictional),Replace range (oven element failed),Appliance,2026-10-18,2026-10-25,2900.00
+4111,Maple Court Apartments,102,Low,Completed,ApplianceCare (fictional),Washer not spinning,Appliance,2026-09-02,2026-09-09,210.00
+4112,Maple Court Apartments,301,Low,New,,Outlet sparks when plugged in,Electrical,2026-11-08,,
+4113,Maple Court Apartments,403,Low,Completed,Volt Electric (fictional),Hallway light out,Electrical,2026-10-10,2026-10-12,85.00
+4114,Maple Court Apartments,205,Low,New,,Closet door off track,General,2026-10-02,,
+4115,Maple Court Apartments,104,Normal,Completed,In-house maintenance,Replace smoke detector battery,General,2026-11-12,2026-11-12,0.00
+4116,Maple Court Apartments,306,Normal,Completed,NoBugs Pest (fictional),Ants in kitchen,Pest,2026-09-25,2026-09-29,150.00
+4117,Maple Court Apartments,306,Normal,Completed,NoBugs Pest (fictional),Ants in kitchen again,Pest,2026-10-27,2026-10-30,150.00
+4118,Maple Court Apartments,202,Normal,Completed,In-house maintenance,Touch-up paint before move-in,General,2026-10-20,2026-10-24,180.00
+4119,Maple Court Apartments,201,Low,Assigned,FlowRight Plumbing (fictional),Toilet running,Plumbing,2026-11-11,,
+4120,Maple Court Apartments,404,Normal,Assigned,QuickFix HVAC (fictional),Furnace making loud noise,HVAC,2026-11-09,,
