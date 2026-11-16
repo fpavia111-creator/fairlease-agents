@@ -1,0 +1,7 @@
+{
+  "tolerance_pct": 5,
+  "ahead_pct": 25,
+  "stalled_days": 60,
+  "capitalize_min": 5000,
+  "reserves": { "Replacement reserve": 150000, "Operating": 40000 }
+}

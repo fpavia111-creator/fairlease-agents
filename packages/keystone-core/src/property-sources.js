@@ -176,17 +176,17 @@ export const INSPECTION_FIELDS = Object.freeze({
 });
 
 export const CAPEX_FIELDS = Object.freeze({
-  project: text(['Project', 'Project Name', 'Job', 'Job Name', 'Capital Project'], false, { required: true }),
-  project_id: text(['Project ID', 'Project Code', 'Job Code', 'Job #'], 'id'),
+  project: text(['Project', 'Project Name', 'Job', 'Job Name', 'Capital Project', 'Projekt', 'Maßnahme', 'Projet', 'Travaux', 'Proyecto', 'Obra', 'Projeto', 'Progetto', 'Lavori', '工事名', '案件', '项目名称', '工程', '공사명', '프로젝트'], false, { required: true }),
+  project_id: text(['Project ID', 'Project Code', 'Job Code', 'Job #', 'Projektnummer', 'N° de projet', 'Número de proyecto', 'Código do projeto', 'Codice progetto', '工事番号', '项目编号', '공사번호'], 'id'),
   property: PROPERTY,
-  category: text(['Category', 'Type', 'Component'], 'category'),
+  category: text(['Category', 'Type', 'Component', 'Gewerk', '区分', '工種', '구분'], 'category'),
   budget: money(['Budget', 'Approved Budget', 'Budget Amount', 'Revised Budget'], 'budget'),
-  committed: money(['Committed', 'Commitments', 'Contracted', 'PO Amount', 'Open Commitments']),
+  committed: money(['Committed', 'Commitments', 'Contracted', 'PO Amount', 'Open Commitments', 'Beauftragt', 'Offene Aufträge', 'Engagé', 'Engagements', 'Comprometido', 'Contratado', 'Impegnato', '発注済', '発注残', '已承诺', '已签约', '발주액', '계약잔액']),
   spent: money(['Spent', 'Actual', 'Actual to Date', 'Paid to Date', 'Invoiced', 'Cost to Date'], 'actual'),
   status: text(['Status', 'Project Status', 'Phase'], 'status'),
   start: date(['Start', 'Start Date', 'Planned Start'], 'start_date'),
-  finish: date(['Finish', 'End', 'End Date', 'Completion', 'Planned Finish', 'Target Completion'], 'end_date'),
-  funding: text(['Funding', 'Funding Source', 'Reserve', 'Paid From']),
+  finish: date(['Finish', 'End', 'End Date', 'Completion', 'Planned Finish', 'Target Completion', 'Fertigstellung', 'Fin prévue', 'Fin prevista', 'Conclusão prevista', 'Fine prevista', '完了予定', '完了予定日', '计划完工', '완료예정'], 'end_date'),
+  funding: text(['Funding', 'Funding Source', 'Reserve', 'Paid From', 'Finanzierung', 'Rücklage', 'Financement', 'Fonds', 'Financiación', 'Fondo', 'Financiamento', 'Fundo', 'Finanziamento', '資金', '財源', '资金来源', '재원']),
 });
 
 export const TAX_FIELDS = Object.freeze({
