@@ -148,6 +148,7 @@ export const COLUMN_WORDS = {
   occupants: W(['Personen', 'Bewohner', 'Personenzahl'], ['Occupants', 'Nombre d’occupants'], ['Ocupantes', 'N.º de ocupantes'], ['Moradores', 'Ocupantes'], ['Occupanti', 'Numero occupanti'], ['入居人数', '居住者数'], ['居住人数', '人数'], ['거주인원', '인원']),
   bedrooms: W(['Zimmer', 'Zimmeranzahl'], ['Pièces', 'Chambres'], ['Dormitorios', 'Habitaciones'], ['Quartos', 'Dormitórios'], ['Camere', 'Vani'], ['間取り', '部屋数'], ['卧室', '户型'], ['방수', '방 개수']),
   sales: W(['Umsatz', 'Bruttoumsatz'], ['Chiffre d’affaires', 'Ventes'], ['Ventas', 'Ventas brutas'], ['Vendas', 'Faturamento'], ['Fatturato', 'Vendite'], ['売上', '売上高'], ['销售额', '营业额'], ['매출', '매출액']),
+  period: W(['Zeitraum', 'Monat', 'Abrechnungsmonat'], ['Période', 'Mois'], ['Periodo', 'Mes'], ['Período', 'Mês', 'Competência'], ['Periodo', 'Mese'], ['期間', '対象月', '年月'], ['期间', '月份', '所属期'], ['기간', '대상월', '년월']),
   budget: W(['Budget', 'Plan', 'Planwert'], ['Budget', 'Prévu'], ['Presupuesto', 'Presupuestado'], ['Orçamento', 'Orçado'], ['Budget', 'Preventivo'], ['予算'], ['预算'], ['예산']),
   actual: W(['Ist', 'Istwert'], ['Réel', 'Réalisé'], ['Real', 'Ejecutado'], ['Realizado', 'Real'], ['Consuntivo', 'Effettivo'], ['実績'], ['实际', '实际数'], ['실적', '실제']),
   work_order: W(['Auftrag', 'Auftragsnummer', 'Ticket'], ['Bon d’intervention', 'N° d’intervention', 'Ticket'], ['Orden de trabajo', 'N.º de orden'], ['Ordem de serviço', 'OS', 'Chamado'], ['Ordine di lavoro', 'Intervento', 'Ticket'], ['作業番号', '修繕依頼番号', '受付番号'], ['工单号', '维修单号', '工單'], ['작업번호', '수리요청번호']),

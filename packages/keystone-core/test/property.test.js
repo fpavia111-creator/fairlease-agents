@@ -148,3 +148,9 @@ test('worklists follow the report language; CSV codes stay English', () => {
   assert.match(csv, /^unit,status/); assert.match(csv, /review/);
   assert.equal(reportWords('ja').label('tenant'), '賃借人'); assert.equal(reportWords('xx').t('limits'), 'Limits');
 });
+
+test('periodKey reads reporting months in many shapes', async () => {
+  const { periodKey } = await import('../src/index.js');
+  const got = ['2025-03', '2025/3', '03/2025', 'Mar 2025', 'März 2025', '2025年3月', '2025년 3월', '202503', '2025-03-31', 'Dec-25', 'junk', '13/2025'].map(periodKey);
+  assert.deepEqual(got, ['2025-03', '2025-03', '2025-03', '2025-03', '2025-03', '2025-03', '2025-03', '2025-03', '2025-03', '2025-12', null, null]);
+});

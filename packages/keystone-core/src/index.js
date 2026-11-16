@@ -25,7 +25,7 @@ export { EXPORTS, exportProfile, carryGroup, firstRowPer, fullName, EXPORTS_BASI
 export { adaptRecords, readYesNo, parseAnyDate, inferDateOrder, cleanAmount, inferDecimal, normHeader, findHeaderRow, encodingWarning, conceptOf, describeSources, loadSourceOverrides, overrideFor, kindsByArg, columnShape, SOURCES_CONFIG_SCHEMA, SOURCES_FILE, FIELD_TYPES } from './sources.js';
 export { sha256, sha256File, canonical, safePath, readRecords, toNumber, round2 } from './util.js';
 export { demoRuntime, printStep } from './demo.js';
-export { foldText, readNumber, numberReader } from './intl.js';
+export { foldText, readNumber, numberReader, periodKey } from './intl.js';
 export { decodeText, encodingName, ENCODINGS } from './encoding.js';
 export { COLUMN_WORDS, COLUMN_LANGUAGES, translatedNames, namesFor } from './i18n/columns.js';
 export { LANGS, LANG_NAMES, HTML_LANG, normLang, isLang, makeText, mergeCatalogs, CORE_TEXT, coreText } from './lang.js';

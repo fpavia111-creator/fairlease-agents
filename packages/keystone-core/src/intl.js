@@ -258,3 +258,19 @@ export function inferDateOrder(values) {
   }
   return mdy && dmy ? 'mixed' : mdy ? 'mdy' : dmy ? 'dmy' : null;
 }
+
+/**
+ * A reporting month as YYYY-MM from "2025-03", "2025/3", "03/2025", "3.2025", "Mar 2025",
+ * "März 2025", "2025年3月", "2025년 3월", "202503" or a full date. Null when unreadable.
+ */
+export function periodKey(value) {
+  const s = String(value ?? '').trim(); if (!s) return null;
+  const ok = (y, m) => (y >= 1900 && y <= 2200 && m >= 1 && m <= 12 ? `${y}-${p2(m)}` : null);
+  let m = /^(\d{4})\s*[-/.年년]\s*(\d{1,2})\s*(?:月|월)?$/.exec(s); if (m) return ok(+m[1], +m[2]);
+  m = /^(\d{1,2})\s*[-/.]\s*(\d{4})$/.exec(s); if (m) return ok(+m[2], +m[1]);
+  m = /^(\d{4})(\d{2})$/.exec(s); if (m) return ok(+m[1], +m[2]);
+  m = /^([A-Za-zÀ-ÿ.]+)\s*[-/ ,]?\s*'?(\d{2}|\d{4})$/.exec(s); if (m && monthOf(m[1])) return ok(year2(m[2]), monthOf(m[1]));
+  m = /^(\d{4})\s+([A-Za-zÀ-ÿ.]+)$/.exec(s); if (m && monthOf(m[2])) return ok(+m[1], monthOf(m[2]));
+  const d = parseAnyDate(s);
+  return d && d.date ? d.date.slice(0, 7) : null;
+}

@@ -95,7 +95,7 @@ export const GL_FIELDS = Object.freeze({
   account: text(['GL Account', 'Account', 'Account Number', 'Account Code', 'Acct', 'GL Code', 'GL Account Number'], 'account', { required: true }),
   account_name: text(['Account Name', 'Account Description', 'GL Account Name', 'Description of Account', 'Acct Name'], 'account_name'),
   date: date(['Date', 'Post Date', 'Posting Date', 'Transaction Date', 'Trans Date'], 'date'),
-  period: text(['Period', 'Post Month', 'Month', 'Fiscal Period', 'Accounting Period']),
+  period: text(['Period', 'Post Month', 'Month', 'Fiscal Period', 'Accounting Period'], 'period'),
   description: text(['Description', 'Memo', 'Remarks', 'Notes', 'Line Description'], 'description'),
   vendor: text(['Vendor', 'Payee', 'Payee Name', 'Vendor Name', 'Person/Company', 'Name'], 'vendor'),
   debit: money(['Debit', 'Debits', 'Dr'], 'ledger_debit'),
@@ -108,7 +108,7 @@ export const BUDGET_FIELDS = Object.freeze({
   property: PROPERTY,
   account: text(['GL Account', 'Account', 'Account Number', 'Account Code', 'Acct'], 'account', { required: true }),
   account_name: text(['Account Name', 'Account Description', 'Description'], 'account_name'),
-  period: text(['Period', 'Month', 'Post Month']),
+  period: text(['Period', 'Month', 'Post Month'], 'period'),
   budget: money(['Budget', 'Budgeted', 'Budget Amount', 'Plan', 'PTD Budget', 'YTD Budget'], 'budget'),
   actual: money(['Actual', 'Actuals', 'Actual Amount', 'PTD Actual', 'YTD Actual'], 'actual'),
 });
@@ -204,9 +204,9 @@ export const TAX_FIELDS = Object.freeze({
 
 export const SALES_FIELDS = Object.freeze({
   tenant: TENANT, unit: UNIT, lease_id: LEASE,
-  period: text(['Period', 'Month', 'Sales Month', 'Reporting Period', 'Year'], false, { required: true }),
+  period: text(['Period', 'Month', 'Sales Month', 'Reporting Period', 'Sales Period'], 'period', { required: true }),
   gross_sales: money(['Gross Sales', 'Sales', 'Total Sales', 'Reported Sales', 'Net Sales'], 'sales'),
-  exclusions: money(['Exclusions', 'Deductions', 'Allowable Deductions', 'Excluded Sales', 'Returns']),
+  exclusions: money(['Exclusions', 'Deductions', 'Allowable Deductions', 'Excluded Sales', 'Returns', 'Abzüge', 'Déductions', 'Deducciones', 'Deduções', 'Detrazioni', '控除額', '扣除额', '공제액']),
   reported_on: date(['Reported On', 'Received', 'Date Received', 'Report Date', 'Submitted'], 'date'),
 });
 
@@ -246,7 +246,7 @@ export const OWNER_LEDGER_FIELDS = Object.freeze({
 export const OWNER_STATEMENT_FIELDS = Object.freeze({
   owner: text(['Owner', 'Owner Name', 'Owners', 'Investor'], 'owner', { required: true }),
   property: PROPERTY,
-  period: text(['Period', 'Statement Period', 'Month', 'Statement Month']),
+  period: text(['Period', 'Statement Period', 'Month', 'Statement Month'], 'period'),
   beginning_balance: money(['Beginning Balance', 'Beginning Cash', 'Opening Balance', 'Starting Balance']),
   income: money(['Income', 'Total Income', 'Cash In', 'Receipts', 'Rent Collected']),
   expenses: money(['Expenses', 'Total Expenses', 'Cash Out', 'Disbursements']),
