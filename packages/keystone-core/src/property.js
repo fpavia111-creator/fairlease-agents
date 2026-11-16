@@ -367,8 +367,9 @@ export function groupRentRoll(rows, { aliases = {} } = {}) {
   for (const e of m.values()) {
     if (e.rent === null && e.charges.rent !== undefined) e.rent = e.charges.rent;
     if (e.rent === null && e.annual_rent !== null) e.rent = round2(e.annual_rent / 12);
-    e.vacant = VACANT.test(e.status) || (!e.tenant && !e.rent);
     e.on_notice = NOTICE.test(e.status);
+    e.vacant = (!e.on_notice && VACANT.test(e.status)) || (!e.tenant && !e.rent) || /^vacant/i.test(e.status) || /^(vacant|vacancy|leer|leerstand|vacance|vacío|vacante|vago|sfitto|空室|空置|공실)$/i.test(e.tenant);
+    if (e.vacant && /^(vacant|vacancy)$/i.test(e.tenant)) e.tenant = '';
   }
   return [...m.values()];
 }

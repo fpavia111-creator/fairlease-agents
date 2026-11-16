@@ -1,0 +1,6 @@
+Unit,Unit Type,Unit Sq Ft,Resident,Name,Market Rent,Charge Code,Amount,Resident Deposit,Other Deposit,Move In,Lease Expiration,Move Out,Balance
+104,2BD1BA,900,t0001104,Dmitri Volkov,1850.00,RNT,1800.00,1800.00,0.00,01/15/2024,02/28/2027,,3600.00
+104,,,,,,PARK,50.00,,,,,,
+404,2BD1BA,900,t0001404,Tomas Horvat,1850.00,RNT,1850.00,1850.00,0.00,01/15/2024,10/31/2027,,0.00
+404,,,,,,CONC,-150.00,,,,,,
+204,2BD1BA,900,VACANT,VACANT,1850.00,,,,,,,09/30/2026,
