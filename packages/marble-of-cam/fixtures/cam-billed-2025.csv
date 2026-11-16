@@ -1,0 +1,71 @@
+Lease,Unit,Tenant,Date,Charge Code,Description,Charges
+L-101,Suite 100,Acme Bagels LLC,2025-01-01,CAM,CAM estimate,1800.00
+L-101,Suite 100,Acme Bagels LLC,2025-02-01,CAM,CAM estimate,1800.00
+L-101,Suite 100,Acme Bagels LLC,2025-03-01,CAM,CAM estimate,1800.00
+L-101,Suite 100,Acme Bagels LLC,2025-04-01,CAM,CAM estimate,1800.00
+L-101,Suite 100,Acme Bagels LLC,2025-05-01,CAM,CAM estimate,1800.00
+L-101,Suite 100,Acme Bagels LLC,2025-06-01,CAM,CAM estimate,1800.00
+L-101,Suite 100,Acme Bagels LLC,2025-07-01,CAM,CAM estimate,1800.00
+L-101,Suite 100,Acme Bagels LLC,2025-08-01,CAM,CAM estimate,1800.00
+L-101,Suite 100,Acme Bagels LLC,2025-09-01,CAM,CAM estimate,1800.00
+L-101,Suite 100,Acme Bagels LLC,2025-10-01,CAM,CAM estimate,1800.00
+L-101,Suite 100,Acme Bagels LLC,2025-11-01,CAM,CAM estimate,1800.00
+L-101,Suite 100,Acme Bagels LLC,2025-12-01,CAM,CAM estimate,1800.00
+L-102,Suite 110,Brightside Dental PC,2025-01-01,CAM,CAM estimate,2900.00
+L-102,Suite 110,Brightside Dental PC,2025-02-01,CAM,CAM estimate,2900.00
+L-102,Suite 110,Brightside Dental PC,2025-03-01,CAM,CAM estimate,2900.00
+L-102,Suite 110,Brightside Dental PC,2025-04-01,CAM,CAM estimate,2900.00
+L-102,Suite 110,Brightside Dental PC,2025-05-01,CAM,CAM estimate,2900.00
+L-102,Suite 110,Brightside Dental PC,2025-06-01,CAM,CAM estimate,2900.00
+L-102,Suite 110,Brightside Dental PC,2025-07-01,CAM,CAM estimate,2900.00
+L-102,Suite 110,Brightside Dental PC,2025-08-01,CAM,CAM estimate,2900.00
+L-102,Suite 110,Brightside Dental PC,2025-09-01,CAM,CAM estimate,2900.00
+L-102,Suite 110,Brightside Dental PC,2025-10-01,CAM,CAM estimate,2900.00
+L-102,Suite 110,Brightside Dental PC,2025-11-01,CAM,CAM estimate,2900.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-01-01,CAM,CAM estimate,7300.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-02-01,CAM,CAM estimate,7300.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-03-01,CAM,CAM estimate,7300.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-04-01,CAM,CAM estimate,7300.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-05-01,CAM,CAM estimate,7300.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-06-01,CAM,CAM estimate,7300.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-07-01,CAM,CAM estimate,7300.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-08-01,CAM,CAM estimate,7300.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-09-01,CAM,CAM estimate,7300.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-10-01,CAM,CAM estimate,7300.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-11-01,CAM,CAM estimate,7300.00
+L-103,Suite 120,Cobalt Fitness Inc,2025-12-01,CAM,CAM estimate,7300.00
+L-104,Suite 130,Delta Phone Repair,2025-01-01,CAM,CAM estimate,1150.00
+L-104,Suite 130,Delta Phone Repair,2025-02-01,CAM,CAM estimate,1150.00
+L-104,Suite 130,Delta Phone Repair,2025-03-01,CAM,CAM estimate,1150.00
+L-104,Suite 130,Delta Phone Repair,2025-04-01,CAM,CAM estimate,1150.00
+L-104,Suite 130,Delta Phone Repair,2025-05-01,CAM,CAM estimate,1150.00
+L-104,Suite 130,Delta Phone Repair,2025-06-01,CAM,CAM estimate,1150.00
+L-104,Suite 130,Delta Phone Repair,2025-07-01,CAM,CAM estimate,1150.00
+L-104,Suite 130,Delta Phone Repair,2025-08-01,CAM,CAM estimate,1150.00
+L-104,Suite 130,Delta Phone Repair,2025-09-01,CAM,CAM estimate,1150.00
+L-104,Suite 130,Delta Phone Repair,2025-10-01,CAM,CAM estimate,1150.00
+L-104,Suite 130,Delta Phone Repair,2025-11-01,CAM,CAM estimate,1150.00
+L-104,Suite 130,Delta Phone Repair,2025-12-01,CAM,CAM estimate,1150.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-01-01,CAM,CAM estimate,2500.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-02-01,CAM,CAM estimate,2500.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-03-01,CAM,CAM estimate,2500.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-04-01,CAM,CAM estimate,2500.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-05-01,CAM,CAM estimate,2500.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-06-01,CAM,CAM estimate,2500.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-07-01,CAM,CAM estimate,2500.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-08-01,CAM,CAM estimate,2500.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-09-01,CAM,CAM estimate,2500.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-10-01,CAM,CAM estimate,2500.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-11-01,CAM,CAM estimate,2500.00
+L-105,Suite 140,Evergreen Grocers Ltd,2025-12-01,CAM,CAM estimate,2500.00
+L-106,Suite 150,Fable Books,2025-02-01,CAM,CAM estimate,2250.00
+L-106,Suite 150,Fable Books,2025-03-01,CAM,CAM estimate,2250.00
+L-106,Suite 150,Fable Books,2025-04-01,CAM,CAM estimate,2250.00
+L-106,Suite 150,Fable Books,2025-05-01,CAM,CAM estimate,2250.00
+L-106,Suite 150,Fable Books,2025-06-01,CAM,CAM estimate,2250.00
+L-106,Suite 150,Fable Books,2025-07-01,CAM,CAM estimate,2250.00
+L-106,Suite 150,Fable Books,2025-08-01,CAM,CAM estimate,2250.00
+L-106,Suite 150,Fable Books,2025-09-01,CAM,CAM estimate,2250.00
+L-106,Suite 150,Fable Books,2025-10-01,CAM,CAM estimate,2250.00
+L-106,Suite 150,Fable Books,2025-11-01,CAM,CAM estimate,2250.00
+L-106,Suite 150,Fable Books,2025-12-01,CAM,CAM estimate,2250.00

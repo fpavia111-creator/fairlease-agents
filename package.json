@@ -1,0 +1,23 @@
+{
+  "name": "keystone-agents",
+  "private": true,
+  "description": "Keystone freight and shipping cost agents monorepo.",
+  "license": "MIT",
+  "workspaces": [
+    "packages/keystone-core",
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "npm test --workspaces",
+    "hostile": "node scripts/hostile-inputs.mjs",
+    "hostile:args": "node scripts/hostile-inputs.mjs --args",
+    "release:check": "node scripts/release-check.mjs",
+    "release:check:offline": "node scripts/release-check.mjs --offline",
+    "bench": "node scripts/bench.mjs",
+    "plugin": "node scripts/plugin-files.mjs",
+    "plugin:check": "node scripts/plugin-files.mjs --check"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

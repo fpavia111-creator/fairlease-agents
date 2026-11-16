@@ -1,0 +1,85 @@
+GL Account,Account Name,Date,Description,Vendor,Amount
+6600,Property insurance,2025-01-05,Property insurance premium 2025,Example Mutual Insurance,48000.00
+6100,Landscaping,2025-01-15,Landscaping 01/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-01-15,Janitorial - common area 01/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-01-15,Trash removal 01/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-01-15,Common area electric 01/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-01-15,Security patrol 01/2025,Watchful Example LLC,1666.67
+6800,Management fee,2025-01-15,Management fee 01/2025,Keystone Example Management,2500.00
+6110,Snow removal,2025-01-20,Snow plowing January,Example Plow Co,9000.00
+7100,Leasing commissions,2025-02-01,Commission - Fable Books lease,Example Realty,22000.00
+6100,Landscaping,2025-02-15,Landscaping 02/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-02-15,Janitorial - common area 02/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-02-15,Trash removal 02/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-02-15,Common area electric 02/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-02-15,Security patrol 02/2025,Watchful Example LLC,1666.67
+6800,Management fee,2025-02-15,Management fee 02/2025,Keystone Example Management,2500.00
+6110,Snow removal,2025-02-18,Snow plowing February,Example Plow Co,9000.00
+6400,Repairs & maintenance,2025-03-10,Parking lot light repair,Bright Example Electric,4000.00
+6100,Landscaping,2025-03-15,Landscaping 03/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-03-15,Janitorial - common area 03/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-03-15,Trash removal 03/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-03-15,Common area electric 03/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-03-15,Security patrol 03/2025,Watchful Example LLC,1666.67
+6800,Management fee,2025-03-15,Management fee 03/2025,Keystone Example Management,2500.00
+6100,Landscaping,2025-04-15,Landscaping 04/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-04-15,Janitorial - common area 04/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-04-15,Trash removal 04/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-04-15,Common area electric 04/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-04-15,Security patrol 04/2025,Watchful Example LLC,1666.67
+6800,Management fee,2025-04-15,Management fee 04/2025,Keystone Example Management,2500.00
+6700,Real estate taxes,2025-04-30,"2025 real estate taxes, first half",Springfield Treasurer (fictional),80000.00
+7200,Legal fees,2025-05-12,Legal fees - collection matter,Example Law Office,6500.00
+6100,Landscaping,2025-05-15,Landscaping 05/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-05-15,Janitorial - common area 05/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-05-15,Trash removal 05/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-05-15,Common area electric 05/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-05-15,Security patrol 05/2025,Watchful Example LLC,1666.67
+6800,Management fee,2025-05-15,Management fee 05/2025,Keystone Example Management,2500.00
+6400,Repairs & maintenance,2025-06-05,HVAC common area service,Cool Example HVAC,16000.00
+6100,Landscaping,2025-06-15,Landscaping 06/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-06-15,Janitorial - common area 06/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-06-15,Trash removal 06/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-06-15,Common area electric 06/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-06-15,Security patrol 06/2025,Watchful Example LLC,1666.67
+6800,Management fee,2025-06-15,Management fee 06/2025,Keystone Example Management,2500.00
+6900,Roof repairs,2025-07-14,Roof leak repair over Suites 100-110,Example Roofing,15000.00
+6100,Landscaping,2025-07-15,Landscaping 07/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-07-15,Janitorial - common area 07/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-07-15,Trash removal 07/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-07-15,Common area electric 07/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-07-15,Security patrol 07/2025,Watchful Example LLC,1666.67
+6800,Management fee,2025-07-15,Management fee 07/2025,Keystone Example Management,2500.00
+7000,Capital improvements,2025-08-01,Parking lot repave (capital),Example Paving,85000.00
+6100,Landscaping,2025-08-15,Landscaping 08/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-08-15,Janitorial - common area 08/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-08-15,Trash removal 08/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-08-15,Common area electric 08/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-08-15,Security patrol 08/2025,Watchful Example LLC,1666.67
+6800,Management fee,2025-08-15,Management fee 08/2025,Keystone Example Management,2500.00
+6100,Landscaping,2025-09-15,Landscaping 09/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-09-15,Janitorial - common area 09/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-09-15,Trash removal 09/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-09-15,Common area electric 09/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-09-15,Security patrol 09/2025,Watchful Example LLC,1666.67
+6800,Management fee,2025-09-15,Management fee 09/2025,Keystone Example Management,2500.00
+6400,Repairs & maintenance,2025-09-22,Sidewalk repair,Example Concrete,20000.00
+6100,Landscaping,2025-10-15,Landscaping 10/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-10-15,Janitorial - common area 10/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-10-15,Trash removal 10/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-10-15,Common area electric 10/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-10-15,Security patrol 10/2025,Watchful Example LLC,1666.67
+6800,Management fee,2025-10-15,Management fee 10/2025,Keystone Example Management,2500.00
+6700,Real estate taxes,2025-10-31,"2025 real estate taxes, second half",Springfield Treasurer (fictional),80000.00
+6100,Landscaping,2025-11-15,Landscaping 11/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-11-15,Janitorial - common area 11/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-11-15,Trash removal 11/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-11-15,Common area electric 11/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-11-15,Security patrol 11/2025,Watchful Example LLC,1666.67
+6800,Management fee,2025-11-15,Management fee 11/2025,Keystone Example Management,2500.00
+6100,Landscaping,2025-12-15,Landscaping 12/2025,Greenleaf Grounds (fictional),3000.00
+6200,Janitorial - common area,2025-12-15,Janitorial - common area 12/2025,Spotless Example Co,2500.00
+6210,Trash removal,2025-12-15,Trash removal 12/2025,Example Waste Services,1000.00
+6300,Common area electric,2025-12-15,Common area electric 12/2025,Example Power & Light,2000.00
+6500,Security patrol,2025-12-15,Security patrol 12/2025,Watchful Example LLC,1666.63
+6800,Management fee,2025-12-15,Management fee 12/2025,Keystone Example Management,2500.00

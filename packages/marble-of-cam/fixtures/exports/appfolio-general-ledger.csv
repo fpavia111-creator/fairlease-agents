@@ -1,0 +1,8 @@
+GL Account,Date,Payee / Payer,Description,Debit,Credit,Reference
+6600 - Property insurance,,,,,,
+,01/05/2025,Example Mutual Insurance,Property insurance premium 2025,"48,000.00",,INS-25
+Total 6600 - Property insurance,,,,"48,000.00",,
+6700 - Real estate taxes,,,,,,
+,04/30/2025,Springfield Treasurer (fictional),First half,"80,000.00",,TX-1
+,10/31/2025,Springfield Treasurer (fictional),Second half,"80,000.00",,TX-2
+Total 6700 - Real estate taxes,,,,"160,000.00",,

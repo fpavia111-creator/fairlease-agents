@@ -1,0 +1,6 @@
+Unit,Unit Type,Unit Sq Ft,Resident,Name,Market Rent,Charge Code,Amount,Resident Deposit,Other Deposit,Move In,Lease Expiration,Move Out,Balance
+Suite 100,RETAIL,2000,L-101,Acme Bagels LLC,4500.00,RNTCOM,4243.60,8000.00,0.00,03/01/2023,02/29/2028,,0.00
+Suite 100,,,,,,CAMEST,1800.00,,,,,,
+Suite 110,RETAIL,3000,L-102,Brightside Dental PC,7800.00,RNTCOM,7649.09,14000.00,0.00,07/01/2022,06/30/2027,,0.00
+Suite 110,,,,,,CAMEST,2900.00,,,,,,
+Suite 130,RETAIL,1200,L-104,Delta Phone Repair,2800.00,RNTCOM,2600.00,5200.00,0.00,05/01/2024,04/30/2026,,0.00

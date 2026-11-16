@@ -1,0 +1,16 @@
+{
+  "property": "HPP",
+  "year": 2025,
+  "rentable_sqft": 40000,
+  "occupancy_pct": 90,
+  "gross_up_to_pct": 95,
+  "pools": [
+    { "name": "Common area (fixed)", "accounts": ["6100", "6110", "6400", "6500", "6800"], "variable": false, "controllable": true },
+    { "name": "Common area (variable)", "accounts": ["6200", "6210", "6300"], "variable": true, "controllable": true },
+    { "name": "Insurance", "accounts": ["6600"], "variable": false, "controllable": false },
+    { "name": "Real estate taxes", "accounts": ["6700"], "variable": false, "controllable": false },
+    { "name": "Roof and structure", "accounts": ["6900"], "variable": false, "controllable": true }
+  ],
+  "excluded_accounts": ["7000", "7100"],
+  "prior_years": [{ "year": 2024, "controllable_total": 198000, "tenants": { "L-101": 9450 } }]
+}
