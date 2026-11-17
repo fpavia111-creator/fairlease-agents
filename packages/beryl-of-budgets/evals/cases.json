@@ -162,6 +162,114 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "beryl_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "beryl_check",
+      "args": {
+        "budget": "../../outside.csv",
+        "actuals": "fixtures/actuals-t12-2026-11.csv",
+        "policy": "fixtures/budget-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "beryl_check",
+      "mode": "review",
+      "args": {
+        "budget": "fixtures/budget-2026.csv",
+        "actuals": "fixtures/actuals-t12-2026-11.csv",
+        "policy": "fixtures/budget-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.month": "2026-10",
+          "result.noi.ytd_budget": 172300,
+          "result.noi.ytd_actual": 164177.3,
+          "result.items.0.account": "5600"
+        },
+        "contains": [
+          "2 account(s) need a variance explanation",
+          "1 already explained"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "beryl_check",
+      "args": {
+        "actuals": "fixtures/actuals-t12-2026-11.csv",
+        "policy": "fixtures/budget-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "budget"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "beryl_draft_memo",
+      "args": {
+        "budget": "fixtures/budget-2026.csv",
+        "actuals": "fixtures/actuals-t12-2026-11.csv",
+        "policy": "fixtures/budget-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "beryl_draft_memo",
+      "approve": "Dana Example",
+      "args": {
+        "budget": "fixtures/budget-2026.csv",
+        "actuals": "fixtures/actuals-t12-2026-11.csv",
+        "policy": "fixtures/budget-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "beryl_draft_memo",
+      "mode": "review",
+      "args": {
+        "budget": "fixtures/budget-2026.csv",
+        "actuals": "fixtures/actuals-t12-2026-11.csv",
+        "policy": "fixtures/budget-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

@@ -202,6 +202,71 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "flint_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "flint_check",
+      "args": {
+        "inspections": "../../outside.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "work_orders": "fixtures/work-orders.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "flint_check",
+      "mode": "review",
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "work_orders": "fixtures/work-orders.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 24,
+          "result.items.0.unit": "106"
+        },
+        "contains": [
+          "1 overdue",
+          "1 never inspected",
+          "(4 item(s))"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "flint_check",
+      "args": {
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "work_orders": "fixtures/work-orders.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "inspections"
+        ]
+      }
     }
   ]
 }

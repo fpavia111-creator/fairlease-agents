@@ -244,6 +244,96 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "quartz_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "quartz_check",
+      "args": {
+        "ledger": "../../outside.csv",
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "quartz_check",
+      "mode": "review",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.total_delinquent": 10600,
+          "result.buckets.61-90": 1850,
+          "result.by_stage.manager_review": 2,
+          "result.by_stage.on_plan": 1,
+          "result.items.0.unit": "106"
+        }
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "quartz_draft_reminder",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15",
+        "tenant": "104"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "quartz_draft_reminder",
+      "approve": "Dana Example",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15",
+        "tenant": "104"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "quartz_draft_reminder",
+      "mode": "review",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15",
+        "tenant": "104"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

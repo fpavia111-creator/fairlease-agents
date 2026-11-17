@@ -186,6 +186,69 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "jade_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "jade_check",
+      "args": {
+        "leases": "../../outside.csv",
+        "ledger": "fixtures/rent-charges-2025.csv",
+        "from": "2025-01",
+        "to": "2026-01",
+        "indexes": "fixtures/indexes.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "jade_check",
+      "mode": "review",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "ledger": "fixtures/rent-charges-2025.csv",
+        "from": "2025-01",
+        "to": "2026-01",
+        "indexes": "fixtures/indexes.json"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.underbilled_total": 34125.83,
+          "result.items.0.net_difference": -1359.6,
+          "result.items.1.status": "ok",
+          "result.items.3.status": "ok",
+          "result.items.5.status": "ok"
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "jade_check",
+      "args": {
+        "ledger": "fixtures/rent-charges-2025.csv",
+        "from": "2025-01",
+        "to": "2026-01",
+        "indexes": "fixtures/indexes.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "leases"
+        ]
+      }
     }
   ]
 }

@@ -190,6 +190,108 @@
           "verifies"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "mica_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "mica_check",
+      "args": {
+        "leads": "../../outside.csv",
+        "policy": "fixtures/lead-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "mica_check",
+      "mode": "review",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "policy": "fixtures/lead-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.id": "GC-1014",
+          "result.sources.1.cost_per_lease": 300
+        },
+        "contains": [
+          "18 lead(s) (1 duplicate(s) set aside)",
+          "2 with no response",
+          "1 approved with no lease",
+          "Rent.com: spend with no leads"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "mica_check",
+      "args": {
+        "policy": "fixtures/lead-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "leads"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "mica_draft_followup",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "as_of": "2026-11-15",
+        "id": "GC-1009"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "mica_draft_followup",
+      "approve": "Dana Example",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "as_of": "2026-11-15",
+        "id": "GC-1009"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "mica_draft_followup",
+      "mode": "review",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "as_of": "2026-11-15",
+        "id": "GC-1009"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

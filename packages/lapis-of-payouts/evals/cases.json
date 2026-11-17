@@ -219,6 +219,78 @@
           "verifies"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "lapis_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "lapis_check",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv",
+          "fixtures/vrbo-payouts-2026-10.csv"
+        ],
+        "bookings": "../../outside.csv",
+        "bank": "fixtures/bank-operating-2026.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "lapis_check",
+      "mode": "review",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv",
+          "fixtures/vrbo-payouts-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "bank": "fixtures/bank-operating-2026.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.id": "HMF6PA3S",
+          "result.short_or_missing": 787.5
+        },
+        "contains": [
+          "1 missing a payout",
+          "5 with differences",
+          "1 not found",
+          "1 channel deposit(s) with no payout"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "lapis_check",
+      "args": {
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "bank": "fixtures/bank-operating-2026.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "payouts"
+        ]
+      }
     }
   ]
 }

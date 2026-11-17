@@ -33,10 +33,13 @@ export function checkBudget({ budgetRows, actualRows = null, policy = {}, asOf }
   const kind = (a) => (incP.some((p) => a.startsWith(p)) ? 'income' : expP.some((p) => a.startsWith(p)) ? 'expense' : null);
   const bud = new Map(monthlyByAccount(budgetRows, { value: 'budget' }).map((a) => [a.account, a]));
   const act = new Map(monthlyByAccount(actualRows || budgetRows, { value: actualRows ? 'amount' : 'actual', natural: (x) => (kind(x) === 'expense' ? 'debit' : 'credit') }).map((a) => [a.account, a]));
-  const items = []; const expl = policy.explanations || {};
+  const items = []; const expl = policy.explanations || {}; const unclassified = [];
+  // A month with no actual on any account has not been closed (or is the wrong month): comparing it would report every line as under budget.
+  const monthHasActuals = [...act.values()].some((a) => a.months[month] !== undefined && a.months[month] !== null && a.months[month] !== '');
   for (const acct of [...new Set([...bud.keys(), ...act.keys()])]) {
-    const k = kind(acct); if (!k) continue;
+    const k = kind(acct);
     const b = bud.get(acct); const a = act.get(acct); const name = (b && b.name) || (a && a.name) || '';
+    if (!k) { unclassified.push({ account: acct, name }); continue; }
     const bm = b ? b.months : {}; const am = a ? a.months : {};
     const line = { account: acct, name, kind: k, ptd_budget: sumOf(bm, [month]), ptd_actual: sumOf(am, [month]), ytd_budget: sumOf(bm, ytdKeys), ytd_actual: sumOf(am, ytdKeys), annual_budget: sumOf(bm, yearKeys) };
     line.ptd_variance = r2(line.ptd_actual - line.ptd_budget); line.ytd_variance = r2(line.ytd_actual - line.ytd_budget);
@@ -46,12 +49,13 @@ export function checkBudget({ budgetRows, actualRows = null, policy = {}, asOf }
     const fav = (v) => (k === 'income' ? v > 0 : v < 0);
     const test = (label, v, p, bAmt) => {
       if (!bAmt && !v) return;
-      if (Math.abs(v) <= amt || (p !== null && Math.abs(p) <= pct)) return;
+      // Compared before rounding: 10.0001% is over a 10% threshold.
+      if (Math.abs(v) <= amt || (bAmt && (Math.abs(v) / Math.abs(bAmt)) * 100 <= pct)) return;
       if (!explainBoth && fav(v)) return;
       add(`${label}_variance`, `${label === 'ptd' ? 'Month' : 'Year to date'}: ${k} ${v > 0 ? 'over' : 'under'} budget by ${Math.abs(v)}${p !== null ? ` (${Math.abs(p)}%)` : ''}: actual ${label === 'ptd' ? line.ptd_actual : line.ytd_actual}, budget ${bAmt}; ${fav(v) ? 'favorable' : 'unfavorable'}. Over your ${pct}% and ${amt} thresholds.`, { amount: v, favorable: fav(v) });
     };
     if (!b || (!has(bm, yearKeys) && line.annual_budget === 0)) { if (line.ytd_actual) add('unbudgeted', `${line.ytd_actual} ${k === 'income' ? 'received' : 'spent'} year to date on an account with no budget.`, k === 'income' ? { severity: 'note' } : {}); }
-    else {
+    else if (monthHasActuals) {
       if (basis !== 'ytd') test('ptd', line.ptd_variance, line.ptd_variance_pct, line.ptd_budget);
       if (basis !== 'ptd') test('ytd', line.ytd_variance, line.ytd_variance_pct, line.ytd_budget);
       if (k === 'expense' && line.annual_budget && line.forecast - line.annual_budget > amt && ((line.forecast - line.annual_budget) / line.annual_budget) * 100 > pct) add('forecast_over_annual', `Year to date ${line.ytd_actual} plus the remaining months' budget makes ${line.forecast}, ${r2(line.forecast - line.annual_budget)} over the annual budget ${line.annual_budget}.`, { amount: r2(line.forecast - line.annual_budget) });
@@ -68,8 +72,10 @@ export function checkBudget({ budgetRows, actualRows = null, policy = {}, asOf }
   items.sort((a, b) => rank[a.status] - rank[b.status] || a.account.localeCompare(b.account, undefined, { numeric: true }));
   const tot = (kd, f) => r2(items.filter((i) => i.kind === kd).reduce((s, i) => s + i[f], 0));
   const noi = { ptd_budget: r2(tot('income', 'ptd_budget') - tot('expense', 'ptd_budget')), ptd_actual: r2(tot('income', 'ptd_actual') - tot('expense', 'ptd_actual')), ytd_budget: r2(tot('income', 'ytd_budget') - tot('expense', 'ytd_budget')), ytd_actual: r2(tot('income', 'ytd_actual') - tot('expense', 'ytd_actual')) };
-  const summary = `${month} (year to date from ${ytdKeys[0]}): NOI ${noi.ptd_actual} against a budget of ${noi.ptd_budget} for the month, ${noi.ytd_actual} against ${noi.ytd_budget} year to date. ${items.filter((i) => i.status === 'explain').length} account(s) need a variance explanation under your ${pct}% and ${amt} thresholds${items.some((i) => i.status === 'explained') ? `, ${items.filter((i) => i.status === 'explained').length} already explained` : ''}.`;
-  return { summary, month, ytd_from: ytdKeys[0], thresholds: { pct, amount: amt, basis, explain: explainBoth ? 'both' : 'unfavorable' }, noi, items };
+  const left = unclassified.length ? ` ${unclassified.length} account(s) were left out because they start with neither an income prefix (${incP.join(', ')}) nor an expense prefix (${expP.join(', ')}): ${unclassified.slice(0, 5).map((u) => u.account).join(', ')}${unclassified.length > 5 ? ` and ${unclassified.length - 5} more` : ''}. Set income_prefixes and expense_prefixes in your policy.` : '';
+  if (!monthHasActuals) return { summary: `No actuals for ${month} on any account, so nothing was compared: the month may not be closed, or the month or the file is wrong.${left}`, month, month_has_actuals: false, ytd_from: ytdKeys[0], thresholds: { pct, amount: amt, basis, explain: explainBoth ? 'both' : 'unfavorable' }, noi, unclassified_accounts: unclassified, items };
+  const summary = `${month} (year to date from ${ytdKeys[0]}): NOI ${noi.ptd_actual} against a budget of ${noi.ptd_budget} for the month, ${noi.ytd_actual} against ${noi.ytd_budget} year to date. ${items.filter((i) => i.status === 'explain').length} account(s) need a variance explanation under your ${pct}% and ${amt} thresholds${items.some((i) => i.status === 'explained') ? `, ${items.filter((i) => i.status === 'explained').length} already explained` : ''}.${left}`;
+  return { summary, month, month_has_actuals: true, ytd_from: ytdKeys[0], thresholds: { pct, amount: amt, basis, explain: explainBoth ? 'both' : 'unfavorable' }, noi, unclassified_accounts: unclassified, items };
 }
 
 /** Variance memo for the owner. */

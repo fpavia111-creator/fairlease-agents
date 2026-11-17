@@ -181,6 +181,114 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "jasper_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "jasper_check",
+      "args": {
+        "move_outs": "../../outside.csv",
+        "deductions": "fixtures/deductions.csv",
+        "leases": "fixtures/leases.json",
+        "ledger": "fixtures/final-ledger.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "jasper_check",
+      "mode": "review",
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/deductions.csv",
+        "leases": "fixtures/leases.json",
+        "ledger": "fixtures/final-ledger.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.unit": "204",
+          "result.items.0.status": "overdue",
+          "result.items.0.refund": 80.8,
+          "result.items.2.status": "ready",
+          "result.items.2.refund": 1650
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "jasper_check",
+      "args": {
+        "deductions": "fixtures/deductions.csv",
+        "leases": "fixtures/leases.json",
+        "ledger": "fixtures/final-ledger.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "move_outs"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "jasper_draft_statement",
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/deductions.csv",
+        "as_of": "2026-11-15",
+        "unit": "204"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "jasper_draft_statement",
+      "approve": "Dana Example",
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/deductions.csv",
+        "as_of": "2026-11-15",
+        "unit": "204"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "jasper_draft_statement",
+      "mode": "review",
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/deductions.csv",
+        "as_of": "2026-11-15",
+        "unit": "204"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

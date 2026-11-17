@@ -166,6 +166,110 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "zircon_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "zircon_check",
+      "args": {
+        "rent_roll": "../../outside.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "zircon_check",
+      "mode": "review",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.rent_roll.scheduled_monthly": 35500,
+          "result.t12.noi": 193006.96,
+          "result.t12.months": 12,
+          "result.items.0.subject": "reconciliation"
+        },
+        "contains": [
+          "1850 below the roll"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "zircon_check",
+      "args": {
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "rent_roll"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "zircon_draft_questions",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "property": "Maple Court (fictional)"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "zircon_draft_questions",
+      "approve": "Dana Example",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "property": "Maple Court (fictional)"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "zircon_draft_questions",
+      "mode": "review",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "property": "Maple Court (fictional)"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

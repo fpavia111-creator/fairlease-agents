@@ -161,6 +161,103 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "pyrite_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "pyrite_check",
+      "args": {
+        "ledger": "../../outside.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "pyrite_check",
+      "mode": "review",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.overcharge_total": 8689,
+          "result.items.length": 4,
+          "result.items.0.property": "Harbor Point Plaza"
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "pyrite_check",
+      "args": {
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "ledger"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "pyrite_draft_credit",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "pyrite_draft_credit",
+      "approve": "Dana Example",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "pyrite_draft_credit",
+      "mode": "review",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

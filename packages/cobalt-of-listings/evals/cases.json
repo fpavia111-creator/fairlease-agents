@@ -191,6 +191,68 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "cobalt_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "cobalt_check",
+      "args": {
+        "listings": "../../outside.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "policy": "fixtures/listing-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "cobalt_check",
+      "mode": "review",
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "policy": "fixtures/listing-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 7,
+          "result.items.0.unit": "103"
+        },
+        "contains": [
+          "1 missing a site",
+          "1 occupied unit(s) still listed",
+          "2 with wording to review"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "cobalt_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "policy": "fixtures/listing-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "listings"
+        ]
+      }
     }
   ]
 }

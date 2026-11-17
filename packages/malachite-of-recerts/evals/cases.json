@@ -184,6 +184,68 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "malachite_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "malachite_check",
+      "args": {
+        "tracker": "../../outside.csv",
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "malachite_check",
+      "mode": "review",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.unit": "103",
+          "result.items.length": 9
+        },
+        "contains": [
+          "1 overdue",
+          "5 notice(s) not recorded",
+          "1 occupied unit(s) not in the tracker"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "malachite_check",
+      "args": {
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "tracker"
+        ]
+      }
     }
   ]
 }

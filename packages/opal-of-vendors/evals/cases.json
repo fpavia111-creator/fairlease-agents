@@ -161,6 +161,67 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "opal_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "opal_check",
+      "args": {
+        "vendors": "../../outside.csv",
+        "requirements": "fixtures/vendor-requirements.json",
+        "payments": "fixtures/payments-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "opal_check",
+      "mode": "review",
+      "args": {
+        "vendors": "fixtures/vendor-directory-appfolio.csv",
+        "requirements": "fixtures/vendor-requirements.json",
+        "payments": "fixtures/payments-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 8,
+          "result.items.0.vendor": "ApplianceCare (fictional)",
+          "result.items.0.paid_while_noncompliant": 2900
+        },
+        "contains": [
+          "Paid 4405"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "opal_check",
+      "args": {
+        "requirements": "fixtures/vendor-requirements.json",
+        "payments": "fixtures/payments-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "vendors"
+        ]
+      }
     }
   ]
 }

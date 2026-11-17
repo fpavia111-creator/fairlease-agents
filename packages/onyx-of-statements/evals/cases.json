@@ -154,6 +154,63 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "onyx_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "onyx_check",
+      "args": {
+        "statements": "../../outside.csv",
+        "ledger": "fixtures/owner-ledger-2026-10.csv",
+        "policy": "fixtures/statement-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "onyx_check",
+      "mode": "review",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "ledger": "fixtures/owner-ledger-2026-10.csv",
+        "policy": "fixtures/statement-policy.json"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.period": "2026-10",
+          "result.items.length": 9
+        },
+        "contains": [
+          "3 to fix before sending (1 math, 1 beginning balance, 1 negative, 1 not matching the ledger)"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "onyx_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026-10.csv",
+        "policy": "fixtures/statement-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "statements"
+        ]
+      }
     }
   ]
 }

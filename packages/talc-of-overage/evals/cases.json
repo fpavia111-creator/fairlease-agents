@@ -215,6 +215,116 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "talc_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "talc_check",
+      "args": {
+        "leases": "../../outside.csv",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "billed": "fixtures/billed-2025.csv",
+        "as_of": "2026-06-30"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "talc_check",
+      "mode": "review",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "billed": "fixtures/billed-2025.csv",
+        "as_of": "2026-06-30"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.total_owed": 24367.5,
+          "result.total_balance_due": 6367.5,
+          "result.items.length": 3,
+          "result.unmatched.0.tenant": "Gizmo Kiosk"
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "talc_check",
+      "args": {
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "billed": "fixtures/billed-2025.csv",
+        "as_of": "2026-06-30"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "leases"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "talc_draft_statement",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "as_of": "2026-06-30",
+        "tenant": "L-106"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "talc_draft_statement",
+      "approve": "Dana Example",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "as_of": "2026-06-30",
+        "tenant": "L-106"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "talc_draft_statement",
+      "mode": "review",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "as_of": "2026-06-30",
+        "tenant": "L-106"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

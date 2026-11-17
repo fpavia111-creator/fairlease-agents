@@ -16,7 +16,8 @@ npx -y amber-of-insurance mcp --root ./insurance
 | `certificate_missing` | Lease in force, nothing in the certificate log |
 | `expired`, `expiring` | Past the expiration date, or within `warn_days` (default 30) |
 | `expiry_missing` | Certificate has no expiration date |
-| `liability_below`, `aggregate_below` | Below the lease's `gl_per_occurrence` / `renters_liability`, or `gl_aggregate` |
+| `insured_name_differs` | The certificate names someone other than the tenant on the lease |
+| `liability_below`, `aggregate_below` | Below the lease's `gl_per_occurrence` / `renters_liability`, or `gl_aggregate`. Limits written `$1M`, `2MM` or `500K` are read |
 | `additional_insured_missing` | Lease requires it; the log says no, or does not say |
 | `holdover` (note) | Lease ended but its notes say month-to-month, so it is still checked |
 | `no_requirement` (note) | The leases file sets no insurance clause for this lease |

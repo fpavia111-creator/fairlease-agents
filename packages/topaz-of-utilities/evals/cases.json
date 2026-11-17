@@ -180,6 +180,65 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "topaz_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "topaz_check",
+      "args": {
+        "bills": "../../outside.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "topaz_check",
+      "mode": "review",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.overbilled_total": 416.12,
+          "result.periods.4.residents_share": 4901.76,
+          "result.periods.4.owner_share": 518.24,
+          "result.periods.0.billed": 3781
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "topaz_check",
+      "args": {
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "bills"
+        ]
+      }
     }
   ]
 }

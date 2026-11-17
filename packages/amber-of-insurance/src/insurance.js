@@ -1,8 +1,9 @@
 // Tenant insurance certificates against lease requirements. Pure functions.
-import { num, str, isoDate, daysBetween, leaseFor, sameUnit, sameParty } from 'keystone-core';
+import { num, shortAmount, str, isoDate, daysBetween, leaseFor, sameUnit, sameParty } from 'keystone-core';
 
 const yes = (v) => /^(y|yes|true|1|x|named|ja|oui|sí|si|sim|はい|是|예)$/i.test(str(v));
 const no = (v) => /^(n|no|false|0|nein|non|não|nao|いいえ|否|아니오)$/i.test(str(v));
+const idKey = (v) => str(v).toLowerCase().replace(/\s+/g, '');
 const money = (v) => (v === null || v === undefined ? '-' : Number(v).toLocaleString('en-US'));
 
 export function checkInsurance({ leases, certs, asOf, warnDays = 30 }) {
@@ -12,26 +13,28 @@ export function checkInsurance({ leases, certs, asOf, warnDays = 30 }) {
   for (const l of active) {
     const req = l.insurance || {}; const findings = []; const add = (code, detail, extra = {}) => findings.push({ code, detail, ...extra });
     if (holdover(l)) add('holdover', `Lease ended ${l.end}; treated as in force because its notes say month-to-month.`, { severity: 'note' });
-    const mine = certs.map((c, i) => ({ c, i })).filter(({ c }) => (c.lease_id && str(c.lease_id) === l.lease_id) || (!str(c.lease_id) && sameUnit(c.unit, l.unit) && (!str(c.tenant) || sameParty(c.tenant, l.tenant))));
+    const mine = certs.map((c, i) => ({ c, i })).filter(({ c }) => (str(c.lease_id) && idKey(c.lease_id) === idKey(l.lease_id)) || (!str(c.lease_id) && sameUnit(c.unit, l.unit) && (!str(c.tenant) || sameParty(c.tenant, l.tenant))));
     mine.forEach(({ i }) => used.add(i));
-    const latest = mine.map(({ c }) => c).sort((a, b) => String(isoDate(b.expires)).localeCompare(String(isoDate(a.expires))))[0];
+    // The certificate that runs longest; one with no expiry date only counts when there is no dated one.
+    const latest = mine.map(({ c }) => c).sort((a, b) => String(isoDate(b.expires) || '').localeCompare(String(isoDate(a.expires) || '')))[0];
     const needGl = num(req.gl_per_occurrence); const needAgg = num(req.gl_aggregate); const needRl = num(req.renters_liability);
     const required = needGl !== null || needAgg !== null || needRl !== null || req.additional_insured;
-    if (!required) { items.push({ lease_id: l.lease_id, unit: l.unit, tenant: l.tenant, required: '', insurer: latest ? str(latest.insurer) : '', expires: latest ? isoDate(latest.expires) : null, liability: latest ? num(latest.liability) : null, status: 'ok', findings: [...findings, { code: 'no_requirement', detail: 'The leases file sets no insurance requirement for this lease.', severity: 'note' }] }); continue; }
+    if (!required) { items.push({ lease_id: l.lease_id, unit: l.unit, tenant: l.tenant, required: '', insurer: latest ? str(latest.insurer) : '', expires: latest ? isoDate(latest.expires) : null, liability: latest ? shortAmount(latest.liability) : null, status: 'ok', findings: [...findings, { code: 'no_requirement', detail: 'The leases file sets no insurance requirement for this lease.', severity: 'note' }] }); continue; }
     if (!latest) add('certificate_missing', 'No certificate on file.');
     else {
       const exp = isoDate(latest.expires); const left = exp ? daysBetween(asOf, exp) : null;
       if (!exp) add('expiry_missing', 'Certificate has no expiration date.');
       else if (left < 0) add('expired', `Expired ${exp} (${-left} days ago).`);
       else if (left <= warnDays) add('expiring', `Expires ${exp} (${left} days).`, { severity: 'soon' });
-      const occ = num(latest.liability); const agg = num(latest.aggregate);
+      const occ = shortAmount(latest.liability); const agg = shortAmount(latest.aggregate);
+      if (str(latest.tenant) && !sameParty(latest.tenant, l.tenant)) add('insured_name_differs', `The certificate names ${str(latest.tenant)}; the tenant on the lease is ${l.tenant}. Confirm the insured is the tenant.`);
       const needOcc = needGl ?? needRl;
       if (needOcc !== null && (occ === null || occ < needOcc)) add('liability_below', `Liability ${money(occ)} is below the ${money(needOcc)} the lease requires.`);
       if (needAgg !== null && (agg === null || agg < needAgg)) add('aggregate_below', `Aggregate ${money(agg)} is below the ${money(needAgg)} the lease requires.`);
       if (req.additional_insured && !yes(latest.additional_insured)) add('additional_insured_missing', no(latest.additional_insured) ? 'Landlord is not named as additional insured, which the lease requires.' : 'Certificate does not show whether the landlord is named as additional insured.');
     }
     const hard = findings.filter((f) => !f.severity);
-    items.push({ lease_id: l.lease_id, unit: l.unit, tenant: l.tenant, required: [needGl !== null ? `${money(needGl)} per occurrence` : '', needAgg !== null ? `${money(needAgg)} aggregate` : '', needRl !== null ? `${money(needRl)} liability` : '', req.additional_insured ? 'additional insured' : ''].filter(Boolean).join(', '), insurer: latest ? str(latest.insurer) : '', policy: latest ? str(latest.policy) : '', expires: latest ? isoDate(latest.expires) : null, liability: latest ? num(latest.liability) : null, status: hard.length ? 'issue' : findings.some((f) => f.severity === 'soon') ? 'due_soon' : 'ok', findings });
+    items.push({ lease_id: l.lease_id, unit: l.unit, tenant: l.tenant, required: [needGl !== null ? `${money(needGl)} per occurrence` : '', needAgg !== null ? `${money(needAgg)} aggregate` : '', needRl !== null ? `${money(needRl)} liability` : '', req.additional_insured ? 'additional insured' : ''].filter(Boolean).join(', '), insurer: latest ? str(latest.insurer) : '', policy: latest ? str(latest.policy) : '', expires: latest ? isoDate(latest.expires) : null, liability: latest ? shortAmount(latest.liability) : null, status: hard.length ? 'issue' : findings.some((f) => f.severity === 'soon') ? 'due_soon' : 'ok', findings });
   }
   const orphans = certs.filter((c, i) => !used.has(i)).map((c) => { const l = leaseFor(leases, { lease_id: str(c.lease_id) || undefined, unit: c.unit, tenant: c.tenant }); return { unit: str(c.unit), tenant: str(c.tenant), expires: isoDate(c.expires), reason: l ? `lease ${l.lease_id} not in force on the date (${l.start} to ${l.end})` : 'matches no lease' }; });
   const rank = { issue: 0, due_soon: 1, ok: 2 };

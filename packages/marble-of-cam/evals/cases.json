@@ -247,6 +247,66 @@
           "verifies"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "marble_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "marble_check",
+      "args": {
+        "leases": "../../outside.csv",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "marble_check",
+      "mode": "review",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.pools_total": 433000,
+          "result.pools.1.grossed_up": 69666.67,
+          "result.shares_total_pct": 91.75,
+          "result.items.0.balance": 754.75,
+          "result.items.2.balance": -3266.67
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "marble_check",
+      "args": {
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "leases"
+        ]
+      }
     }
   ]
 }

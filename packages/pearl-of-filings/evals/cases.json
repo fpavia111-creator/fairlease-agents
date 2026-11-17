@@ -206,6 +206,117 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "pearl_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "pearl_check",
+      "args": {
+        "payments": "../../outside.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "pearl_check",
+      "mode": "review",
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 10,
+          "result.items.0.payee": "Maple Court Holdings LLC",
+          "result.items.0.form": "MISC"
+        },
+        "contains": [
+          "8 at or above your 2000 threshold",
+          "5 to fix",
+          "1 payment(s) outside 2026 ignored"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "pearl_check",
+      "args": {
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "payments"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "pearl_draft_request",
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000,
+        "payee": "Sparkle Cleaning"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "pearl_draft_request",
+      "approve": "Dana Example",
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000,
+        "payee": "Sparkle Cleaning"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "pearl_draft_request",
+      "mode": "review",
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000,
+        "payee": "Sparkle Cleaning"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

@@ -16,8 +16,11 @@ npx -y basalt-of-turns mcp --root ./turns
 | `over_target`, `open_over_target` | Days from move-out to ready over `target_days` (default 7), finished or still open |
 | `over_budget` | Turn cost over your budget for the unit's bedroom count (or `default_budget`) |
 | `ready_not_leased` | Ready for more than `ready_to_lease_days` (default 14) with no move-in |
+| `dates_out_of_order` | Ready or move-in dated before the move-out; those days are not counted |
 | `cost_missing`, `vendor_missing` | Lines without a cost or a vendor |
 | `chargeable_unknown`, `chargeable_partial`, `tenant_chargeable` | What to put on the deposit statement ([Jasper of Deposits](../jasper-of-deposits) checks that) |
+
+Units are matched across spellings ("Apt 0202" is unit 202) and per property; a cost line with no dates joins the turn above it for the same unit. `Tenant` and `Resident` count as chargeable, `Owner` as not, and any other word as unknown.
 
 Rent lost = market rent × 12 ÷ 365 × days from move-out to move-in (or to `as_of`).
 

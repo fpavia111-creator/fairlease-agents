@@ -186,6 +186,110 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "amber_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "amber_check",
+      "args": {
+        "leases": "../../outside.csv",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "amber_check",
+      "mode": "review",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 5,
+          "result.unmatched_certificates.length": 1
+        },
+        "contains": [
+          "1 with no certificate",
+          "1 expired",
+          "2 short of the lease"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "amber_check",
+      "args": {
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "leases"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "amber_draft_request",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 150"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "amber_draft_request",
+      "approve": "Dana Example",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 150"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "amber_draft_request",
+      "mode": "review",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 150"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

@@ -137,6 +137,69 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "obsidian_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "obsidian_check",
+      "args": {
+        "bank": "../../outside.csv",
+        "book": "fixtures/trust-register-2026.csv",
+        "ledgers": "fixtures/trust-ledgers-2026-10.csv",
+        "policy": "fixtures/trust-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "obsidian_check",
+      "mode": "review",
+      "args": {
+        "bank": "fixtures/bank-statement-2026.csv",
+        "book": "fixtures/trust-register-2026.csv",
+        "ledgers": "fixtures/trust-ledgers-2026-10.csv",
+        "policy": "fixtures/trust-policy.json"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.balanced": false,
+          "result.three_way.adjusted_bank_balance": 57291,
+          "result.three_way.book_balance": 58666,
+          "result.three_way.ledger_total": 58666,
+          "result.three_way.unexplained_bank_book": 0
+        },
+        "contains": [
+          "all of it bank items missing from the book"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "obsidian_check",
+      "args": {
+        "book": "fixtures/trust-register-2026.csv",
+        "ledgers": "fixtures/trust-ledgers-2026-10.csv",
+        "policy": "fixtures/trust-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "bank"
+        ]
+      }
     }
   ]
 }

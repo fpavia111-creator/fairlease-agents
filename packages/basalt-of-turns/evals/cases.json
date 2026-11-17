@@ -138,6 +138,100 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "basalt_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "basalt_check",
+      "args": {
+        "turns": "../../outside.csv",
+        "policy": "fixtures/turn-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "basalt_check",
+      "mode": "review",
+      "args": {
+        "turns": "fixtures/turns-2026.csv",
+        "policy": "fixtures/turn-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 5,
+          "result.average_days_to_ready": 10.5,
+          "result.cost_by_category.Flooring": 3850,
+          "result.items.0.unit": "204"
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "basalt_check",
+      "args": {
+        "policy": "fixtures/turn-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "turns"
+        ]
+      }
+    },
+    {
+      "id": "undated-line-joins-its-turn-and-unit-spelling-finds-the-budget",
+      "tool": "basalt_explain",
+      "args": {
+        "turns": "fixtures/turns-edge-cases.csv",
+        "policy": "fixtures/turn-policy.json",
+        "as_of": "2026-11-15",
+        "unit": "Apt 0103"
+      },
+      "expect": {
+        "contains": [
+          "over_budget",
+          "1800 budget for a 2-bedroom unit"
+        ],
+        "equals": {
+          "result.item.cost": 2000,
+          "result.item.chargeable": 1100
+        }
+      }
+    },
+    {
+      "id": "dates-out-of-order-and-two-properties",
+      "tool": "basalt_check",
+      "args": {
+        "turns": "fixtures/turns-edge-cases.csv",
+        "policy": "fixtures/turn-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "dates_out_of_order",
+          "Birch Row Apartments (fictional)"
+        ],
+        "equals": {
+          "result.items.length": 3
+        }
+      }
     }
   ]
 }

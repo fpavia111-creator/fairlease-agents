@@ -196,6 +196,116 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "feldspar_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "feldspar_check",
+      "args": {
+        "leases": "../../outside.csv",
+        "estoppels": "fixtures/estoppels-2026.csv",
+        "policy": "fixtures/estoppel-policy.json",
+        "indexes": "fixtures/indexes.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "feldspar_check",
+      "mode": "review",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "estoppels": "fixtures/estoppels-2026.csv",
+        "policy": "fixtures/estoppel-policy.json",
+        "indexes": "fixtures/indexes.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.coverage.returned": 4,
+          "result.coverage.pct_returned": 92.96,
+          "result.coverage.meets_requirement": true,
+          "result.unmatched_estoppels.length": 1
+        },
+        "contains": [
+          "1 claiming a landlord default"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "feldspar_check",
+      "args": {
+        "estoppels": "fixtures/estoppels-2026.csv",
+        "policy": "fixtures/estoppel-policy.json",
+        "indexes": "fixtures/indexes.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "leases"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "feldspar_draft_request",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "estoppels": "fixtures/estoppels-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 150"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "feldspar_draft_request",
+      "approve": "Dana Example",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "estoppels": "fixtures/estoppels-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 150"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "feldspar_draft_request",
+      "mode": "review",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "estoppels": "fixtures/estoppels-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 150"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

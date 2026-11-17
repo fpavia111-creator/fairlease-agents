@@ -1,0 +1,5 @@
+Property,Unit,Move-out,Ready,Move-in,Category,Vendor,Cost,Tenant Chargeable,Market Rent
+Maple Court Apartments,Apt 0103,2026-10-01,2026-10-06,2026-10-20,Paint,BrightWall Painting (fictional),900.00,Owner,1850
+Maple Court Apartments,Apt 0103,,,,Carpet cleaning,Sparkle Cleaners (fictional),1100.00,Tenant,
+Maple Court Apartments,201,2026-10-10,2026-10-05,,Cleaning,Sparkle Cleaners (fictional),200.00,No,1450
+Birch Row Apartments (fictional),201,2026-10-10,2026-10-14,2026-11-01,Cleaning,Sparkle Cleaners (fictional),180.00,No,1500

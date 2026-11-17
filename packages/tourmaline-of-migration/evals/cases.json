@@ -186,6 +186,65 @@
           "verifies"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "tourmaline_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "tourmaline_check",
+      "args": {
+        "before": "../../outside.csv",
+        "after": "fixtures/rent-roll-new-system.csv",
+        "policy": "fixtures/migration-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "tourmaline_check",
+      "mode": "review",
+      "args": {
+        "before": "fixtures/rent-roll-old-system.csv",
+        "after": "fixtures/rent-roll-new-system.csv",
+        "policy": "fixtures/migration-policy.json"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.unit": "B-305",
+          "result.totals.4.difference": -862
+        },
+        "contains": [
+          "6 differ",
+          "1 missing from the new system",
+          "deposit 12450 vs 10550"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "tourmaline_check",
+      "args": {
+        "after": "fixtures/rent-roll-new-system.csv",
+        "policy": "fixtures/migration-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "before"
+        ]
+      }
     }
   ]
 }

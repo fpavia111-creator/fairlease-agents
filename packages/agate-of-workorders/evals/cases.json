@@ -153,6 +153,62 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "agate_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "agate_check",
+      "args": {
+        "work_orders": "../../outside.csv",
+        "policy": "fixtures/workorder-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "agate_check",
+      "mode": "review",
+      "args": {
+        "work_orders": "fixtures/work-orders-appfolio.csv",
+        "policy": "fixtures/workorder-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 20,
+          "result.items.0.work_order": "4112",
+          "result.vendors.0.vendor": "QuickFix HVAC (fictional)",
+          "result.vendors.0.on_time_pct": 0
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "agate_check",
+      "args": {
+        "policy": "fixtures/workorder-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "work_orders"
+        ]
+      }
     }
   ]
 }

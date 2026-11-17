@@ -9,6 +9,13 @@ import { readNumber } from './intl.js';
 
 export const round2 = (n) => Math.round((Number(n) + Number.EPSILON) * 100) / 100;
 export const num = (v) => { if (v === null || v === undefined || v === '') return null; if (typeof v === 'number') return Number.isFinite(v) ? v : null; const n = readNumber(v); return Number.isFinite(n) ? n : null; };
+/** An amount that may be written short, as insurance limits and budgets often are: "$1M", "2MM", "500K", "1 million". Null when it is not a number. */
+export const shortAmount = (v) => {
+  const n = num(v); if (n !== null) return n;
+  const m = /^[^\d-]*(-?[\d.,]+)\s*(k|thousand|m|mm|mio|million|b|bn|billion)\.?$/i.exec(str(v)); if (!m) return null;
+  const base = num(m[1]); if (base === null) return null;
+  const u = m[2].toLowerCase(); return base * (u === 'k' || u === 'thousand' ? 1e3 : /^b/.test(u) ? 1e9 : 1e6);
+};
 export const sum = (xs) => round2(xs.reduce((s, x) => s + (Number(x) || 0), 0));
 export const str = (v) => String(v ?? '').trim();
 export const pct = (part, whole) => (whole ? round2((part / whole) * 100) : 0);

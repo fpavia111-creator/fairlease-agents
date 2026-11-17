@@ -167,6 +167,61 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "shale_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "shale_check",
+      "args": {
+        "rent_roll": "../../outside.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "shale_check",
+      "mode": "review",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.totals.units": 24,
+          "result.totals.physical_occupancy_pct": 87.5,
+          "result.totals.leased_pct": 87.5,
+          "result.totals.exposure_units": 3,
+          "result.totals.loss_to_lease": 850,
+          "result.totals.vacancy_loss_monthly": 6350
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "shale_check",
+      "args": {
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "rent_roll"
+        ]
+      }
     }
   ]
 }

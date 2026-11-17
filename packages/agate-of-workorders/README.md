@@ -16,9 +16,9 @@ npx -y agate-of-workorders mcp --root ./maintenance
 | `possible_emergency` | An open order not marked emergency whose description has a word such as leak, flood, no heat, gas smell, sparks, sewage (or Wasserschaden, fuite, fuga, 漏水, 누수 …). Your own list replaces it via `emergency_words` |
 | `overdue`, `completed_late` | Days from created to completed (or to `as_of`) over your target for the priority |
 | `stale`, `unassigned` | Open longer than `stale_days` (30), or no vendor after `unassigned_days` (2) |
-| `repeat` | Same category in the same unit within `repeat_days` (90) |
+| `repeat` | Same category in the same unit of the same property within `repeat_days` (90); common-area orders are not compared |
 | `cost_outlier` | Cost over `outlier_factor` (4) × the category median, with three or more costs to compare |
-| `cost_missing`, `created_missing` | Data to fix |
+| `cost_missing`, `created_missing`, `completed_date_missing`, `dates_out_of_order` | Data to fix: a closed order with no completed date is not aged, and a completed date before the created date is reported |
 
 Default targets, which you should replace with your own: emergency 1 day, high 3, normal 7, low 14. Priority and status words in nine languages are read; cancelled orders are left out.
 

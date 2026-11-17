@@ -19,6 +19,8 @@ npx -y beryl-of-budgets mcp --root ./budget
 | `budget_unused` (note) | Expense budget of at least the threshold amount with nothing recorded |
 | `explained` (note) | You entered an explanation for the account in the policy |
 
+If no account has an actual for the month, Beryl says the month is not closed and compares nothing. Accounts that start with neither an income nor an expense prefix are listed under `unclassified_accounts` and named in the summary, so a chart of accounts with different numbering is not silently skipped.
+
 Budget files: a column per month, or one row per account and month with `budget` (and `actual`). Actuals: a twelve-month income statement or general ledger detail (AppFolio, Yardi, Buildium layouts recognised); income is credit less debit. `fiscal_start_month` sets the year to date. Income and expense accounts are told apart by number prefix.
 
 

@@ -147,6 +147,64 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "chert_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "chert_check",
+      "args": {
+        "taxes": "../../outside.csv",
+        "policy": "fixtures/tax-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "chert_check",
+      "mode": "review",
+      "args": {
+        "taxes": "fixtures/tax-bills-2026.csv",
+        "policy": "fixtures/tax-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 4,
+          "result.events.length": 2
+        },
+        "contains": [
+          "billed 274000, paid 169000",
+          "7000 past due"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "chert_check",
+      "args": {
+        "policy": "fixtures/tax-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "taxes"
+        ]
+      }
     }
   ]
 }

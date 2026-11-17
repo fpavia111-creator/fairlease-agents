@@ -166,6 +166,64 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "gypsum_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "gypsum_check",
+      "args": {
+        "projects": "../../outside.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "gypsum_check",
+      "mode": "review",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 8,
+          "result.reserves.0.short": 154000
+        },
+        "contains": [
+          "budget 658500",
+          "Replacement reserve by 154000"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "gypsum_check",
+      "args": {
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "projects"
+        ]
+      }
     }
   ]
 }

@@ -192,6 +192,67 @@
           ".html"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "coral_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "coral_check",
+      "args": {
+        "policy": "../../outside.csv",
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "violations": "fixtures/violations-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "coral_check",
+      "mode": "review",
+      "args": {
+        "policy": "fixtures/association-policy.json",
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "violations": "fixtures/violations-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 15,
+          "result.items.0.id": "A-102"
+        },
+        "contains": [
+          "1 delinquent (550 past due)",
+          "5 need a step"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "coral_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "violations": "fixtures/violations-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "policy"
+        ]
+      }
     }
   ]
 }

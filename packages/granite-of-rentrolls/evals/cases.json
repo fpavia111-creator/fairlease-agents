@@ -218,6 +218,64 @@
           "verifies"
         ]
       }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "granite_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "granite_check",
+      "args": {
+        "rent_roll": "../../outside.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-01-31",
+        "indexes": "fixtures/indexes.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "granite_check",
+      "mode": "review",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-01.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-01-31",
+        "indexes": "fixtures/indexes.json"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.units": 8,
+          "result.under_lease_monthly": 222.79,
+          "result.items.6.vacant": true
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "granite_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-01-31",
+        "indexes": "fixtures/indexes.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "rent_roll"
+        ]
+      }
     }
   ]
 }
