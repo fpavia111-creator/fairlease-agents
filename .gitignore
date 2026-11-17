@@ -5,3 +5,4 @@ keystone-out/
 .npmrc
 mcp-conformance.json
 try.mjs
+/node
