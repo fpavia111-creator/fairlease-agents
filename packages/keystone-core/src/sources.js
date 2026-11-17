@@ -26,7 +26,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { rowsToRecords } from './csv.js';
 import { assertValid } from './schema.js';
-import { normHeader, parseAnyDate, inferDateOrder, cleanAmount, inferDecimal } from './intl.js';
+import { normHeader, parseAnyDate, inferDateOrder, cleanAmount, inferDecimal, periodKey } from './intl.js';
 import { translatedNames } from './i18n/columns.js';
 import { encodingName, ENCODINGS } from './encoding.js';
 
@@ -90,7 +90,8 @@ function wordsOf(def) {
 export function findHeaderRow(matrix, def, { skipRows = null } = {}) {
   if (skipRows !== null && skipRows !== undefined) return Math.max(0, Math.min(Number(skipRows) || 0, Math.max(0, matrix.length - 1)));
   const words = wordsOf(def);
-  const score = (row) => (row || []).reduce((n, c) => n + (words.has(normHeader(c)) ? 1 : 0), 0);
+  // A report with a column per month (a T-12, a budget) may have one known heading and twelve month headings: the months count too.
+  const score = (row) => { const known = (row || []).reduce((n, c) => n + (words.has(normHeader(c)) ? 1 : 0), 0); const monthCols = known ? (row || []).filter((c) => typeof c === "string" && c.trim() && periodKey(c)).length : 0; return known + (monthCols >= 2 ? monthCols : 0); };
   let best = 0, bestScore = score(matrix[0]);
   if (bestScore >= 2) return 0;
   for (let i = 1; i < Math.min(matrix.length, 40); i++) { const s = score(matrix[i]); if (s > bestScore && s >= 2) { best = i; bestScore = s; } }

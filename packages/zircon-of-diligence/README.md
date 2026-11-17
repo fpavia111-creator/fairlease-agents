@@ -20,6 +20,11 @@ npx -y zircon-of-diligence mcp --root ./deal
 | `t12_months_missing`, `t12_gap`, `t12_stale`, `rent_account_not_found` | Fewer than 12 months, a hole in the months, ending more than a month before the roll, no rent account recognised |
 | `month_outlier` | A month off the account's median by more than `outlier_pct` (default 25) and `outlier_min` (default 500), for accounts with 9+ months |
 | `month_blank` | 1 to 3 empty months in an account filled the rest of the year (a missed accrual?) |
+| `lease_not_started`, `moved_out_in_roll` | Listed as occupied, but the lease starts after the roll date, or the move-out date has passed |
+| `duplicate_units` | A unit on more than one current line (future residents and the charge lines of one lease do not count) |
+| `accounts_by_name`, `rent_income_net_of`, `t12_extra_months` (notes) | How the T-12 was read: lines without account numbers, gross potential rent taken net of vacancy, loss to lease and concessions, more than twelve month columns |
+
+Sellers' T-12s come as they come. A statement with names only is read by the INCOME and EXPENSES headings its lines sit under (or by their names), subtotals such as Total Income, Effective Gross Income and Net Operating Income are left out, and a title block above the header row is skipped. Vacancy, loss to lease and concessions come off income whichever sign the export gives them. With more than twelve month columns the latest twelve are used. A last month with no rent posted at all is reported as the gap it is.
 
 T-12 layouts: one row per account with a column per month ("Dec 2025", "2026-01", "Jan-26", "März 2026", "2026年3月"…), or one row per account and month. Total columns and total rows are skipped. Income and expense accounts are told apart by account number prefix (`income_prefixes`, default 4; `expense_prefixes`, default 5–8); the rent account by name in nine languages or `rent_accounts`.
 

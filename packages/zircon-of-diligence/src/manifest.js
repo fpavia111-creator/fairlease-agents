@@ -4,7 +4,7 @@ import { checkDiligence, questionsText, DILIGENCE_POLICY_SCHEMA } from './dilige
 
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const OUT = 'keystone-out/zircon';
-const T12_FIELDS = Object.freeze({ property: GL_FIELDS.property, account: GL_FIELDS.account, account_name: GL_FIELDS.account_name, period: GL_FIELDS.period, date: GL_FIELDS.date, amount: GL_FIELDS.amount, debit: GL_FIELDS.debit, credit: GL_FIELDS.credit });
+const T12_FIELDS = Object.freeze({ property: GL_FIELDS.property, account: { ...GL_FIELDS.account, required: false }, account_name: { ...GL_FIELDS.account_name, aliases: [...GL_FIELDS.account_name.aliases, 'Description', 'Line Item', 'Category', 'Item', 'Name'] }, period: GL_FIELDS.period, date: GL_FIELDS.date, amount: GL_FIELDS.amount, debit: GL_FIELDS.debit, credit: GL_FIELDS.credit });
 const props = {
   rent_roll: { type: 'string', description: 'Seller\'s rent roll (CSV, Excel or JSON). AppFolio and Yardi rent roll layouts are recognised' },
   t12: { type: 'string', description: 'Trailing-twelve-month income statement: one row per account with a column per month ("Dec 2025", "2026-01", "Jan-26"…), or one row per account and month (account, period, amount). Local headers such as Cuenta, Periodo or Importe are read' },

@@ -270,6 +270,55 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "names-only-t12-with-gross-potential-rent",
+      "tool": "zircon_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-names-only.csv",
+        "as_of": "2026-11-30"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "accounts_by_name",
+          "rent_income_net_of"
+        ],
+        "not_contains": [
+          "roll_above_collections",
+          "t12_empty",
+          "negative_rent_month",
+          "rent_account_not_found"
+        ],
+        "equals": {
+          "result.t12.months": 12,
+          "result.t12.income": 427800,
+          "result.t12.expenses": 157512,
+          "result.t12.noi": 270288,
+          "result.t12.rent_income_last_month": 35500
+        }
+      }
+    },
+    {
+      "id": "last-month-rent-not-posted",
+      "tool": "zircon_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-last-month-not-posted.csv",
+        "as_of": "2026-11-30",
+        "subject": "reconciliation"
+      },
+      "expect": {
+        "contains": [
+          "roll_above_collections",
+          "35500"
+        ],
+        "equals": {
+          "result.item.status": "issue",
+          "result.item.amount": 35500
+        }
+      }
     }
   ]
 }
