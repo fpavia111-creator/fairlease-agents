@@ -334,6 +334,30 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "bounced-payment-reopens-rent-and-unit-spelling",
+      "tool": "quartz_check",
+      "args": {
+        "ledger": "fixtures/ledger-edge-cases.csv",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "1 delinquent tenant(s) owe 1435"
+        ],
+        "not_contains": [
+          "late_fee_over_policy",
+          "Apt 102"
+        ],
+        "equals": {
+          "result.items.length": 2,
+          "result.items.0.oldest_days": 45,
+          "result.items.0.stage": "manager_review"
+        }
+      }
     }
   ]
 }

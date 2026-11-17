@@ -1,0 +1,7 @@
+Unit,Tenant,Date,Charge Code,Description,Charges,Payments,Reference
+101,Aiko Tanaka,2026-10-01,RENT,Rent,1400.00,,
+101,Aiko Tanaka,2026-10-03,PMT,Payment,,1400.00,ACH
+101,Aiko Tanaka,2026-10-09,PMT,NSF returned payment,,-1400.00,ACH RETURN
+101,Aiko Tanaka,2026-10-09,NSF,NSF fee,35.00,,
+102,Ben Okafor,2026-11-01,RENT,Rent,1350.00,,
+Apt 102,BEN OKAFOR,2026-11-03,PMT,Payment,,1350.00,ACH

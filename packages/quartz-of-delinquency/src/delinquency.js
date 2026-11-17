@@ -1,5 +1,8 @@
 // Delinquency worklist from an aging report or a tenant ledger. Pure functions.
-import { r2, num, str, isoDate, addDays, daysBetween, monthKey, chargeKind, agingBucket, AGING_BUCKETS, sameUnit, sameParty, leaseFor } from 'keystone-core';
+import { r2, num, str, isoDate, addDays, daysBetween, monthKey, chargeKind, agingBucket, AGING_BUCKETS, sameUnit, sameParty, leaseFor, unitKey, partyKey } from 'keystone-core';
+
+const REVERSAL = /returned|reversal|reversed|bounced|chargeback|rücklast|rückbuch|impayé|rejet|devuelto|devolvido|insoluto|不渡|退票|부도/i;
+const FEE_WORD = /\bfee\b|gebühr|frais|cargo|taxa|手数料|费|수수료/i;
 
 export const POLICY_SCHEMA = Object.freeze({
   type: 'object', additionalProperties: false,
@@ -16,7 +19,8 @@ export const DEFAULT_STAGES = Object.freeze([{ days: 1, name: 'reminder' }, { da
 
 const keyOf = (leases, r) => {
   const l = leases ? leaseFor(leases, { lease_id: str(r.lease_id) || undefined, unit: r.unit, tenant: r.tenant }) || (leases.leases || []).find((x) => (r.lease_id && x.lease_id === str(r.lease_id)) || (sameUnit(x.unit, r.unit) && (!r.tenant || sameParty(x.tenant, r.tenant)))) : null;
-  return { key: l ? l.lease_id : `${str(r.unit)}|${str(r.tenant)}`, lease: l };
+  // Without a lease to hang it on, "Apt 101 / AIKO TANAKA" and "101 / Aiko Tanaka" are still one tenant.
+  return { key: l ? l.lease_id : `${unitKey(r.unit) || str(r.unit)}|${partyKey(r.tenant) || str(r.tenant)}`, lease: l };
 };
 
 /**
@@ -28,9 +32,16 @@ export function ageLedger(rows, { leases = null, asOf, aliases = {} }) {
   for (const r of rows) {
     const d = isoDate(r.date); if (!d || d > asOf) continue;
     const { key, lease } = keyOf(leases, r);
-    const t = by.get(key) || { key, lease, unit: lease ? lease.unit : str(r.unit), tenant: lease ? lease.tenant : str(r.tenant), charges: [], credits: [], fees: [], lastPayment: null };
-    const kind = chargeKind(r.charge_code || r.description, aliases);
+    const t = by.get(key) || { key, lease, unit: lease ? lease.unit : str(r.unit), tenant: lease ? lease.tenant : str(r.tenant), charges: [], credits: [], fees: [], reversals: [], lastPayment: null };
+    let kind = chargeKind(r.charge_code || r.description, aliases);
     const charge = num(r.charge); const paid = num(r.payment); const amt = num(r.amount);
+    // A bounced payment: a negative payment, or a "returned payment" line in the charges column. It takes the payment back out,
+    // so the rent it had covered is open again from its own due date. The NSF fee itself is a charge, but not a late fee.
+    const text = `${str(r.charge_code)} ${str(r.description)}`; const bounce = REVERSAL.test(text) && !FEE_WORD.test(text);
+    if (paid !== null && paid < 0) { t.reversals.push({ date: d, amount: r2(-paid) }); by.set(key, t); continue; }
+    if (bounce && kind !== 'payment' && (charge ?? amt) > 0) { t.reversals.push({ date: d, amount: r2(charge ?? amt) }); by.set(key, t); continue; }
+    if (bounce && kind === 'payment' && amt !== null && amt > 0 && paid === null && charge === null) { t.reversals.push({ date: d, amount: r2(amt) }); by.set(key, t); continue; }
+    if (kind === 'late_fee' && /\bnsf\b/i.test(text)) kind = 'nsf_fee';
     const debit = charge ?? (amt !== null && amt > 0 && kind !== 'payment' ? amt : null);
     const credit = paid ?? (amt !== null && (amt < 0 || kind === 'payment') ? Math.abs(amt) : null);
     if (debit && debit > 0) { t.charges.push({ date: d, kind, amount: r2(debit), open: r2(debit) }); if (kind === 'late_fee') t.fees.push({ date: d, amount: r2(debit) }); }
@@ -41,6 +52,16 @@ export function ageLedger(rows, { leases = null, asOf, aliases = {} }) {
   const out = [];
   for (const t of by.values()) {
     t.charges.sort((a, b) => a.date.localeCompare(b.date)); t.credits.sort((a, b) => a.date.localeCompare(b.date));
+    for (const rv of t.reversals) {
+      // Take back the payment it reverses: the latest earlier payment of that amount, else the latest earlier payments up to the amount.
+      const prior = t.credits.map((c, i) => ({ c, i })).filter(({ c }) => c.kind === 'payment' && c.date <= rv.date);
+      const exact = prior.filter(({ c }) => Math.abs(c.amount - rv.amount) < 0.005).at(-1);
+      if (exact) { t.credits.splice(exact.i, 1); continue; }
+      let left = rv.amount; for (const { c } of prior.reverse()) { if (left <= 0.004) break; const use = Math.min(c.amount, left); c.amount = r2(c.amount - use); left = r2(left - use); }
+      if (left > 0.004) t.charges.push({ date: rv.date, kind: 'returned_payment', amount: left, open: left });
+    }
+    t.credits = t.credits.filter((c) => c.amount > 0.004); t.charges.sort((a, b) => a.date.localeCompare(b.date));
+    t.lastPayment = t.credits.filter((c) => c.kind === 'payment').map((c) => c.date).sort().at(-1) || null;
     const rentPaid = new Map(); // month -> date the month's rent was fully covered
     let pool = 0; let ci = 0;
     const credits = [...t.credits];
@@ -75,7 +96,8 @@ export function fromAging(rows, { leases = null }) {
   return out;
 }
 
-const planFor = (policy, t) => (policy.payment_plans || []).find((p) => (p.lease_id && t.lease && p.lease_id === t.lease.lease_id) || (p.unit && sameUnit(p.unit, t.unit)) || (p.tenant && sameParty(p.tenant, t.tenant)));
+// A plan belongs to the tenant it names: every field it gives has to fit (a plan for the last tenant of unit 101 is not the new tenant's).
+const planFor = (policy, t) => (policy.payment_plans || []).find((p) => (p.lease_id || p.unit || p.tenant) && (!p.lease_id || (t.lease && p.lease_id === t.lease.lease_id)) && (!p.unit || sameUnit(p.unit, t.unit)) && (!p.tenant || sameParty(p.tenant, t.tenant)));
 
 /** The delinquency worklist. Either `ledgerRows` or `agingRows`. */
 export function checkDelinquency({ ledgerRows = null, agingRows = null, leases = null, policy = {}, asOf, aliases = {} }) {
@@ -92,7 +114,7 @@ export function checkDelinquency({ ledgerRows = null, agingRows = null, leases =
       const rentByMonth = new Map(t.charges.filter((c) => c.kind === 'rent').map((c) => [monthKey(c.date), c]));
       const monthly = t.lease && t.lease.rent ? num(t.lease.rent.monthly) : null;
       const cap = lf.type === 'pct' && monthly ? r2((monthly * (lf.pct || 0)) / 100) : lf.amount ?? null;
-      const max = lf.max ?? cap;
+      const limits = [cap, lf.max].filter((v) => v !== null && v !== undefined); const max = limits.length ? Math.min(...limits) : null; // the lower of the two
       for (const f of t.fees) {
         const m = monthKey(f.date); const rc = rentByMonth.get(m); const lastGrace = rc ? addDays(rc.date, grace) : null;
         if (max !== null && f.amount > max + 0.004) add('late_fee_over_policy', `Late fee ${f.amount} on ${f.date} is above your policy's ${max}.`, { amount: r2(f.amount - max) });
@@ -115,6 +137,7 @@ export function checkDelinquency({ ledgerRows = null, agingRows = null, leases =
     let stage = null;
     if (status === 'delinquent') {
       stage = (stages.filter((s) => s.days <= t.oldest_days).at(-1) || { name: 'not_yet_late' }).name;
+      if (plan && !onPlan) add('payment_plan_ended', `The payment plan ended ${plan.until} and a balance of ${t.balance} remains; reminders are no longer paused.`, { severity: 'note' });
       if (onPlan) { stage = 'on_plan'; add('on_payment_plan', `On a payment plan until ${plan.until}${plan.note ? ` (${plan.note})` : ''}; reminders paused.`, { severity: 'note' }); }
       if (deposit !== null && t.balance > deposit) add('balance_over_deposit', `Balance ${t.balance} is more than the ${deposit} deposit held.`);
       if (t.buckets['61-90'] + t.buckets['90+'] > 0) add('over_60_days', `${r2(t.buckets['61-90'] + t.buckets['90+'])} is more than 60 days old.`);

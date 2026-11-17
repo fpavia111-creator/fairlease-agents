@@ -21,9 +21,11 @@ npx -y quartz-of-delinquency mcp --root ./collections
 | `over_60_days` | Part of the balance is more than 60 days old |
 | `late_fee_in_grace`, `late_fee_over_policy` | A fee to look at; the amount is in `fee_adjustment` |
 | `late_fee_not_charged` | Late rent with no fee (note) |
-| `on_payment_plan` | On a plan in your policy file; reminders paused |
+| `on_payment_plan`, `payment_plan_ended` | On a plan in your policy file, reminders paused; or the plan's end date has passed and a balance remains. A plan applies only to the tenant it names: every field it gives (lease, unit, tenant) has to fit |
 | `credit_balance`, `below_minimum` | Prepaid, or under your `min_balance` (no action) |
 | `lease_ended`, `former_tenant`, `in_collections` | Notes that change how a balance is handled |
+
+A bounced payment (a negative payment, or a "returned payment" line) takes the payment back out, so the rent it covered is open again from its own due date and ages from there. An NSF fee is a charge on the account but is not judged as a late fee. A late fee is held to the lower of the percentage and the `max` in your policy. Without a leases file, tenants are still matched across spellings of the unit and the name.
 
 
 <!-- generated:start -->
