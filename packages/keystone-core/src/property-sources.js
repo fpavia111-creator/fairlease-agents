@@ -291,19 +291,21 @@ export const TRUST_LEDGER_FIELDS = Object.freeze({
 });
 
 export const LEAD_FIELDS = Object.freeze({
-  lead_id: text(['Lead ID', 'Guest Card ID', 'Prospect ID', 'ID', 'Inquiry ID'], 'id', { required: true }),
+  lead_id: text(['Lead ID', 'Guest Card ID', 'Prospect ID', 'ID', 'Inquiry ID', 'Interessenten-ID', 'N° de contact', 'ID del prospecto', 'ID do lead', 'ID contatto', '反響ID', '线索编号', '리드 ID'], 'id', { required: true }),
   property: PROPERTY,
-  name: text(['Name', 'Prospect', 'Prospect Name', 'Guest Card Name', 'Lead Name'], 'name'),
+  name: text(['Name', 'Prospect', 'Prospect Name', 'Guest Card Name', 'Lead Name', 'Interessent', 'Prospect', 'Interesado', 'Interessado', 'Interessato', '氏名', '客户姓名', '이름'], 'name'),
+  email: text(['Email', 'Email Address', 'E-mail'], 'email'),
+  phone: text(['Phone', 'Phone Number', 'Mobile', 'Cell'], 'phone'),
   source: text(['Source', 'Lead Source', 'Marketing Source', 'Channel', 'Referral Source'], 'lead_source'),
-  unit_type: text(['Unit Type', 'Floorplan', 'Desired Bedrooms', 'Bedrooms', 'Beds'], 'bedrooms'),
-  created: date(['Created', 'Created At', 'Inquiry Date', 'Lead Date', 'First Contact', 'Received'], 'date'),
-  first_response: date(['First Response', 'First Response At', 'Responded', 'Response Date', 'First Contacted']),
-  toured: date(['Tour Date', 'Toured', 'Showing Date', 'Showing', 'Tour']),
-  applied: date(['Application Date', 'Applied', 'Application Submitted']),
-  approved: date(['Approved', 'Approval Date', 'Application Approved']),
-  leased: date(['Lease Signed', 'Leased', 'Lease Date', 'Move-in', 'Converted']),
+  unit_type: text(['Unit Type', 'Floorplan', 'Desired Bedrooms', 'Bedrooms', 'Beds', 'Bed / Bath Preference'], 'bedrooms'),
+  created: date(['Created', 'Created At', 'Inquiry Date', 'Lead Date', 'First Contact', 'Received', 'Anfragedatum', 'Eingang', 'Date de demande', 'Date de contact', 'Fecha de contacto', 'Fecha de alta', 'Data do contato', 'Data richiesta', '問合せ日', '反響日', '咨询日期', '문의일'], 'date'),
+  first_response: date(['First Response', 'First Response At', 'Responded', 'Response Date', 'First Contacted', 'Erste Antwort', 'Première réponse', 'Primera respuesta', 'Primeira resposta', 'Prima risposta', '初回対応日', '首次回复', '첫 응답']),
+  toured: date(['Tour Date', 'Toured', 'Showing Date', 'Showing', 'Tour', 'Besichtigung', 'Visite', 'Fecha de visita', 'Visita', 'Data da visita', 'Data visita', '内見日', '看房日期', '투어일']),
+  applied: date(['Application Date', 'Applied', 'Application Submitted', 'Bewerbung', 'Candidature', 'Fecha de solicitud', 'Solicitud', 'Data da proposta', 'Data domanda', '申込日', '申请日期', '신청일']),
+  approved: date(['Approved', 'Approval Date', 'Application Approved', 'Zusage', 'Accepté le', 'Fecha de aprobación', 'Aprovado em', 'Approvato il', '審査通過日', '批准日期', '승인일']),
+  leased: date(['Lease Signed', 'Leased', 'Lease Date', 'Move-in', 'Converted', 'Vertrag unterschrieben', 'Bail signé', 'Contrato firmado', 'Contrato assinado', 'Contratto firmato', '契約日', '签约日期', '계약일']),
   status: text(['Status', 'Lead Status', 'Stage'], 'status'),
-  lost_reason: text(['Lost Reason', 'Reason Lost', 'Cancel Reason', 'Denied Reason'], 'reason'),
+  lost_reason: text(['Lost Reason', 'Reason Lost', 'Cancel Reason', 'Denied Reason', 'Inactive Reason', 'Verlustgrund', 'Motif de perte', 'Motivo de pérdida', 'Motivo da perda', 'Motivo perdita', '失注理由', '流失原因', '이탈 사유'], 'reason'),
 });
 
 export const BOOKING_FIELDS = Object.freeze({

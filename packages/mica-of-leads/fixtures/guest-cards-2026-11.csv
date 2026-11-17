@@ -1,0 +1,20 @@
+Guest Card ID,Property,Name,Email,Phone,Source,Bed / Bath Preference,Received,First Response,Showing,Application Date,Approved,Lease Signed,Status,Inactive Reason
+GC-1001,Birch Street Lofts (fictional),Avery Stone (fictional),avery.stone@example.com,,Zillow,1/1,10/01/2026,10/01/2026,10/04/2026,10/05/2026,10/07/2026,10/10/2026,Leased,
+GC-1002,Birch Street Lofts (fictional),Bo Mendez (fictional),bo.mendez@example.com,,Zillow,2/1,10/02/2026,10/02/2026,10/06/2026,,,,Inactive,Chose another community
+GC-1003,Birch Street Lofts (fictional),Cam Ellis (fictional),cam.ellis@example.com,,Apartments.com,1/1,10/03/2026,10/06/2026,,,,,Inactive,
+GC-1004,Birch Street Lofts (fictional),Dee Park (fictional),dee.park@example.com,,Website,2/2,10/05/2026,10/05/2026,10/08/2026,10/09/2026,10/12/2026,10/15/2026,Leased,
+GC-1005,Birch Street Lofts (fictional),Eli Brooks (fictional),eli.brooks@example.com,,Walk-in,Studio,10/08/2026,10/08/2026,10/08/2026,,,,Inactive,Price
+GC-1006,Birch Street Lofts (fictional),Fran Ochoa (fictional),fran.ochoa@example.com,,ILS - Zillow,1/1,10/10/2026,10/10/2026,10/13/2026,10/14/2026,10/16/2026,10/20/2026,Leased,
+GC-1007,Birch Street Lofts (fictional),Gil Novak (fictional),gil.novak@example.com,,Apartments.com,3/2,10/12/2026,10/12/2026,,,,,Active,
+GC-1008,Birch Street Lofts (fictional),Hana Sato (fictional),hana.sato@example.com,,Referral,2/1,10/15/2026,10/15/2026,10/18/2026,10/19/2026,10/21/2026,10/25/2026,Leased,
+GC-1009,Birch Street Lofts (fictional),Ivy Grant (fictional),ivy.grant@example.com,,Zillow,2/2,10/20/2026,10/20/2026,10/23/2026,10/24/2026,10/28/2026,,Active,
+GC-1010,Birch Street Lofts (fictional),Jon Reyes (fictional),jon.reyes@example.com,,Apartments.com,1/1,10/22/2026,10/24/2026,10/27/2026,,,,Active,
+GC-1011,Birch Street Lofts (fictional),Kai Moore (fictional),kai.moore@example.com,,Website,Studio,10/28/2026,10/28/2026,11/02/2026,,,,Active,
+GC-1012,Birch Street Lofts (fictional),Lia Chen (fictional),lia.chen@example.com,,Apartments.com,2/1,11/02/2026,11/02/2026,11/05/2026,11/06/2026,,,Active,
+GC-1013,Birch Street Lofts (fictional),Max Dubois (fictional),max.dubois@example.com,,Zillow,1/1,11/05/2026,11/05/2026,11/09/2026,11/10/2026,11/12/2026,,Active,
+GC-1014,Birch Street Lofts (fictional),Nia Fox (fictional),nia.fox@example.com,,Website,2/2,11/09/2026,,,,,,Active,
+GC-1015,Birch Street Lofts (fictional),Gil Novak (fictional),gil.novak@example.com,,Zillow,3/2,11/10/2026,11/10/2026,,,,,Active,
+GC-1016,Birch Street Lofts (fictional),Oli Park (fictional),oli.park@example.com,,Apartments.com,2/1,11/12/2026,11/12/2026,,,,,Active,
+GC-1017,Birch Street Lofts (fictional),Pia Lund (fictional),pia.lund@example.com,,Zillow,1/1,11/13/2026,,,,,,Active,
+GC-1018,Birch Street Lofts (fictional),Quinn Hale (fictional),quinn.hale@example.com,,Website,1/1,11/14/2026,11/14/2026,,,,,Active,
+GC-1019,Birch Street Lofts (fictional),Rae Ito (fictional),rae.ito@example.com,,Apartments.com,Studio,10/30/2026,10/30/2026,10/29/2026,,,,Active,

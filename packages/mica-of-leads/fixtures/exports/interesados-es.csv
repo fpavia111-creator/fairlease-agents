@@ -1,0 +1,5 @@
+ID del prospecto,Inmueble,Interesado,Origen,Fecha de contacto,Primera respuesta,Fecha de visita,Fecha de solicitud,Contrato firmado,Estado,Motivo de pérdida
+P-01,Residencial Los Pinos (ficticio),Marta Ruiz (ficticia),Portal inmobiliario,02/10/2026,02/10/2026,05/10/2026,06/10/2026,12/10/2026,Firmado,
+P-02,Residencial Los Pinos (ficticio),Jorge Sanz (ficticio),Portal inmobiliario,14/10/2026,17/10/2026,,,,Perdido,
+P-03,Residencial Los Pinos (ficticio),Elena Gil (ficticia),Recomendación,28/10/2026,28/10/2026,30/10/2026,,,Abierto,
+P-04,Residencial Los Pinos (ficticio),Pablo Vera (ficticio),Página web,12/11/2026,,,,,Abierto,

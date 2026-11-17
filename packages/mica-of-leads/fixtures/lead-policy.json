@@ -1,0 +1,9 @@
+{
+  "respond_within_days": 1,
+  "follow_up_days": 3,
+  "stale_days": 30,
+  "approved_days": 7,
+  "duplicate_days": 30,
+  "spend": { "Zillow": 600, "Apartments.com": 900, "Website": 150, "Rent.com": 250 },
+  "source_aliases": { "ILS - Zillow": "Zillow" }
+}
