@@ -4,7 +4,7 @@
     "name": "Keystone"
   },
   "metadata": {
-    "description": "Thirty property management agents for commercial and mid-size operators. Each reads your exported files, writes reports locally and waits for a named person before anything that moves money, sends a message or changes a live system."
+    "description": "Thirty property management agents for commercial and mid-size operators. Each reads your exported files, writes reports locally, never moves money or changes a live system, and waits for a named person before any letter or notice goes out."
   },
   "plugins": [
     {
