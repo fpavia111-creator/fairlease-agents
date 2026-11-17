@@ -1,0 +1,53 @@
+{
+  "name": "coral-of-associations",
+  "version": "0.1.0",
+  "description": "Coral of Associations: checks HOA and condo association owner accounts against your assessment and collection policy (missing or wrong assessments, late fees charged or missed, days delinquent and the next step your policy names) and tracks violations against your notice, cure and hearing steps; drafts owner notices.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "coral-of-associations": "bin/coral-of-associations.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/coral-of-associations.js demo",
+    "eval": "node bin/coral-of-associations.js eval"
+  },
+  "dependencies": {
+    "keystone-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/keystone-agents.git",
+    "directory": "packages/coral-of-associations"
+  },
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/coral-of-associations#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/keystone-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "associations"
+  ]
+}

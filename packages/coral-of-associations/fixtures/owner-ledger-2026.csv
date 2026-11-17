@@ -1,0 +1,80 @@
+Account,Owner,Unit,Date,Description,Charge,Payment,Balance
+A-101,Ada Lane (fictional),101,2026-07-01,HOA Assessment,250.00,,250.00
+A-101,Ada Lane (fictional),101,2026-07-05,Payment - thank you,,250.00,0.00
+A-101,Ada Lane (fictional),101,2026-08-01,HOA Assessment,250.00,,250.00
+A-101,Ada Lane (fictional),101,2026-08-05,Payment - thank you,,250.00,0.00
+A-101,Ada Lane (fictional),101,2026-09-01,HOA Assessment,250.00,,250.00
+A-101,Ada Lane (fictional),101,2026-09-05,Payment - thank you,,250.00,0.00
+A-101,Ada Lane (fictional),101,2026-10-01,HOA Assessment,250.00,,250.00
+A-101,Ada Lane (fictional),101,2026-10-05,Payment - thank you,,250.00,0.00
+A-101,Ada Lane (fictional),101,2026-11-01,HOA Assessment,250.00,,250.00
+A-101,Ada Lane (fictional),101,2026-11-05,Payment - thank you,,250.00,0.00
+A-102,Ben Ortiz (fictional),102,2026-07-01,HOA Assessment,250.00,,250.00
+A-102,Ben Ortiz (fictional),102,2026-07-03,Payment - thank you,,250.00,0.00
+A-102,Ben Ortiz (fictional),102,2026-08-01,HOA Assessment,250.00,,250.00
+A-102,Ben Ortiz (fictional),102,2026-08-04,Payment - thank you,,250.00,0.00
+A-102,Ben Ortiz (fictional),102,2026-09-01,HOA Assessment,250.00,,250.00
+A-102,Ben Ortiz (fictional),102,2026-09-17,Late Fee,25.00,,275.00
+A-102,Ben Ortiz (fictional),102,2026-10-01,HOA Assessment,250.00,,525.00
+A-102,Ben Ortiz (fictional),102,2026-10-17,Late Fee,25.00,,550.00
+A-102,Ben Ortiz (fictional),102,2026-11-01,HOA Assessment,250.00,,800.00
+A-103,Chen Wu (fictional),103,2026-07-01,HOA Assessment,250.00,,250.00
+A-103,Chen Wu (fictional),103,2026-07-02,Payment - thank you,,250.00,0.00
+A-103,Chen Wu (fictional),103,2026-08-01,HOA Assessment,250.00,,250.00
+A-103,Chen Wu (fictional),103,2026-08-02,Payment - thank you,,250.00,0.00
+A-103,Chen Wu (fictional),103,2026-09-01,HOA Assessment,250.00,,250.00
+A-103,Chen Wu (fictional),103,2026-09-02,Payment - thank you,,250.00,0.00
+A-103,Chen Wu (fictional),103,2026-10-01,HOA Assessment,225.00,,225.00
+A-103,Chen Wu (fictional),103,2026-10-02,Payment - thank you,,225.00,0.00
+A-103,Chen Wu (fictional),103,2026-11-01,HOA Assessment,250.00,,250.00
+A-103,Chen Wu (fictional),103,2026-11-02,Payment - thank you,,250.00,0.00
+A-104,Dana Price (fictional),104,2026-07-01,HOA Assessment,250.00,,250.00
+A-104,Dana Price (fictional),104,2026-07-06,Payment - thank you,,250.00,0.00
+A-104,Dana Price (fictional),104,2026-08-01,HOA Assessment,250.00,,250.00
+A-104,Dana Price (fictional),104,2026-08-06,Payment - thank you,,250.00,0.00
+A-104,Dana Price (fictional),104,2026-09-01,HOA Assessment,250.00,,250.00
+A-104,Dana Price (fictional),104,2026-09-06,Payment - thank you,,250.00,0.00
+A-104,Dana Price (fictional),104,2026-10-01,HOA Assessment,250.00,,250.00
+A-104,Dana Price (fictional),104,2026-10-06,Payment - thank you,,250.00,0.00
+A-105,Eli Stone (fictional),105,2026-07-01,HOA Assessment,250.00,,250.00
+A-105,Eli Stone (fictional),105,2026-07-08,Payment - thank you,,250.00,0.00
+A-105,Eli Stone (fictional),105,2026-08-01,HOA Assessment,250.00,,250.00
+A-105,Eli Stone (fictional),105,2026-08-08,Payment - thank you,,250.00,0.00
+A-105,Eli Stone (fictional),105,2026-09-01,HOA Assessment,250.00,,250.00
+A-105,Eli Stone (fictional),105,2026-09-08,Payment - thank you,,250.00,0.00
+A-105,Eli Stone (fictional),105,2026-10-01,HOA Assessment,250.00,,250.00
+A-105,Eli Stone (fictional),105,2026-10-25,Payment - thank you,,250.00,0.00
+A-105,Eli Stone (fictional),105,2026-11-01,HOA Assessment,250.00,,250.00
+A-105,Eli Stone (fictional),105,2026-11-07,Payment - thank you,,250.00,0.00
+A-106,Fay Moss (fictional),106,2026-07-01,HOA Assessment,250.00,,250.00
+A-106,Fay Moss (fictional),106,2026-07-10,Payment - thank you,,250.00,0.00
+A-106,Fay Moss (fictional),106,2026-08-01,HOA Assessment,250.00,,250.00
+A-106,Fay Moss (fictional),106,2026-08-10,Payment - thank you,,250.00,0.00
+A-106,Fay Moss (fictional),106,2026-08-17,Late Fee,25.00,,25.00
+A-106,Fay Moss (fictional),106,2026-08-30,Payment - thank you,,25.00,0.00
+A-106,Fay Moss (fictional),106,2026-09-01,HOA Assessment,250.00,,250.00
+A-106,Fay Moss (fictional),106,2026-09-10,Payment - thank you,,250.00,0.00
+A-106,Fay Moss (fictional),106,2026-10-01,HOA Assessment,250.00,,250.00
+A-106,Fay Moss (fictional),106,2026-10-10,Payment - thank you,,250.00,0.00
+A-106,Fay Moss (fictional),106,2026-11-01,HOA Assessment,250.00,,250.00
+A-106,Fay Moss (fictional),106,2026-11-10,Payment - thank you,,250.00,0.00
+A-107,Gus Hale (fictional),107,2026-07-01,HOA Assessment,250.00,,250.00
+A-107,Gus Hale (fictional),107,2026-07-01,Payment - thank you,,250.00,0.00
+A-107,Gus Hale (fictional),107,2026-08-01,HOA Assessment,250.00,,250.00
+A-107,Gus Hale (fictional),107,2026-08-01,Payment - thank you,,250.00,0.00
+A-107,Gus Hale (fictional),107,2026-09-01,HOA Assessment,250.00,,250.00
+A-107,Gus Hale (fictional),107,2026-09-01,Payment - thank you,,250.00,0.00
+A-107,Gus Hale (fictional),107,2026-10-01,HOA Assessment,250.00,,250.00
+A-107,Gus Hale (fictional),107,2026-10-01,Payment - thank you,,250.00,0.00
+A-107,Gus Hale (fictional),107,2026-11-01,HOA Assessment,250.00,,250.00
+A-107,Gus Hale (fictional),107,2026-11-01,Payment - thank you,,250.00,0.00
+A-107,Gus Hale (fictional),107,2026-11-01,Payment - thank you,,250.00,-250.00
+A-108,Hana Ito (fictional),108,2026-07-01,HOA Assessment,300.00,,300.00
+A-108,Hana Ito (fictional),108,2026-07-09,Payment - thank you,,300.00,0.00
+A-108,Hana Ito (fictional),108,2026-08-01,HOA Assessment,300.00,,300.00
+A-108,Hana Ito (fictional),108,2026-08-09,Payment - thank you,,300.00,0.00
+A-108,Hana Ito (fictional),108,2026-09-01,HOA Assessment,300.00,,300.00
+A-108,Hana Ito (fictional),108,2026-09-09,Payment - thank you,,300.00,0.00
+A-108,Hana Ito (fictional),108,2026-10-01,HOA Assessment,300.00,,300.00
+A-108,Hana Ito (fictional),108,2026-10-09,Payment - thank you,,300.00,0.00
+A-108,Hana Ito (fictional),108,2026-11-01,HOA Assessment,300.00,,0.00

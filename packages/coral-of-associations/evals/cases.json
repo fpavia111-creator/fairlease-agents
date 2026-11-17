@@ -1,0 +1,18 @@
+{
+  "suite": "coral-of-associations",
+  "root": "..",
+  "data_note": "Fictional Cedar Ridge association ledger, violations and policy in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {"id": "totals", "tool": "coral_check", "args": {"policy": "fixtures/association-policy.json", "ledger": "fixtures/owner-ledger-2026.csv", "violations": "fixtures/violations-2026.csv", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.items.length": 15, "result.items.0.id": "A-102"}, "contains": ["1 delinquent (550 past due)", "5 need a step"]}},
+    {"id": "collection-step-from-policy", "tool": "coral_explain", "args": {"policy": "fixtures/association-policy.json", "ledger": "fixtures/owner-ledger-2026.csv", "as_of": "2026-11-15", "id": "A-102"}, "expect": {"contains": ["offer a payment plan", "Next at 90 days", "A person decides"], "equals": {"result.item.past_due": 550}}},
+    {"id": "late-fee-not-due", "tool": "coral_explain", "args": {"policy": "fixtures/association-policy.json", "ledger": "fixtures/owner-ledger-2026.csv", "as_of": "2026-11-15", "id": "A-106"}, "expect": {"contains": ["late_fee_not_due", "within the grace period"]}},
+    {"id": "per-unit-amount", "tool": "coral_explain", "args": {"policy": "fixtures/association-policy.json", "ledger": "fixtures/owner-ledger-2026.csv", "as_of": "2026-11-15", "id": "A-108"}, "expect": {"contains": ["balance_differs"], "not_contains": ["wrong_amount"]}},
+    {"id": "fine-without-hearing", "tool": "coral_explain", "args": {"policy": "fixtures/association-policy.json", "violations": "fixtures/violations-2026.csv", "as_of": "2026-11-15", "id": "V-201"}, "expect": {"contains": ["fine_without_hearing"], "equals": {"result.item.status": "action"}}},
+    {"id": "repeat", "tool": "coral_explain", "args": {"policy": "fixtures/association-policy.json", "violations": "fixtures/violations-2026.csv", "as_of": "2026-11-15", "id": "V-204"}, "expect": {"contains": ["repeat", "V-203"]}},
+    {"id": "spanish-export", "tool": "coral_check", "args": {"policy": "fixtures/exports/comunidad-policy.json", "ledger": "fixtures/exports/cuotas-comunidad-es.csv", "as_of": "2026-11-15"}, "expect": {"contains": ["1 delinquent (240 past due)", "enviar recordatorio de pago"]}},
+    {"id": "no-reminder-when-current", "tool": "coral_draft_notice", "mode": "auto", "auto_actions": ["coral_draft_notice"], "args": {"policy": "fixtures/association-policy.json", "ledger": "fixtures/owner-ledger-2026.csv", "as_of": "2026-11-15", "id": "A-101"}, "expect": {"status": "error", "contains": ["nothing past due"]}},
+    {"id": "never-liens", "tool": "record_lien", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
+    {"id": "never-fines", "tool": "post_fine", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
+    {"id": "send-is-one-click", "tool": "coral_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+  ]
+}

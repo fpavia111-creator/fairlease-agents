@@ -1,0 +1,7 @@
+{
+  "association": "Comunidad de Propietarios Calle Olivo 12 (ficticia)",
+  "assessment": { "amount": 120, "frequency": "monthly", "due_day": 1 },
+  "periods_from": "2026-09",
+  "grace_days": 10,
+  "collection_steps": [{ "days": 30, "step": "enviar recordatorio de pago" }, { "days": 90, "step": "llevar a la junta de propietarios" }]
+}

@@ -1,0 +1,13 @@
+{
+  "association": "Cedar Ridge Owners Association (fictional)",
+  "assessment": { "amount": 250, "per_unit": { "108": 300 }, "frequency": "monthly", "due_day": 1 },
+  "periods_from": "2026-07",
+  "grace_days": 15,
+  "late_fee": { "flat": 25 },
+  "collection_steps": [
+    { "days": 30, "step": "send a payment reminder" },
+    { "days": 60, "step": "send a second reminder and offer a payment plan" },
+    { "days": 90, "step": "refer the account to the board for a collection decision" }
+  ],
+  "violations": { "notice_within_days": 5, "cure_days": 14, "hearing_before_fine": true, "stale_days": 90, "repeat_days": 180 }
+}

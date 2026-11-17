@@ -345,8 +345,8 @@ export const ASSOCIATION_FIELDS = Object.freeze({
   unit: UNIT,
   date: date(['Date', 'Charge Date', 'Post Date', 'Due Date'], 'date'),
   type: text(['Type', 'Charge Type', 'Assessment Type', 'Description', 'Code'], 'charge_code'),
-  charge: money(['Charge', 'Charges', 'Assessment', 'Amount Due', 'Billed']),
-  payment: money(['Payment', 'Payments', 'Paid', 'Received'], 'payment'),
+  charge: money(['Charge', 'Charges', 'Assessment', 'Amount Due', 'Billed', 'Cargo', 'Cargos', 'Soll', 'Belastung', 'Débit', 'Appel de fonds', 'Débito', 'Cobrança', 'Addebito', '請求額', '請求', '应收金额', '应收', '청구액', '부과액']),
+  payment: money(['Payment', 'Payments', 'Paid', 'Received', 'Haben', 'Crédit', 'Crédito', 'Accredito', '入金額', '实收金额', '수납액'], 'payment'),
   balance: money(['Balance', 'Balance Due', 'Account Balance'], 'balance'),
 });
 
