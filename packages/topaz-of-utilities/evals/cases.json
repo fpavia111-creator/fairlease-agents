@@ -239,6 +239,68 @@
           "bills"
         ]
       }
+    },
+    {
+      "id": "messy-exports-same-answer",
+      "tool": "topaz_check",
+      "args": {
+        "bills": "fixtures/bills-edge-cases.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed-edge-cases.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "listed twice",
+          "ends before it starts"
+        ],
+        "equals": {
+          "result.overbilled_total": 416.12,
+          "result.periods.length": 6,
+          "result.skipped_bills.length": 2,
+          "result.unmatched_charges.length": 0
+        }
+      }
+    },
+    {
+      "id": "roommates-and-two-meters",
+      "tool": "topaz_check",
+      "args": {
+        "bills": "fixtures/bills-two-meters.csv",
+        "occupancy": "fixtures/occupancy-roommates.csv",
+        "rubs": "fixtures/rubs-units.json"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "overlapping_tenancies"
+        ],
+        "equals": {
+          "result.periods.length": 1,
+          "result.periods.0.amount": 400,
+          "result.periods.0.owner_share": 0,
+          "result.periods.0.lines.0.share": 100,
+          "result.periods.0.lines.3.share": 103.23,
+          "result.items.length": 2
+        }
+      }
+    },
+    {
+      "id": "explain-shared-unit",
+      "tool": "topaz_explain",
+      "args": {
+        "bills": "fixtures/bills-two-meters.csv",
+        "occupancy": "fixtures/occupancy-roommates.csv",
+        "rubs": "fixtures/rubs-units.json",
+        "unit": "1A"
+      },
+      "expect": {
+        "contains": [
+          "Maya Brooks, Noor Haddad",
+          "split 200"
+        ]
+      }
     }
   ]
 }

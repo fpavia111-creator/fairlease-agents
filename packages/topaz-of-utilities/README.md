@@ -22,6 +22,9 @@ npx -y topaz-of-utilities mcp --root ./utilities
 | `billed_while_vacant` | A charge for a unit with nobody in it that period |
 | `duplicate_charge`, `overbilled`, `underbilled`, `not_billed` | Per unit, against the split |
 | `bill_spike` | Cost per day more than `spike_pct` (default 25%) above the earlier bills of that utility |
+| `overlapping_tenancies` | Two tenancies in one unit on the same days (roommates, or a move-in keyed before the move-out); they share the unit rather than counting twice |
+
+Messy exports are expected. A unit written `Unit 101` on one row and `101` on another is one unit. The same bill in two exports is counted once, and two accounts of one utility for the same period are split as one bill. A bill whose period ends before it starts is skipped with the reason. Words name a utility only when they stand alone (`gas` is not in `Vegas`), and a parking, rent or payment line is never read as a utility charge. With a property column in the files, each bill is split over its own property's units only.
 
 
 ## Files it reads
