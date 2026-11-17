@@ -24,6 +24,8 @@ npx -y garnet-of-renewals mcp --root ./renewals
 | `capped`, `at_or_over_market`, `market_rent_missing` | How the proposal was set |
 
 
+The cap is applied to the rent paid today, after the lease's own steps and escalations. A lease whose renewal is already in the lease file (same tenant and unit, starting when this one ends) is shown as `renewed` and not chased. The latest offer during the lease counts; an offer dated before the lease began belongs to the earlier term. A status such as "Renewal notice sent" is a pending offer; only notice to vacate ("NTV", "Gave notice", "Non-renewal", "Moving out") ends it.
+
 <!-- generated:start -->
 
 ## A demo run

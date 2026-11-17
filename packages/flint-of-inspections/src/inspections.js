@@ -1,5 +1,5 @@
 // Unit inspections: move-out against move-in item by item, periodic inspections on schedule, poor items followed by a work order. Pure functions.
-import { num, str, isoDate, addDays, daysBetween, sameUnit, foldText, groupRentRoll } from 'keystone-core';
+import { num, str, isoDate, addDays, daysBetween, sameUnit, unitKey, foldText, groupRentRoll } from 'keystone-core';
 
 export const INSPECTION_POLICY_SCHEMA = Object.freeze({
   type: 'object', additionalProperties: false, required: ['interval_days'],
@@ -36,6 +36,7 @@ export function conditionScore(v, scaleMax = 5) {
   return hit ? hit[1] : null;
 }
 
+const NOT_RATED = /^(n a|na|not applicable|none|nicht zutreffend|entfallt|sans objet|no aplica|nao se aplica|non applicabile|該当なし|不适用|해당 없음|-+)$/;
 const MOVE_IN = /move[- ]?in|einzug|entrée|entree|ingreso|vistoria de entrada|entrada|ingresso|入居|入住|입주/i;
 const MOVE_OUT = /move[- ]?out|auszug|sortie|salida|saída|saida|uscita|退去|退房|退租|퇴거/i;
 export const inspectionKind = (t) => (MOVE_OUT.test(str(t)) ? 'move_out' : MOVE_IN.test(str(t)) ? 'move_in' : 'periodic');
@@ -56,10 +57,13 @@ export function groupInspections(rows, scaleMax = 5) {
 
 export function checkInspections({ rows, policy, rentRoll = null, workOrders = null, asOf }) {
   const scaleMax = policy.scale_max ?? 5; const poorAt = policy.poor_at ?? 2; const follow = policy.followup_days ?? 14; const soon = policy.due_soon_days ?? 30;
-  const insp = groupInspections(rows, scaleMax); const roll = rentRoll ? groupRentRoll(rentRoll) : null;
-  const units = new Map(); const key = (u) => str(u).toLowerCase().replace(/^(unit|apt|suite|#)\s*/i, '');
+  const all = groupInspections(rows, scaleMax);
+  // An inspection dated after as_of is on the schedule; it has not been done.
+  const insp = all.filter((i) => i.date <= asOf); const upcoming = all.filter((i) => i.date > asOf);
+  const roll = rentRoll ? groupRentRoll(rentRoll) : null;
+  const units = new Map(); const key = (u) => unitKey(u) || str(u).toLowerCase();
   if (roll) for (const r of roll) units.set(key(r.unit), { unit: r.unit, tenant: r.tenant, vacant: r.vacant });
-  for (const i of insp) if (!units.has(key(i.unit))) units.set(key(i.unit), { unit: i.unit, tenant: '', vacant: null });
+  for (const i of all) if (!units.has(key(i.unit))) units.set(key(i.unit), { unit: i.unit, tenant: '', vacant: null });
   const wos = (workOrders || []).map((w) => ({ unit: str(w.unit), created: isoDate(w.created), id: str(w.work_order), text: `${str(w.description)} ${str(w.category)}` })).filter((w) => w.created);
   const items = [];
   for (const u of units.values()) {
@@ -74,7 +78,7 @@ export function checkInspections({ rows, policy, rentRoll = null, workOrders = n
       const lastOcc = [...mine].reverse().find((i) => i.kind !== 'move_out') || null;
       if (!lastOcc) { if (roll) add('never_inspected', 'No inspection on file for this unit.'); }
       else { nextDue = addDays(lastOcc.date, policy.interval_days); daysToDue = daysBetween(asOf, nextDue);
-        if (daysToDue < 0) add('inspection_overdue', `Last inspection ${lastOcc.date} (${lastOcc.kind.replace('_', '-')}); the ${policy.interval_days}-day interval ran out ${nextDue}, ${-daysToDue} days ago.`);
+        if (daysToDue < 0) add('inspection_overdue', `Last inspection ${lastOcc.date} (${lastOcc.kind.replace('_', '-')}); the ${policy.interval_days}-day interval ran out ${nextDue}, ${-daysToDue} days ago.${(upcoming.find((i) => sameUnit(i.unit, u.unit)) || {}).date ? ` One is scheduled for ${upcoming.find((i) => sameUnit(i.unit, u.unit)).date}.` : ''}`);
         else if (daysToDue <= soon) add('inspection_due_soon', `Next inspection due ${nextDue} (${daysToDue} days).`, { severity: 'soon' }); }
     }
     // Move-out against the latest move-in before it.
@@ -104,10 +108,11 @@ export function checkInspections({ rows, policy, rentRoll = null, workOrders = n
         else if (!after.length) add('poor_follow_up_due', `Rated poor on ${last.date}: ${poor.map((x) => x.label).join('; ')}. No work order yet; ${follow - age} day(s) left of your ${follow}-day follow-up.`, { severity: 'soon' });
       }
     }
-    const unrated = last ? last.items.filter((x) => x.score === null && x.condition) : [];
+    const unrated = last ? last.items.filter((x) => x.score === null && x.condition && !NOT_RATED.test(foldText(x.condition).toLowerCase().trim())) : [];
+    const nextScheduled = (upcoming.find((i) => sameUnit(i.unit, u.unit)) || {}).date || null;
     if (unrated.length) add('unrated', `Condition not understood for: ${unrated.map((x) => `${x.label} "${x.condition}"`).join('; ')}.`, { severity: 'note' });
     const hard = findings.filter((f) => !f.severity);
-    items.push({ unit: u.unit, tenant: u.tenant, vacant: u.vacant, inspections: mine.length, last_inspection: lastAny, last_kind: last ? last.kind : null, next_due: nextDue, days_to_due: daysToDue, worse, poor: poor.map((x) => ({ item: x.label, condition: x.condition })), status: hard.length ? 'issue' : findings.some((f) => f.severity === 'soon') ? 'due_soon' : 'ok', findings });
+    items.push({ unit: u.unit, tenant: u.tenant, vacant: u.vacant, inspections: mine.length, last_inspection: lastAny, last_kind: last ? last.kind : null, next_due: nextDue, days_to_due: daysToDue, next_scheduled: nextScheduled, worse, poor: poor.map((x) => ({ item: x.label, condition: x.condition })), status: hard.length ? 'issue' : findings.some((f) => f.severity === 'soon') ? 'due_soon' : 'ok', findings });
   }
   const rank = { issue: 0, due_soon: 1, ok: 2 };
   items.sort((a, b) => rank[a.status] - rank[b.status] || String(a.unit).localeCompare(String(b.unit), undefined, { numeric: true }));

@@ -24,6 +24,8 @@ npx -y flint-of-inspections mcp --root ./inspections
 Conditions are read as words in nine languages (good, gut, bon, bueno, bom, buono, 良好, 良好, 양호; damaged, beschädigt, endommagé…) or as scores (`4`, `8/10`, with `scale_max`). Negated wording such as "not good" is left unrated for a person. Vacant units are skipped for the schedule; without a rent roll, a unit whose latest inspection is a move-out is treated as between residents.
 
 
+An inspection dated after `as_of` is treated as scheduled, not done: it is shown as `next_scheduled` and does not reset the interval. Units are matched across spellings ("Apt 101", "0101", "Unit 101"). `N/A` and `not applicable` are simply not rated.
+
 <!-- generated:start -->
 
 ## A demo run

@@ -13,15 +13,19 @@ export const ESTOPPEL_POLICY_SCHEMA = Object.freeze({
 });
 
 const NONE = /^(none|no|n|nil|n\/a|n a|na|-|0|keine|kein|nein|aucune?|rien|non|ningun[oa]?|nada|no hay|nenhum|nenhuma|não|nao|nessuno|nessuna|nulla|なし|無し|无|没有|없음)\.?$/i;
-const said = (v) => { const t = str(v); return t && !NONE.test(foldText(t).trim()) ? t : ''; };
+// Short ways of saying "nothing to report". Anything longer or different is quoted as the tenant's statement.
+const NO_CLAIM = /^(none( known| at this time| to (the )?(best of )?(tenant s|tenants|our|its|my) knowledge)?|no (known )?(defaults?|claims?|offsets?|disputes?|amendments?|options?|modifications?)( known| exist| at this time)?|(tenant is |we are |i am )?not aware of any( defaults?| claims?)?|not applicable)$/;
+const said = (v) => { const t = str(v); const f = foldText(t).trim(); return t && !NONE.test(f) && !NO_CLAIM.test(f) ? t : ''; };
+const idKey = (v) => str(v).toLowerCase().replace(/\s+/g, '');
+const holdover = (l, asOf) => l.end && l.end < asOf && /month[- ]to[- ]month|holdover|mes a mes|monatlich|au mois/i.test(str(l.notes));
 
 export function checkEstoppels({ leases, estoppels, rentRoll = null, policy = {}, indexes = {}, asOf }) {
   const tol = policy.rent_tolerance ?? 1; const maxAge = policy.max_age_days ?? 30; const ref = policy.closing || asOf;
-  const inForce = (leases.leases || []).filter((l) => l.start <= asOf && l.end >= asOf);
+  const inForce = (leases.leases || []).filter((l) => l.start <= asOf && (!l.end || l.end >= asOf || holdover(l, asOf)));
   const used = new Set(); const items = [];
   for (const l of inForce) {
     const findings = []; const add = (code, detail, extra = {}) => findings.push({ code, detail, ...extra });
-    const mine = estoppels.map((e, i) => ({ e, i })).filter(({ e }) => (str(e.lease_id) && str(e.lease_id) === l.lease_id) || (!str(e.lease_id) && sameUnit(e.unit, l.unit) && (!str(e.tenant) || sameParty(e.tenant, l.tenant))));
+    const mine = estoppels.map((e, i) => ({ e, i })).filter(({ e }) => (str(e.lease_id) && idKey(e.lease_id) === idKey(l.lease_id)) || (!str(e.lease_id) && sameUnit(e.unit, l.unit) && (!str(e.tenant) || sameParty(e.tenant, l.tenant))));
     mine.forEach(({ i }) => used.add(i));
     const e = mine.map(({ e: x }) => x).sort((a, b) => String(isoDate(b.signed) || isoDate(b.received) || '').localeCompare(String(isoDate(a.signed) || isoDate(a.received) || '')))[0];
     const sqft = num(l.sqft); const major = policy.major_sqft !== undefined && sqft !== null && sqft >= policy.major_sqft;
@@ -29,7 +33,10 @@ export function checkEstoppels({ leases, estoppels, rentRoll = null, policy = {}
     if (!e) { add(major ? 'major_tenant_missing' : 'not_returned', `No estoppel returned${major ? ` from a major tenant (${sqft} sq ft)` : ''}.`); }
     else {
       const signed = isoDate(e.signed);
+      if (holdover(l, asOf)) add('holdover', `Lease ended ${l.end}; treated as in force because its notes say month-to-month.`, { severity: 'note' });
+      if (str(e.tenant) && !sameParty(e.tenant, l.tenant)) add('tenant_differs', `The estoppel is from ${str(e.tenant)}; the tenant on the lease is ${l.tenant}. Check for an assignment or a sublease.`);
       if (!signed) add('unsigned', 'No signature date on the estoppel; it may not be signed.');
+      else if (signed > asOf) add('signed_in_future', `Signature date ${signed} is after ${asOf}; check the date.`);
       else if (daysBetween(signed, ref) > maxAge) add('stale', `Signed ${signed}, ${daysBetween(signed, ref)} days before ${policy.closing ? `closing ${ref}` : ref}; your limit is ${maxAge} days.`);
       const rent = num(e.rent);
       if (rent === null) add('rent_missing', 'Estoppel states no rent.');
@@ -41,6 +48,7 @@ export function checkEstoppels({ leases, estoppels, rentRoll = null, policy = {}
       const area = num(e.sqft); if (area !== null && sqft !== null && Math.abs(area - sqft) > 0.5) add('area_differs', `Estoppel states ${area} sq ft; the lease abstract has ${sqft}.`);
       const claim = said(e.defaults); if (claim) add('default_claimed', `Tenant states: "${claim}".`);
       const amend = said(e.amendments); const known = (l.amendments || []).length;
+      if (!amend && str(e.amendments) && known) add('amendment_not_confirmed', `Lease file has ${known} amendment(s); the estoppel says none.`);
       if (amend && !known) add('amendment_not_in_file', `Tenant lists amendments the lease file does not have: "${amend}".`);
       const opts = said(e.options); const lopts = (l.options || []).length;
       if (opts && !lopts) add('option_not_in_file', `Tenant states options the lease file does not have: "${opts}".`);
@@ -52,7 +60,7 @@ export function checkEstoppels({ leases, estoppels, rentRoll = null, policy = {}
       if (rrRent !== null && expected !== null && Math.abs(rrRent - expected) > tol) add('rent_roll_differs', `Rent roll shows ${rrRent}; the lease abstract gives ${expected}.`, { amount: r2(rrRent - expected) });
     }
     const hard = findings.filter((f) => !f.severity);
-    const status = !e ? 'missing' : hard.some((f) => ['default_claimed', 'rent_differs', 'expiration_differs', 'deposit_differs', 'amendment_not_in_file', 'option_not_in_file'].includes(f.code)) ? 'discrepancy' : hard.length ? 'follow_up' : 'clean';
+    const status = !e ? 'missing' : hard.some((f) => ['default_claimed', 'tenant_differs', 'rent_differs', 'expiration_differs', 'deposit_differs', 'amendment_not_in_file', 'option_not_in_file'].includes(f.code)) ? 'discrepancy' : hard.length ? 'follow_up' : 'clean';
     items.push({ lease_id: l.lease_id, unit: l.unit, tenant: l.tenant, sqft, major, expected_rent: expected, estoppel_rent: e ? num(e.rent) : null, signed: e ? isoDate(e.signed) : null, status, findings });
   }
   const orphans = estoppels.filter((x, i) => !used.has(i)).map((x) => { const l = leaseFor(leases, { lease_id: str(x.lease_id) || undefined, unit: x.unit, tenant: x.tenant }); return { unit: str(x.unit), tenant: str(x.tenant), reason: l ? `lease ${l.lease_id} not in force on ${asOf}` : 'matches no lease' }; });

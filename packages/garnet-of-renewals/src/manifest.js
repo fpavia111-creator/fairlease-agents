@@ -1,4 +1,4 @@
-import { defineManifest, MODEL_PIN, LEASES_SCHEMA, RENT_ROLL_FIELDS, RENT_ROLL_PROFILES, standardTools, draftPair, refusedTools, isoDate } from 'keystone-core';
+import { defineManifest, MODEL_PIN, LEASES_SCHEMA, RENT_ROLL_FIELDS, RENT_ROLL_PROFILES, standardTools, draftPair, refusedTools, isoDate, sameUnit } from 'keystone-core';
 import { readFileSync } from 'node:fs';
 import { checkRenewals, offerText, RENEWAL_POLICY_SCHEMA, OFFER_FIELDS } from './renewals.js';
 
@@ -34,7 +34,7 @@ const pair = draftPair({
   required: ['leases', 'policy', 'unit'],
   args: { ...props, unit: { type: 'string', description: 'Unit from garnet_check' }, offer_rent: { type: 'number', minimum: 0, description: 'Rent to offer instead of the proposed one (refused above your cap)' }, term_months: { type: 'integer', minimum: 1, maximum: 60, description: 'Renewal term in months' }, reply_by: { type: 'string', description: 'Date the tenant should reply by' }, to: { type: 'string', description: 'Tenant email or address' }, from: { type: 'string', description: 'Manager name and contact for the signature' }, extra: { type: 'string', maxLength: 500, description: 'One extra sentence (for example a renewal incentive)' } },
   build: (a, ctx) => {
-    const r = run(a, ctx); const it = r.items.find((i) => String(i.unit) === String(a.unit).trim());
+    const r = run(a, ctx); const it = r.items.find((i) => String(i.unit) === String(a.unit).trim() && i.stage !== 'renewed') || r.items.find((i) => sameUnit(i.unit, a.unit) && i.stage !== 'renewed');
     if (!it) throw new Error(`no renewal for unit ${a.unit} in the next ${r.horizon_days} days`);
     if (it.stage === 'notice') throw new Error(`${it.tenant} gave notice to vacate; no offer`);
     const pol = ctx.readJson(a.policy, 'renewal_policy');

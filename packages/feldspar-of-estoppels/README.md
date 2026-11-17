@@ -25,6 +25,8 @@ npx -y feldspar-of-estoppels mcp --root ./closing
 Coverage: returned leases and their share of leased area, against `required_pct`.
 
 
+Also checked: `tenant_differs` (the estoppel is from someone other than the tenant on the lease: an assignment or a sublease?), `amendment_not_confirmed` (the file has amendments and the tenant says none), `signed_in_future`, and month-to-month holdover tenants, who are still asked for an estoppel. Short answers such as "None known", "No defaults" or "Not aware of any" are read as nothing to report; anything longer is quoted as the tenant's statement.
+
 <!-- generated:start -->
 
 ## A demo run

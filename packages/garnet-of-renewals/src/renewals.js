@@ -1,5 +1,5 @@
 // Renewal pipeline: offer deadlines, proposed rents within the buyer's cap, offers already made. Pure functions.
-import { r2, num, str, isoDate, addDays, daysBetween, sameUnit, sameParty, groupRentRoll } from 'keystone-core';
+import { r2, num, str, isoDate, addDays, daysBetween, sameUnit, sameParty, groupRentRoll, rentAt } from 'keystone-core';
 
 export const RENEWAL_POLICY_SCHEMA = Object.freeze({
   type: 'object', additionalProperties: false, required: ['max_increase_pct', 'notice_days'],
@@ -21,7 +21,7 @@ export const OFFER_FIELDS = Object.freeze({
 });
 
 const roundTo = (v, step) => (step ? Math.round(v / step) * step : r2(v));
-const offerState = (s) => { const t = str(s).toLowerCase(); if (/notice|vacat|move.?out|préavis|kündig|aviso|disdetta|退去|退租|퇴거/.test(t)) return 'notice'; if (/accept|signed|renewed|accept|angenommen|accepté|aceptad|aceito|accettat|承諾|接受|수락/.test(t)) return 'accepted'; if (/declin|reject|refus|abgelehnt|rechaz|recus|rifiut|辞退|拒绝|거절/.test(t)) return 'declined'; return 'pending'; };
+const offerState = (s) => { const t = str(s).toLowerCase(); if (/notice to vacate|notice of non|gave notice|given notice|on notice|^notice$|\bntv\b|non.?renew|vacat|mov(e|ing).?out|préavis|kündig|aviso|disdetta|退去|退租|퇴거/.test(t)) return 'notice'; if (/accept|signed|renewed|accept|angenommen|accepté|aceptad|aceito|accettat|承諾|接受|수락/.test(t)) return 'accepted'; if (/declin|reject|refus|abgelehnt|rechaz|recus|rifiut|辞退|拒绝|거절/.test(t)) return 'declined'; return 'pending'; };
 
 export function checkRenewals({ leases, marketRows = null, offers = [], policy, asOf, horizonDays = 120 }) {
   const market = marketRows ? groupRentRoll(marketRows) : [];
@@ -29,12 +29,17 @@ export function checkRenewals({ leases, marketRows = null, offers = [], policy, 
   for (const l of leases.leases || []) {
     if (l.end > until || l.end < addDays(asOf, -366)) continue;
     const findings = []; const add = (code, detail, extra = {}) => findings.push({ code, detail, ...extra });
-    const rent = num(l.rent && l.rent.monthly);
+    // The rent paid today: the base rent after the lease's own steps and escalations, when they can be worked out.
+    const stepped = rentAt(l, l.end < asOf ? l.end : asOf); const rent = stepped ?? num(l.rent && l.rent.monthly);
     const m = market.find((u) => sameUnit(u.unit, l.unit)); const mkt = m ? m.market_rent : null;
     const mtm = l.end < asOf;
     const gone = !!(m && m.vacant);
     const deadline = addDays(l.end, -policy.notice_days); const left = daysBetween(asOf, deadline);
-    const o = offers.find((x) => sameUnit(x.unit, l.unit) && (!str(x.tenant) || sameParty(x.tenant, l.tenant)));
+    // The latest offer made during this lease; an offer dated before the lease began belongs to the term before.
+    const o = offers.filter((x) => sameUnit(x.unit, l.unit) && (!str(x.tenant) || sameParty(x.tenant, l.tenant)) && !(isoDate(x.offered_on) && l.start && isoDate(x.offered_on) < l.start))
+      .sort((x, y) => String(isoDate(y.offered_on) || '').localeCompare(String(isoDate(x.offered_on) || '')))[0];
+    const next = (leases.leases || []).find((x) => x !== l && sameUnit(x.unit, l.unit) && sameParty(x.tenant, l.tenant) && x.start > l.start && x.start <= addDays(l.end, 45) && (!x.end || x.end > l.end));
+    if (next) { items.push({ lease_id: l.lease_id, unit: l.unit, tenant: l.tenant, lease_end: l.end, days_to_end: daysBetween(asOf, l.end), deadline: null, days_to_deadline: null, rent, market_rent: mkt, proposed: null, increase: null, increase_pct: null, offered_rent: o ? num(o.offered_rent) : null, stage: 'renewed', status: 'ok', findings: [{ code: 'renewed', detail: `Lease ${next.lease_id} for the same tenant starts ${next.start}; nothing to offer.`, severity: 'note' }] }); continue; }
     const state = o ? offerState(o.status) : null;
     let proposed = null;
     if (rent !== null && mkt !== null) {

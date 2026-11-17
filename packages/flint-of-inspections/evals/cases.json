@@ -267,6 +267,54 @@
           "inspections"
         ]
       }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "flint_draft_notice",
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "106"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "flint_draft_notice",
+      "approve": "Dana Example",
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "106"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "flint_draft_notice",
+      "mode": "review",
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "106"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }
