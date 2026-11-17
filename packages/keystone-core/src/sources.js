@@ -214,8 +214,22 @@ export function adaptRecords(table, def, { override = null, kind = '', arg = '',
     // Headers in a language that writes the day first (Fecha, Date d'arrivée, Datum …) are a second hint.
     else if (numeric.length && Object.values(translated).some((t) => ['de', 'fr', 'es', 'pt', 'it'].includes(t.language))) { softDmy = 'language'; dateOrder = 'dmy'; }
   }
-  const decimals = new Map();
-  for (const p of plan) if ((p.fd.type === 'money' || p.fd.type === 'number') && p.from.length) decimals.set(p.f, ov.decimal || (profile && profile.decimal) || inferDecimal(colValues(p)));
+  const decimals = new Map(); const undecided = [];
+  // A column with no telling value (650, 900, 1.150) takes the mark the rest of the file uses:
+  // another column that clearly writes 3.980,00, dates written 01.08.2026, or headers in a
+  // language that writes a decimal comma. Otherwise 1.150 square metres would read as 1.15.
+  const telling = (vals) => vals.some((v) => { const t = String(v ?? '').replace(/[^\d.,]/g, ''); return (t.includes('.') && t.includes(',')) || /,\d{1,2}$/.test(t) || /\.\d{1,2}$/.test(t); });
+  for (const p of plan) if ((p.fd.type === 'money' || p.fd.type === 'number') && p.from.length) {
+    const fixed = ov.decimal || (profile && profile.decimal); const vals = colValues(p);
+    if (fixed) decimals.set(p.f, fixed); else { decimals.set(p.f, inferDecimal(vals)); if (!telling(vals)) undecided.push([p, vals]); }
+  }
+  let groupedByHint = 0; let groupHint = null;
+  if (undecided.length) {
+    const told = [...decimals.entries()].filter(([f]) => !undecided.some(([p]) => p.f === f)).map(([, d]) => d);
+    const commaLangs = [...new Set(Object.values(translated).map((t) => t.language).filter((l) => ['de', 'fr', 'es', 'pt', 'it'].includes(l)))];
+    groupHint = told.includes(',') && !told.includes('.') ? 'other amounts in the file use a decimal comma' : softDmy === true ? 'the file writes dates with dots' : commaLangs.length ? `the column headers are in ${commaLangs.join(', ')}` : null;
+    if (groupHint) for (const [p, vals] of undecided) { decimals.set(p.f, ','); groupedByHint += vals.filter((v) => /^[-+]?\d{1,3}(\.\d{3})+$/.test(String(v ?? '').trim())).length; }
+  }
 
   let ambiguousDates = 0, badDates = 0, badAmounts = 0, convertedDates = 0, numericDates = 0, skipped = 0;
   // A value set by a profile's "values" table or "default" is final: it is the
@@ -237,7 +251,7 @@ export function adaptRecords(table, def, { override = null, kind = '', arg = '',
       return type === 'date' ? d.date : d.iso;
     }
     if (type === 'money' || type === 'number') {
-      if (/^-?\d+(\.\d+)?$/.test(s)) return s;
+      if (/^-?\d+(\.\d+)?$/.test(s) && !(decimals.get(p.f) === ',' && /^-?\d{1,3}(\.\d{3})+$/.test(s))) return s;
       const a = cleanAmount(s, { decimal: decimals.get(p.f) || '.' });
       if (a === null) { badAmounts++; return s; }
       return a;
@@ -295,6 +309,7 @@ export function adaptRecords(table, def, { override = null, kind = '', arg = '',
   const missing = Object.entries(fields).filter(([f, fd]) => fd && fd.required && !planFields.has(f) && !provided.has(f)).map(([f]) => f);
   const unmapped = headers.filter((h) => table.matrix || !h.includes('.')).filter((h) => !consumed.has(h) && !consumedParents.has(h) && !planFields.has(h) && !planNorm.has(normHeader(h))).map(clipName);
   if (encWarn) warnings.push(encWarn);
+  if (groupedByHint) warnings.push(`${groupedByHint} number(s) such as 1.150 were read as thousands (1150) because ${groupHint}. Set "decimal": "." in ${SOURCES_FILE} if the dot is a decimal point.`);
   if (missing.length) warnings.push(`No column found for: ${missing.join(', ')}. Name the columns in ${SOURCES_FILE} (see "inspect").`);
   if (ambiguousDates && softDmy === 'language') warnings.push(`${ambiguousDates} date(s) such as 03/04/2026 could be day-first or month-first; read as day/month/year because the column headers are in ${[...new Set(Object.values(translated).map((t) => t.language).filter((l) => ['de', 'fr', 'es', 'pt', 'it'].includes(l)))].join(', ')}. Set "date_order": "mdy" in ${SOURCES_FILE} if the file is month-first.`);
   else if (ambiguousDates && softDmy) warnings.push(`${ambiguousDates} date(s) such as 03.04.2026 could be day-first or month-first; read as day/month/year because the file writes dates with dots. Set "date_order": "mdy" in ${SOURCES_FILE} if the file is month-first.`);

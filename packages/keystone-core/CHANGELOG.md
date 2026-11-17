@@ -1,6 +1,19 @@
 # Changelog
 
-## Unreleased (MCP quality pass, 2026-11-16)
+## 0.1.0 (2026-11-17)
+
+First Keystone release. The core is the same engine used by the two earlier agent families built in this project (manifest, policy, approvals, audit log, MCP server, file readers in nine languages), carried over with its full history below, plus what property management needs:
+
+Added (property)
+- `property.js`: `groupRentRoll` (one row per unit or one row per charge, with charge codes for rent, deposit, pet, parking, storage, utilities), `unitKey`, `sameUnit`, `sameParty`, `partyKey`, `addMonths`, lease-term helpers, `maskId` (digits only).
+- `property-sources.js`: field lists for rent rolls, leases, ledgers, aging, deposits, work orders, insurance certificates, vendors, payments, budgets, capex, tax bills, owner statements, trust registers, association ledgers, short-term rental bookings and payouts, recertification trackers, listings and leads, and column words in eight more languages.
+- `exports.js`: 25 named property export layouts (AppFolio, Yardi Voyager, Buildium, Rent Manager, Entrata, RealPage OneSite, MRI, Airbnb, Vrbo). Recalled from knowledge of the exports, not checked against live accounts; `inspect` shows which one matched.
+- Date order hint: when no row settles day-first or month-first and the columns were translated from German, French, Spanish, Portuguese or Italian headers, dates are read day-first and a warning says so.
+- Report labels for property terms in nine languages.
+
+The sections below are the core's history before Keystone.
+
+## Earlier: MCP quality pass (2026-11-16)
 
 Added
 - Every tool argument now has a description in `tools/list` (509 were missing across the 30 agents; a model fills arguments from these). New `manifest.argDocs` (`{ "arg": "...", "tool.arg": "..." }`) plus a shared glossary for names every pack uses (`out_dir`, `as_of`, `reason`, `title`, `note`, `accept_open_issues`, `timeout_ms`, `*_column`, and a file argument with its `*_sha256` twin). Inline descriptions win; shared schema objects are copied, never mutated. A key in `argDocs` that names no argument is a manifest error. Exports `documentSchema`, `undocumentedArgs`, `argDocsProblems`.
@@ -12,7 +25,7 @@ Changed
 - The text block of a tool result is compact JSON (same data as `structuredContent`), about a quarter fewer characters for the model to read.
 - Memory tools: `kind` and `decision` declare `type: "string"` (some hosts require a type next to `enum`); `kind`, `limit`, `decision` and `reason` have descriptions.
 
-## 0.2.0 (2026-11-16)
+## Earlier: other markets and languages (2026-11-16)
 
 Added (other markets and languages, handoff ver 6)
 - Text encodings: `decodeText`, `encodingName`, `ENCODINGS`. BOM, strict UTF-8, UTF-16 without a BOM, then a scored guess among Shift_JIS, EUC-KR, GB18030, Big5 and Windows-1252; a guess is named in `warnings`. `keystone-sources.json` takes `encoding` per file. `readTable` returns `encoding`; `inspect` shows it.
@@ -73,6 +86,6 @@ Hardening (review pass, found by planting hostile values in every agent's fixtur
 Unchanged
 - One-click categories, fail-closed manifests, the kill switch and the default caps behave as in 0.1.0. Every 0.1.0 agent test passes unchanged against this version.
 
-## 0.1.0
+## Earlier first release
 
-First release.
+First release of the shared core.

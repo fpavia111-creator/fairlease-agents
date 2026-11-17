@@ -1,15 +1,15 @@
 # keystone-core
 
-The shared core for **Keystone Machine domain agents**: small MCP agents that each own one business process and cannot act outside it.
+The shared core for the **Keystone property management agents**: thirty small MCP agents that each own one property management job and cannot act outside it. It also holds the property helpers they share: rent roll grouping (one row per unit or one row per charge), unit and party matching, lease-date math, named export layouts for AppFolio, Yardi Voyager, Buildium, Rent Manager, Entrata, RealPage OneSite, MRI, Airbnb and Vrbo (written from knowledge of those exports, not checked against live accounts), and column words in nine languages.
 
 - **Pack manifest** — name, version, a declared model pin, the tool allowlist and the policy. `defineManifest()` fails closed: an unpinned model (`latest`), a tool without a rule, a write marked `allow`, or a one-click action marked `allow` are rejected at load time.
-- **Talos-style policy** — every tool call gets `allow`, `ask` or `block`. Unknown tools are blocked. The default is block.
+- **Policy** — every tool call gets `allow`, `ask` or `block`. Unknown tools are blocked. The default is block.
 - **Modes**
   - **Review**: read and report tools only. Everything else is blocked.
   - **Assist** (default): the policy as written. `ask` returns an `approval_id` and waits for a named human.
   - **Auto**: off by default and **opt-in per action** (`--auto tool_a,tool_b`). Only opted-in `ask` actions run without a click. Step and spend caps and a kill switch always apply.
 - **Always one-click, even in Auto**: `go_live`, `revoke_access`, `delete_personal_data`, `move_money`, `binding_send`, `production_deploy`, and `accept_learning` (changing what an agent remembers). Trying to put one of these on Auto throws an error. Auto prepares the work; a person clicks.
-- **Audit log** — append-only JSONL (`.keystone/audit.jsonl`), one line per decision, hash-chained so edits and removed lines show up. Arguments are stored as a SHA-256 hash, not in full. Field names follow Alethea's record vocabulary (`id`, `type`, `date`, `requirements`) so logs sit cleanly next to an Alethea `.decisions/` folder; this package does not write into `.decisions/`.
+- **Audit log** — append-only JSONL (`.keystone/audit.jsonl`), one line per decision, hash-chained so edits and removed lines show up. Arguments are stored as a SHA-256 hash, not in full.
 - **Stdio MCP server** — zero-dependency, newline-delimited JSON-RPC 2.0 (`initialize`, `ping`, `tools/list`, `tools/call`, `prompts/list`, `prompts/get`), protocol versions up to `2025-11-25`, tool annotations (`readOnlyHint`, `destructiveHint`, …) derived from each tool's kind, plus a built-in `keystone_info` tool that reports usage and pending approvals.
 - **Input validation** — every call is checked against the tool's `inputSchema` before anything runs or reaches a human. Errors carry JSON-pointer paths (`/vendors/3/tin expected string`).
 - **Signed audit log (opt-in)** — with `--signing-key`, every line is also signed with Ed25519. A re-chained file fails `verify-log --pubkey`. Key rotation is recorded as a signed entry.
@@ -249,7 +249,7 @@ The core reads exports the way systems in Germany, France, Spain, Brazil, Italy,
 { "files": { "exports/仕訳.csv": { "encoding": "shift_jis", "decimal": "." } } }
 ```
 
-**Output language.** `--lang de|fr|es|pt|it|ja|zh|ko` (or `KEYSTONE_LANG`) sets the language of the pages and reports people read: the approvals page (which also has a language switcher), the Olympus readiness report, and the Ladon recertification summary and evidence page; a tool argument `language` overrides it per call where offered. Tool results, codes, CSV columns and JSON stay in English, so scripts and later runs read them the same. Any string not yet translated falls back to English. Use `makeText(catalog, lang)` and `coreText(lang)` for a pack's own pages.
+**Output language.** `--lang de|fr|es|pt-BR|it|ja|zh-Hans|ko` (or `KEYSTONE_LANG`) sets the language of the pages and reports people read: the approvals page (which also has a language switcher) and every agent's report; a tool argument `language` overrides it per call where offered. Tool results, codes, CSV columns and JSON stay in English, so scripts and later runs read them the same. Any string not yet translated falls back to English. Use `makeText(catalog, lang)` and `coreText(lang)` for a pack's own pages.
 
 **Limits.** The translations were written by Claude and have not been reviewed by native speakers; every translated page says so. The encoding guess can be wrong on very short files; set `encoding` when names look garbled. The column dictionaries cover common names, not every system's labels. The agents make no claim about any country's laws, tax rules or filing formats.
 
@@ -267,11 +267,11 @@ This is not copy protection: the packages are MIT-licensed source and anyone can
 
 ## What the model pin means
 
-The manifest declares which host model a pack's prompts and evals target. An MCP server cannot force your MCP host to use that model; the pin is reported in `initialize` and `keystone_info` so you can check it. The wave-1 packs' tools are deterministic and call no model at all.
+The manifest declares which host model a pack's prompts and evals target. An MCP server cannot force your MCP host to use that model; the pin is reported in `initialize` and `keystone_info` so you can check it. The Keystone agents' tools are deterministic and call no model at all.
 
 ## Packs built on this core
 
-All 30 Keystone domain agents in the monorepo, from `olympus-of-migration` to `solon-of-clauses`. Source: <https://github.com/fpavia111-creator/keystone-agents>.
+All 30 Keystone property management agents in this monorepo, from `agate-of-workorders` to `zircon-of-diligence`. Planned source: <https://github.com/fpavia111-creator/keystone-agents> (not published yet).
 
 ## License
 

@@ -247,3 +247,13 @@ test('ambiguous dates under Spanish, French, German, Portuguese or Italian heade
   const en = adaptRecords(t([['Date', 'Total', 'Supplier'], ['01/10/2026', '120.00', 'Water']]), LEDGER, { kind: 'ledger', arg: 'file', file: 'y.csv' });
   assert.equal(en.rows[0].date, '2026-01-10');
 });
+
+test('a column with only 650, 900 and 1.150 reads 1.150 as 1150 when the rest of the file writes a decimal comma', () => {
+  const t = (rows) => ({ format: 'csv', matrix: rows });
+  const AREA = { fields: { unit: { aliases: ['Einheit'] }, sqft: { type: 'number', aliases: ['Fläche'] }, rent: { type: 'money', aliases: ['Miete'] } } };
+  const de = adaptRecords(t([['Einheit', 'Fläche', 'Miete'], ['101', '650', '1.400,00'], ['105', '1.150', '2.100,00']]), AREA, { kind: 'units', arg: 'file', file: 'x.csv' });
+  assert.deepEqual(de.rows.map((r) => [r.sqft, r.rent]), [['650', '1400.00'], ['1150', '2100.00']]);
+  assert.ok(de.report.warnings.some((w) => /1\.150 were read as thousands .*decimal comma/.test(w)));
+  const us = adaptRecords(t([['Unit', 'Sq Ft', 'Rent'], ['101', '650', '1,400.00'], ['105', '1.150', '2,100.00']]), { fields: { unit: {}, sqft: { type: 'number', aliases: ['Sq Ft'] }, rent: { type: 'money' } } }, { kind: 'units', arg: 'file', file: 'x.csv' });
+  assert.equal(us.rows[1].sqft, '1.150', 'with a decimal point elsewhere, 1.150 stays as written');
+});
