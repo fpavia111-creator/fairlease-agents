@@ -307,6 +307,74 @@
           "leases"
         ]
       }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "marble_draft_statement",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv",
+        "tenant": "L-102"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "marble_draft_statement",
+      "approve": "Dana Example",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv",
+        "tenant": "L-102"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "marble_draft_statement",
+      "mode": "review",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv",
+        "tenant": "L-102"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "gl-lines-from-other-years-left-out",
+      "tool": "marble_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025-with-other-years.csv",
+        "billed": "fixtures/cam-billed-2025.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "gl_outside_year",
+          "2 GL line(s) dated outside 2025 (24000) were left out"
+        ],
+        "equals": {
+          "result.pools_total": 433000
+        }
+      }
     }
   ]
 }

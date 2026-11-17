@@ -36,6 +36,8 @@ Marble can remember one kind of fact: **a GL account that belongs in a pool** (`
 - **GL detail**: account and amount (or debit and credit). AppFolio, Yardi Voyager and Buildium general ledger layouts are recognised, including AppFolio's account heading rows; German, French, Spanish, Portuguese, Italian, Japanese, Chinese and Korean column names are read too. `marble-of-cam inspect <file>` shows how a file is read without printing values.
 - **Tenant ledger** (optional): CAM estimate charges by lease or unit.
 
+Things it guards against: GL lines dated outside the CAM year, and lines or leases that belong to another property, are left out and counted (`gl_outside_year`, `other_property_rows`). A GL account listed in two pools is counted once and pointed out (`account_in_two_pools`). `shares_over_100` looks at shares in force at the same time, so two tenants who follow one another in a suite are not added together. A cap on controllable expenses is applied first and a base-year stop second, and the result never goes below zero. Excluded pool names and lease ids match whatever their capitals.
+
 <!-- generated:start -->
 
 ## A demo run
