@@ -211,6 +211,8 @@ export function adaptRecords(table, def, { override = null, kind = '', arg = '',
   if (!dateOrder) {
     const numeric = plan.filter((p) => (p.fd.type === 'date' || p.fd.type === 'datetime') && p.from.length).flatMap(colValues).map((v) => /^\d{1,2}([/.-])\d{1,2}\1(\d{4}|\d{2})(?!\d)/.exec(String(v ?? '').trim())).filter(Boolean);
     if (numeric.length && numeric.every((m) => m[1] === '.')) { softDmy = true; dateOrder = 'dmy'; }
+    // Headers in a language that writes the day first (Fecha, Date d'arrivée, Datum …) are a second hint.
+    else if (numeric.length && Object.values(translated).some((t) => ['de', 'fr', 'es', 'pt', 'it'].includes(t.language))) { softDmy = 'language'; dateOrder = 'dmy'; }
   }
   const decimals = new Map();
   for (const p of plan) if ((p.fd.type === 'money' || p.fd.type === 'number') && p.from.length) decimals.set(p.f, ov.decimal || (profile && profile.decimal) || inferDecimal(colValues(p)));
@@ -294,7 +296,8 @@ export function adaptRecords(table, def, { override = null, kind = '', arg = '',
   const unmapped = headers.filter((h) => table.matrix || !h.includes('.')).filter((h) => !consumed.has(h) && !consumedParents.has(h) && !planFields.has(h) && !planNorm.has(normHeader(h))).map(clipName);
   if (encWarn) warnings.push(encWarn);
   if (missing.length) warnings.push(`No column found for: ${missing.join(', ')}. Name the columns in ${SOURCES_FILE} (see "inspect").`);
-  if (ambiguousDates && softDmy) warnings.push(`${ambiguousDates} date(s) such as 03.04.2026 could be day-first or month-first; read as day/month/year because the file writes dates with dots. Set "date_order": "mdy" in ${SOURCES_FILE} if the file is month-first.`);
+  if (ambiguousDates && softDmy === 'language') warnings.push(`${ambiguousDates} date(s) such as 03/04/2026 could be day-first or month-first; read as day/month/year because the column headers are in ${[...new Set(Object.values(translated).map((t) => t.language).filter((l) => ['de', 'fr', 'es', 'pt', 'it'].includes(l)))].join(', ')}. Set "date_order": "mdy" in ${SOURCES_FILE} if the file is month-first.`);
+  else if (ambiguousDates && softDmy) warnings.push(`${ambiguousDates} date(s) such as 03.04.2026 could be day-first or month-first; read as day/month/year because the file writes dates with dots. Set "date_order": "mdy" in ${SOURCES_FILE} if the file is month-first.`);
   else if (ambiguousDates) warnings.push(`${ambiguousDates} date(s) such as 03/04/2026 could be month-first or day-first; read as month/day/year. Set "date_order": "dmy" in ${SOURCES_FILE} if the file is day-first.`);
   if (dateOrder === 'mixed') warnings.push(`The date columns mix month-first and day-first values; each was read by its own digits where possible. Check the dates.`);
   if (badDates) warnings.push(`${badDates} date value(s) could not be read and were left as they are.`);

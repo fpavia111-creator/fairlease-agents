@@ -1,0 +1,6 @@
+{
+  "required_channels": ["Website", "Zillow", "Apartments.com"],
+  "list_notice_days": 45,
+  "rent_tolerance_pct": 2,
+  "stale_days": 14
+}

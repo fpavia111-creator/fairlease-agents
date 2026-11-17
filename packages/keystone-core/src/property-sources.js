@@ -327,18 +327,19 @@ export const BOOKING_FIELDS = Object.freeze({
 });
 
 export const LISTING_FIELDS = Object.freeze({
-  listing_id: text(['Listing ID', 'Listing', 'ID', 'MLS #', 'Ad ID', 'Posting ID'], 'id'),
-  channel: text(['Channel', 'Source', 'Site', 'Portal', 'Syndication'], 'lead_source'),
+  listing_id: text(['Listing ID', 'Listing', 'ID', 'MLS #', 'Ad ID', 'Posting ID', 'Référence annonce', 'Anzeigen-ID', 'ID del anuncio', 'ID do anúncio', 'ID annuncio', '物件番号', '房源编号', '매물번호'], 'id'),
+  channel: text(['Channel', 'Source', 'Site', 'Portal', 'Syndication', 'Portail', 'Plattform', 'Portal inmobiliario', 'Canale', '掲載先', '发布渠道', '게시처'], 'lead_source'),
   property: PROPERTY, unit: { ...UNIT, required: true },
   bedrooms: num(['Bedrooms', 'Beds', 'BR', 'Bed'], 'bedrooms'),
-  bathrooms: num(['Bathrooms', 'Baths', 'BA', 'Bath']),
+  bathrooms: num(['Bathrooms', 'Baths', 'BA', 'Bath', 'Salles de bain', 'Badezimmer', 'Baños', 'Banheiros', 'Bagni', 'バス', '卫生间', '욕실']),
   sqft: num(['Sqft', 'Sq Ft', 'Square Feet', 'Size', 'Area'], 'sqft'),
   rent: money(['Rent', 'Price', 'Asking Rent', 'Monthly Rent', 'List Price', 'Market Rent'], 'rent'),
   deposit: money(['Deposit', 'Security Deposit'], 'deposit'),
-  available: date(['Available', 'Available Date', 'Date Available', 'Available On', 'Move-in Date'], 'date'),
-  pets: text(['Pets', 'Pet Policy', 'Pets Allowed', 'Cats', 'Dogs']),
+  available: date(['Available', 'Available Date', 'Date Available', 'Available On', 'Move-in Date', 'Disponible le', 'Disponibilité', 'Verfügbar ab', 'Bezugsfrei ab', 'Disponible desde', 'Disponível em', 'Disponibile dal', '入居可能日', '可入住日期', '입주 가능일'], 'date'),
+  pets: text(['Pets', 'Pet Policy', 'Pets Allowed', 'Cats', 'Dogs', 'Animaux', 'Haustiere', 'Mascotas', 'Animais', 'Animali', 'ペット', '宠物', '반려동물']),
   status: text(['Status', 'Listing Status', 'Posted'], 'status'),
-  title: text(['Title', 'Headline', 'Listing Title', 'Marketing Title'], 'name'),
+  title: text(['Title', 'Headline', 'Listing Title', 'Marketing Title', 'Titre', 'Titel', 'Título', 'Titolo', 'タイトル', '标题', '제목'], 'name'),
+  description: text(['Description', 'Listing Description', 'Ad Text', 'Marketing Description', 'Body', 'Texte', 'Beschreibung', 'Descripción', 'Descrição', 'Descrizione', '説明', '描述', '설명'], 'description'),
 });
 
 export const ASSOCIATION_FIELDS = Object.freeze({

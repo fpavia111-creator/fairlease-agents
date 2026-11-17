@@ -238,3 +238,12 @@ test('Windows-1252 bytes 0x80-0x9F decode to the euro sign, quotes and dashes on
   assert.equal(guessed.encoding, 'windows-1252'); assert.equal(guessed.text, set.text);
   assert.equal(cleanAmount('1.234,56 ' + set.text[7]), '1234.56');
 });
+
+test('ambiguous dates under Spanish, French, German, Portuguese or Italian headers are read day-first and warned about', () => {
+  const t = (rows) => ({ format: 'csv', matrix: rows });
+  const es = adaptRecords(t([['Fecha', 'Importe', 'Proveedor'], ['01/10/2026', '120,00', 'Agua'], ['02/11/2026', '80,00', 'Luz']]), LEDGER, { kind: 'ledger', arg: 'file', file: 'x.csv' });
+  assert.deepEqual(es.rows.map((r) => r.date), ['2026-10-01', '2026-11-02']);
+  assert.ok(es.report.warnings.some((w) => /because the column headers are in es/.test(w)));
+  const en = adaptRecords(t([['Date', 'Total', 'Supplier'], ['01/10/2026', '120.00', 'Water']]), LEDGER, { kind: 'ledger', arg: 'file', file: 'y.csv' });
+  assert.equal(en.rows[0].date, '2026-01-10');
+});
