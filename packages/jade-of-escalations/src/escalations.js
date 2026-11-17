@@ -1,14 +1,26 @@
 // Rent billed against each lease's schedule, month by month. Pure functions.
-import { r2, num, str, monthKey, monthsInRange, addDays, daysBetween, rentSchedule, rentForMonth, chargeKind, sameUnit, sameParty, overlapDays } from 'keystone-core';
+import { r2, num, str, monthKey, monthsInRange, addDays, daysBetween, rentSchedule, rentForMonth, chargeKind, sameUnit, sameParty, overlapDays, foldText } from 'keystone-core';
+
+const flat = (v) => foldText(str(v)).toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+/** Does the ledger row's property (a name or an id) fit the lease's property? Blank on either side fits. */
+function propFits(leases, l, rowProp) {
+  const rp = flat(rowProp); if (!rp || !l.property) return true;
+  const p = (leases.properties || []).find((x) => x.id === l.property);
+  return [l.property, p && p.name].map(flat).filter(Boolean).some((k) => k === rp || (k.length > 3 && rp.length > 3 && (k.includes(rp) || rp.includes(k))));
+}
 
 /** Rent billed per lease and month from ledger rows (charges whose kind is rent). */
 export function billedRent(rows, leases, aliases = {}) {
   const out = new Map(); const unmatched = [];
   for (const r of rows) {
-    const kind = chargeKind(r.charge_code || r.description, aliases); if (kind !== 'rent') continue;
+    let kind = chargeKind(r.charge_code || r.description, aliases); if (kind === 'other' && r.charge_code && r.description) kind = chargeKind(r.description, aliases); // a GL account number as the code says nothing; the description does
+    if (kind !== 'rent') continue;
+    if (num(r.charge) === null && num(r.payment) !== null) continue; // a payment line coded as rent is money received, not billing
     const m = monthKey(r.date); if (!m) continue;
     const amt = num(r.charge) ?? num(r.amount); if (amt === null) continue;
-    const l = (leases.leases || []).find((x) => (r.lease_id && str(r.lease_id) === x.lease_id) || (!r.lease_id && sameUnit(x.unit, r.unit) && (!r.tenant || sameParty(x.tenant, r.tenant)) && overlapDays(x.start, x.end, `${m}-01`, `${m}-28`)));
+    const all = leases.leases || []; const id = flat(r.lease_id);
+    const byUnit = (strict) => all.find((x) => sameUnit(x.unit, r.unit) && propFits(leases, x, r.property) && (!r.tenant || sameParty(x.tenant, r.tenant)) && (!strict || overlapDays(x.start, x.end, `${m}-01`, `${m}-28`)));
+    const l = (id && all.find((x) => flat(x.lease_id) === id)) || (!id ? byUnit(true) || byUnit(false) : null);
     if (!l) { unmatched.push({ unit: str(r.unit), tenant: str(r.tenant), month: m, amount: amt }); continue; }
     const k = `${l.lease_id}|${m}`; out.set(k, r2((out.get(k) || 0) + amt));
   }
@@ -25,6 +37,7 @@ export function checkEscalations({ leases, rows, from, to, indexes = {}, toleran
     for (const m of months) {
       const exp = rentForMonth(l, m, { indexes });
       if (exp === 0 && !billed.has(`${l.lease_id}|${m}`)) continue;
+      if (exp === 0 && billed.get(`${l.lease_id}|${m}`) === 0) continue;
       const got = billed.get(`${l.lease_id}|${m}`) ?? null;
       const step = sched.filter((s) => s.from <= `${m}-31`).at(-1);
       const prev = sched.filter((s) => s.from < (step ? step.from : '')).at(-1);
@@ -32,7 +45,8 @@ export function checkEscalations({ leases, rows, from, to, indexes = {}, toleran
       if (exp === null) code = 'index_missing';
       else if (got === null) code = exp > 0 ? 'not_billed' : 'ok';
       else if (Math.abs(got - exp) <= tolerance) code = 'ok';
-      else if (exp === 0) code = 'billed_during_free_rent';
+      else if (exp === 0) code = l.end < `${m}-01` || l.start > `${m}-31` ? 'billed_outside_term' : 'billed_during_free_rent';
+      else if (exp > 0 && Math.abs(got - 2 * exp) <= tolerance) code = 'billed_twice';
       else if (prev && prev.monthly !== null && Math.abs(got - prev.monthly) <= tolerance && step && step.reason !== 'base rent') code = 'escalation_missed';
       else code = got < exp ? 'underbilled' : 'overbilled';
       lines.push({ month: m, expected: exp, billed: got, difference: exp === null || got === null ? (got === null && exp ? r2(-exp) : null) : r2(got - exp), code, step: step ? `${step.from} ${step.reason}` : '' });
@@ -41,7 +55,7 @@ export function checkEscalations({ leases, rows, from, to, indexes = {}, toleran
     const byCode = {}; for (const x of bad) (byCode[x.code] = byCode[x.code] || []).push(x);
     for (const [code, xs] of Object.entries(byCode)) {
       const total = r2(xs.reduce((s, x) => s + (x.difference || 0), 0));
-      const what = { escalation_missed: `Billed at the old rent after the ${xs[0].step} step`, underbilled: 'Billed below the schedule', overbilled: 'Billed above the schedule', not_billed: 'No rent billed', billed_during_free_rent: 'Rent billed during free rent', index_missing: 'CPI index month missing; rent not checked' }[code];
+      const what = { escalation_missed: `Billed at the old rent after the ${xs[0].step} step`, underbilled: 'Billed below the schedule', overbilled: 'Billed above the schedule', not_billed: 'No rent billed', billed_during_free_rent: 'Rent billed during free rent', billed_outside_term: `Rent billed outside the lease term (${l.start} to ${l.end})`, billed_twice: 'Rent billed twice', index_missing: 'CPI index month missing; rent not checked' }[code];
       add(code, `${what}: ${xs.map((x) => x.month).join(', ')}${code === 'index_missing' ? '' : ` (${total >= 0 ? '+' : ''}${total})`}.`, code === 'index_missing' ? null : total);
     }
     const net = r2(bad.reduce((s, x) => s + (x.difference || 0), 0));

@@ -17,6 +17,8 @@ npx -y jade-of-escalations mcp --root ./leases
 | `underbilled`, `overbilled` | Billed below or above the schedule for the month |
 | `not_billed` | No rent charge in a month the lease is in force |
 | `billed_during_free_rent` | Rent billed in an abatement month |
+| `billed_outside_term` | Rent billed in a month before the lease starts or after it ends |
+| `billed_twice` | The month's rent charged twice |
 | `index_missing` | A CPI escalation month has no index value in your file; the lease is marked **review** |
 
 The schedule comes from the lease: explicit rent steps, or the escalation clause applied every `every_months` from the first anniversary (fixed percent, fixed amount, or CPI with base month, lag, floor and cap). Part months are charged by days; free rent is taken off.
@@ -25,7 +27,7 @@ The schedule comes from the lease: explicit rent steps, or the escalation clause
 ## Files it reads
 
 - **Leases** (`leases` schema). **Indexes** (optional) with CPI-style values you copy from your source; nothing is looked up online.
-- **Ledger**: rent charges by lease id, or by unit and tenant. AppFolio, Yardi and Buildium ledgers are recognised. Charge codes such as `RNT` or `RNTCOM` and words such as Rent, Miete, Loyer, Renta, Aluguel, Canone, 家賃, 租金 and 임대료 are read as rent; local column names and day-first dates are read too.
+- **Ledger**: rent charges by lease id, or by unit and tenant. A lease id is matched however it is typed (`L-101`, `l101`); without one, the unit is matched within the row's property. A line whose code is a GL account number is read by its description, and a payment line coded as rent is not counted as billing. AppFolio, Yardi and Buildium ledgers are recognised. Charge codes such as `RNT` or `RNTCOM` and words such as Rent, Miete, Loyer, Renta, Aluguel, Canone, 家賃, 租金 and 임대료 are read as rent; local column names and day-first dates are read too.
 
 <!-- generated:start -->
 

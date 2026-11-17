@@ -1,0 +1,7 @@
+Lease,Property,Unit,Tenant,Date,Charge Code,Description,Charges,Payments
+l101,Harbor Point Plaza (fictional),Suite 100,Acme Bagels LLC,2026-03-01,4000-00,Base rent,4370.91,
+l101,Harbor Point Plaza (fictional),Suite 100,Acme Bagels LLC,2026-03-05,RNTCOM,Payment received,,4370.91
+L-104,Harbor Point Plaza (fictional),Suite 130,Delta Phone Repair,2026-04-01,RNTCOM,Base rent,2704.00,
+L-104,Harbor Point Plaza (fictional),Suite 130,Delta Phone Repair,2026-05-01,RNTCOM,Base rent,2704.00,
+,Harbor Point Plaza (fictional),Ste. 150,Fable Books,2026-03-01,RNTCOM,Base rent,4506.25,
+,Harbor Point Plaza (fictional),Ste. 150,Fable Books,2026-03-01,RNTCOM,Base rent,4506.25,

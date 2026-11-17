@@ -249,6 +249,65 @@
           "leases"
         ]
       }
+    },
+    {
+      "id": "gl-code-read-by-description-and-payment-not-billing",
+      "tool": "jade_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "ledger": "fixtures/rent-charges-edge-cases.csv",
+        "from": "2026-03",
+        "to": "2026-03",
+        "lease": "L-101"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.item.billed_total": 4370.91,
+          "result.item.status": "ok"
+        }
+      }
+    },
+    {
+      "id": "billed-after-lease-end",
+      "tool": "jade_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "ledger": "fixtures/rent-charges-edge-cases.csv",
+        "from": "2026-04",
+        "to": "2026-05",
+        "lease": "L-104"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "billed_outside_term",
+          "2024-05-01 to 2026-04-30"
+        ],
+        "not_contains": [
+          "billed_during_free_rent"
+        ]
+      }
+    },
+    {
+      "id": "billed-twice-matched-by-unit-spelling",
+      "tool": "jade_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "ledger": "fixtures/rent-charges-edge-cases.csv",
+        "from": "2026-03",
+        "to": "2026-03",
+        "lease": "L-106"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "billed_twice"
+        ],
+        "equals": {
+          "result.item.net_difference": 4506.25
+        }
+      }
     }
   ]
 }
