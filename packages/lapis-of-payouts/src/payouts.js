@@ -25,10 +25,14 @@ const CHANNEL_WORDS = { airbnb: ['airbnb'], vrbo: ['vrbo', 'homeaway', 'abritel'
 const CANCEL = /cancel|storn|annul|cancelad|cancelad|annull|キャンセル|取消|취소/;
 const RES_TYPES = /^(reservation|booking|stay|reserva|buchung|réservation|reservation|prenotazione|予約|预订|예약|)$/;
 
-export function channelOf(text, policy = {}) {
+/** A confirmation code is the same however it is typed: " hma1qx7z" is HMA1QX7Z. */
+export const bookingKey = (v) => str(v).replace(/\s+/g, '').toUpperCase();
+
+export function channelOf(text, policy = {}, { bank = false } = {}) {
   const t = ` ${fold(text).replace(/[^a-z0-9.぀-鿿가-힯]+/g, ' ')} `;
-  for (const [k, c] of Object.entries(policy.channels || {})) if ((c.words || [k]).some((w) => t.includes(fold(w)))) return k;
-  for (const [k, ws] of Object.entries(CHANNEL_WORDS)) if (ws.some((w) => t.includes(w))) return k;
+  for (const [k, c] of Object.entries(policy.channels || {})) if ((c.words || [k]).some((w) => t.includes(` ${fold(w).replace(/[^a-z0-9.\u3040-\u9fff\uac00-\ud7af]+/g, ' ').trim()} `))) return k;
+  // On a bank statement "direct" means direct deposit (payroll, transfers), not a direct booking.
+  for (const [k, ws] of Object.entries(CHANNEL_WORDS)) if (!(bank && k === 'direct') && ws.some((w) => t.includes(` ${w} `))) return k;
   return null;
 }
 
@@ -44,7 +48,7 @@ export function listingName(name, policy = {}, learned = {}) {
 export function readPayoutFile(rows, channel, policy = {}, learned = {}) {
   const lines = []; const transfers = [];
   for (const r of rows) {
-    const id = str(r.booking_id); const type = fold(r.type);
+    const id = bookingKey(r.booking_id); const type = fold(r.type);
     const paidOut = num(r.paid_out); const amount = num(r.amount);
     const ch = channel || channelOf(r.channel, policy) || 'unknown';
     if (!id && (/payout|auszahlung|versement|pago|repasse|accredito|支払|打款|지급/.test(type) || (paidOut !== null && amount === null))) { const d = isoDate(r.payout_date); const amt = paidOut ?? amount; if (d && amt !== null) transfers.push({ channel: ch, date: d, amount: amt, explicit: true }); continue; }
@@ -64,11 +68,17 @@ export function readPayoutFile(rows, channel, policy = {}, learned = {}) {
 
 export function reconcilePayouts({ payoutFiles, bookings = null, bank = null, policy = {}, asOf, learned = {} }) {
   const tol = policy.tolerance ?? 1; const feeTol = policy.fee_tolerance_pct ?? 0.5; const bankLag = policy.bank_lag_days ?? 5;
-  const lines = []; const transfers = [];
-  for (const f of payoutFiles) { const r = readPayoutFile(f.rows, f.channel, policy, learned); lines.push(...r.lines); transfers.push(...r.transfers); }
+  const lines = []; const transfers = []; let repeated = 0;
+  // Exports often overlap (October, then October to November): a line already read from another file is counted once.
+  const seenL = new Map(); const seenT = new Map();
+  payoutFiles.forEach((f, fi) => {
+    const r = readPayoutFile(f.rows, f.channel, policy, learned);
+    for (const l of r.lines) { const k = [l.channel, l.booking_id, fold(l.type), l.amount, l.payout_date].join('|'); if (seenL.has(k) && seenL.get(k) !== fi) { repeated++; continue; } if (!seenL.has(k)) seenL.set(k, fi); lines.push(l); }
+    for (const t of r.transfers) { const k = [t.channel, t.date, t.amount].join('|'); if (seenT.has(k) && seenT.get(k) !== fi) { if (t.explicit) repeated++; continue; } if (!seenT.has(k)) seenT.set(k, fi); transfers.push(t); }
+  });
   const res = new Map();
   for (const b of bookings || []) {
-    const id = str(b.booking_id); if (!id) continue;
+    const id = bookingKey(b.booking_id); if (!id) continue;
     res.set(id, { booking_id: id, channel: channelOf(`${str(b.channel)} ${id}`, policy) || 'unknown', listing: listingName(b.listing, policy, learned), guest: str(b.guest), check_in: isoDate(b.check_in), check_out: isoDate(b.check_out), nights: num(b.nights), gross: num(b.gross), cleaning: num(b.cleaning_fee), expected: num(b.amount), cancelled: CANCEL.test(fold(b.type)) || CANCEL.test(fold(b.status)) });
   }
   const ids = [...new Set([...res.keys(), ...lines.map((l) => l.booking_id)])];
@@ -97,7 +107,9 @@ export function reconcilePayouts({ payoutFiles, bookings = null, bank = null, po
       if (!cancelled && expected !== null && Math.abs(paid - expected) > tol) add(paid < expected ? 'payout_short' : 'payout_over', `Paid ${paid}; ${source} ${expected} (${paid < expected ? 'short' : 'over'} ${r2(Math.abs(paid - expected))}).`, { amount: r2(paid - expected) });
       if (resLines.length > 1) {
         const same = resLines.filter((l) => Math.abs((l.amount || 0) - (resLines[0].amount || 0)) < 0.005);
-        if (same.length > 1) add('duplicate_payout', `${same.length} reservation lines for this booking with the same amount ${resLines[0].amount}${same.map((l) => l.payout_date).filter(Boolean).length ? ` (${same.map((l) => l.payout_date).join(', ')})` : ''}.`, { amount: r2((same.length - 1) * (resLines[0].amount || 0)) });
+        // Equal instalments of a long stay that add up to what was expected are not a duplicate.
+        const addsUp = expected !== null && Math.abs(paid - expected) <= tol;
+        if (same.length > 1 && !addsUp) add('duplicate_payout', `${same.length} reservation lines for this booking with the same amount ${resLines[0].amount}${same.map((l) => l.payout_date).filter(Boolean).length ? ` (${same.map((l) => l.payout_date).join(', ')})` : ''}.`, { amount: r2((same.length - 1) * (resLines[0].amount || 0)) });
       }
       for (const l of resLines.slice(0, 1)) {
         if (ch.fee_pct !== undefined && l.fee !== null && l.gross) {
@@ -128,8 +140,8 @@ export function reconcilePayouts({ payoutFiles, bookings = null, bank = null, po
       else if (addDays(t.date, bankLag) < asOf) findings.push({ code: 'not_in_bank', detail: `${t.channel} payout of ${t.amount} on ${t.date} has no matching bank deposit within ${bankLag} day(s).`, amount: t.amount });
       items.push({ kind: 'transfer', id: `${t.channel} ${t.date} ${t.amount}`, channel: t.channel, date: t.date, amount: t.amount, bank_date: hit ? hit.date : null, status: hit ? 'ok' : findings.length ? 'missing' : 'pending', findings });
     }
-    for (const d of deposits.filter((x) => !x.used && channelOf(x.description, policy))) {
-      items.push({ kind: 'deposit', id: `bank ${d.date} ${d.amount}`, channel: channelOf(d.description, policy), date: d.date, amount: d.amount, description: d.description, status: 'issue', findings: [{ code: 'deposit_without_payout', detail: `Bank deposit ${d.amount} on ${d.date} ("${d.description}") matches no payout in the channel files.`, amount: d.amount }] });
+    for (const d of deposits.filter((x) => !x.used && channelOf(x.description, policy, { bank: true }))) {
+      items.push({ kind: 'deposit', id: `bank ${d.date} ${d.amount}`, channel: channelOf(d.description, policy, { bank: true }), date: d.date, amount: d.amount, description: d.description, status: 'issue', findings: [{ code: 'deposit_without_payout', detail: `Bank deposit ${d.amount} on ${d.date} ("${d.description}") matches no payout in the channel files.`, amount: d.amount }] });
     }
   }
   const order = { missing: 0, issue: 1, pending: 2, cancelled: 3, ok: 4 };
@@ -137,8 +149,8 @@ export function reconcilePayouts({ payoutFiles, bookings = null, bank = null, po
   const bk = items.filter((i) => i.kind === 'booking'); const tr = items.filter((i) => i.kind === 'transfer');
   const n = (l, s) => l.filter((i) => i.status === s).length;
   const short = r2(bk.flatMap((i) => i.findings).filter((f) => ['payout_short', 'missing_payout'].includes(f.code)).reduce((s, f) => s + Math.abs(f.amount || 0), 0));
-  const summary = `${bk.length} booking(s) across ${[...new Set(bk.map((i) => i.channel))].join(', ') || 'no channel'}: ${n(bk, 'ok')} paid as expected, ${n(bk, 'missing')} missing a payout, ${n(bk, 'issue')} with differences, ${n(bk, 'pending')} not yet due. Short or missing: ${short}.${deposits ? ` ${tr.length} payout(s) against the bank: ${n(tr, 'ok')} matched, ${n(tr, 'missing')} not found${items.some((i) => i.kind === 'deposit') ? `, ${items.filter((i) => i.kind === 'deposit').length} channel deposit(s) with no payout` : ''}.` : ' No bank file, so payouts are not matched to deposits.'}`;
-  return { summary, as_of: asOf, short_or_missing: short, items };
+  const summary = `${bk.length} booking(s) across ${[...new Set(bk.map((i) => i.channel))].join(', ') || 'no channel'}: ${n(bk, 'ok')} paid as expected, ${n(bk, 'missing')} missing a payout, ${n(bk, 'issue')} with differences, ${n(bk, 'pending')} not yet due. Short or missing: ${short}.${deposits ? ` ${tr.length} payout(s) against the bank: ${n(tr, 'ok')} matched, ${n(tr, 'missing')} not found${items.some((i) => i.kind === 'deposit') ? `, ${items.filter((i) => i.kind === 'deposit').length} channel deposit(s) with no payout` : ''}.` : ' No bank file, so payouts are not matched to deposits.'}${repeated ? ` ${repeated} line(s) appear in more than one file and were counted once.` : ''}`;
+  return { summary, as_of: asOf, short_or_missing: short, repeated_lines: repeated, items };
 }
 
 /** Inquiry to a channel's host support about one booking's payout. */

@@ -15,13 +15,15 @@ npx -y lapis-of-payouts mcp --root ./payouts
 |---|---|
 | `missing_payout` | Checked in more than `payout_lag_days` ago (per channel, default 3) and no payout line |
 | `payout_short`, `payout_over` | Paid differs from the reservation's expected payout, or from your rates when there is no reservation file |
-| `duplicate_payout` | Two reservation lines for one booking with the same amount |
+| `duplicate_payout` | Two reservation lines for one booking with the same amount, unless they are instalments that add up to what the reservation expects |
 | `paid_while_cancelled` | Reservation cancelled but money paid (it may be a cancellation fee you keep) |
 | `fee_rate_differs` | Channel fee as a share of the stay (plus cleaning, unless `fee_base` is `gross`) differs from your `fee_pct` |
 | `cleaning_fee_differs` | Cleaning fee differs from the listing's rate |
 | `nights_differ`, `dates_differ` | The channel pays for different nights or a different check-in |
 | `not_in_reservations` | Paid for a booking missing from your reservations file |
 | `not_in_bank`, `deposit_without_payout` | A channel payout with no bank deposit within `bank_lag_days`, or a channel deposit with no payout |
+
+Confirmation codes match however they are typed (`hma1qx7z` is `HMA1QX7Z`). When two exports overlap, a line found in both is counted once and the summary says how many. On the bank statement, "DIRECT DEPOSIT" lines such as payroll are not taken for direct bookings.
 
 Airbnb transaction history (with Payout rows) and Vrbo payout reports are recognised; other channels work when the file has a confirmation code and an amount. Airbnb's "Gross earnings" includes cleaning; Lapis splits it back out. Channel names come from the file name or a Channel column. German, French, Spanish, Portuguese, Italian, Japanese, Chinese and Korean headers such as Buchungsnummer, Anreise, Provision, Auszahlung, Llegada or 予約番号 are read.
 

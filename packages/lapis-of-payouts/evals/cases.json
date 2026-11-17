@@ -291,6 +291,99 @@
           "payouts"
         ]
       }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "lapis_draft_inquiry",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "as_of": "2026-11-15",
+        "id": "HMC3WE9P"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "lapis_draft_inquiry",
+      "approve": "Dana Example",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "as_of": "2026-11-15",
+        "id": "HMC3WE9P"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "lapis_draft_inquiry",
+      "mode": "review",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "as_of": "2026-11-15",
+        "id": "HMC3WE9P"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "same-export-twice-counted-once",
+      "tool": "lapis_check",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv",
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "appear in more than one file and were counted once"
+        ]
+      }
+    },
+    {
+      "id": "lower-case-codes-and-payroll-direct-deposit",
+      "tool": "lapis_check",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-edge-cases.csv",
+        "bank": "fixtures/bank-edge-cases.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-10-14"
+      },
+      "expect": {
+        "status": "executed",
+        "not_contains": [
+          "PAYROLL",
+          "missing_payout"
+        ],
+        "contains": [
+          "HMA1QX7Z"
+        ]
+      }
     }
   ]
 }
