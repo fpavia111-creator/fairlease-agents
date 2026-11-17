@@ -1,0 +1,12 @@
+Owner,Property,Date,Type,GL Account,Description,Cash In,Cash Out,Reference
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-01,Receipt,4000,Rent deposit batch,"18,500.00",,DEP-1001
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-03,Receipt,4000,Rent deposit batch,"16,200.00",,DEP-1002
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-15,Receipt,4000,Rent deposit batch,"2,900.00",,DEP-1003
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-20,Receipt,4200,Utility reimbursement,"1,650.00",,DEP-1005
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-30,Receipt,4000,Rent deposit,"1,200.00",,DEP-1004
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-05,Bill,5000,FlowRight Plumbing (fictional),,145.00,2201
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-06,Bill,5000,Volt Electric (fictional),,210.00,2202
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-20,Bill,5600,Example Flooring (fictional),,"3,100.00",2204
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-20,Bill,5200,Payroll transfer,,"5,200.00",2195
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-25,Bill,5100,City Water (fictional),,"2,595.00",2206
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-31,Management Fee,5300,Management fee October,,"2,256.00",2205

@@ -1,0 +1,53 @@
+{
+  "name": "onyx-of-statements",
+  "version": "0.1.0",
+  "description": "Onyx of Statements: checks owner statements before they go out: the math, beginning against last month's ending, reserves held, distributions made below the reserve, negative balances, and totals against the owner ledger; drafts contribution requests.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "onyx-of-statements": "bin/onyx-of-statements.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/onyx-of-statements.js demo",
+    "eval": "node bin/onyx-of-statements.js eval"
+  },
+  "dependencies": {
+    "keystone-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/keystone-agents.git",
+    "directory": "packages/onyx-of-statements"
+  },
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/onyx-of-statements#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/keystone-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "statements"
+  ]
+}

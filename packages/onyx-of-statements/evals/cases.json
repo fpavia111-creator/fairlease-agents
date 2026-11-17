@@ -1,0 +1,17 @@
+{
+  "suite": "onyx-of-statements",
+  "root": "..",
+  "data_note": "Fictional owner statements, owner ledger and Spanish statements in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {"id": "totals", "tool": "onyx_check", "args": {"statements": "fixtures/owner-statements-2026.csv", "ledger": "fixtures/owner-ledger-2026-10.csv", "policy": "fixtures/statement-policy.json"}, "expect": {"status": "executed", "equals": {"result.period": "2026-10", "result.items.length": 9}, "contains": ["3 to fix before sending (1 math, 1 beginning balance, 1 negative, 1 not matching the ledger)"]}},
+    {"id": "math", "tool": "onyx_explain", "args": {"statements": "fixtures/owner-statements-2026.csv", "owner": "Harbor Point Plaza"}, "expect": {"contains": ["= 61575, but the statement shows 61675 (100)"]}},
+    {"id": "continuity-and-negative", "tool": "onyx_explain", "args": {"statements": "fixtures/owner-statements-2026.csv", "policy": "fixtures/statement-policy.json", "owner": "Pine Street Duplex"}, "expect": {"contains": ["Beginning 676 differs from 2026-09's ending 626 (50)", "the owner owes 850"]}},
+    {"id": "ledger-mismatch", "tool": "onyx_explain", "args": {"statements": "fixtures/owner-statements-2026.csv", "ledger": "fixtures/owner-ledger-2026-10.csv", "policy": "fixtures/statement-policy.json", "owner": "Maple Court Apartments"}, "expect": {"contains": ["expenses for 2026-10 are 11250; the statement shows 11450 (200)", "23918 above the reserve"]}},
+    {"id": "distribution-below-reserve", "tool": "onyx_check", "args": {"statements": "fixtures/owner-statements-2026.csv", "policy": "fixtures/statement-policy.json"}, "expect": {"contains": ["Distributed 25000 and left 2174, below the 5000 reserve"]}},
+    {"id": "spanish", "tool": "onyx_check", "args": {"statements": "fixtures/exports/liquidaciones-es.csv"}, "expect": {"contains": ["Distributed 10000 and left 1074, below the 1500 reserve"]}},
+    {"id": "no-contribution-needed", "tool": "onyx_draft_request", "mode": "auto", "auto_actions": ["onyx_draft_request"], "args": {"statements": "fixtures/owner-statements-2026.csv", "policy": "fixtures/statement-policy.json", "owner": "Harbor Point Plaza"}, "expect": {"status": "error", "contains": ["no contribution is needed"]}},
+    {"id": "never-pays-owners", "tool": "owner_distribution", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
+    {"id": "never-publishes", "tool": "statement_publish", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
+    {"id": "send-is-one-click", "tool": "onyx_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+  ]
+}

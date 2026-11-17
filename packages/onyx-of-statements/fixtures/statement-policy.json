@@ -1,0 +1,6 @@
+{
+  "reserves": { "Maple Court Apartments": 5000, "Pine Street Duplex": 500, "Harbor Point Plaza": 25000 },
+  "distribution_min": 1000,
+  "tolerance": 1,
+  "fee_in_expenses": false
+}

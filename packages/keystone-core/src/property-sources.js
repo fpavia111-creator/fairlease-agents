@@ -262,13 +262,13 @@ export const OWNER_STATEMENT_FIELDS = Object.freeze({
   owner: text(['Owner', 'Owner Name', 'Owners', 'Investor'], 'owner', { required: true }),
   property: PROPERTY,
   period: text(['Period', 'Statement Period', 'Month', 'Statement Month'], 'period'),
-  beginning_balance: money(['Beginning Balance', 'Beginning Cash', 'Opening Balance', 'Starting Balance']),
-  income: money(['Income', 'Total Income', 'Cash In', 'Receipts', 'Rent Collected']),
-  expenses: money(['Expenses', 'Total Expenses', 'Cash Out', 'Disbursements']),
-  management_fee: money(['Management Fee', 'Management Fees', 'Mgmt Fee', 'Property Management Fee']),
-  owner_draw: money(['Owner Draw', 'Owner Distribution', 'Distribution', 'Owner Disbursement', 'Contributions/Distributions', 'Owner Payment']),
-  reserve: money(['Reserve', 'Property Reserve', 'Operating Reserve', 'Held Reserve']),
-  ending_balance: money(['Ending Balance', 'Ending Cash', 'Closing Balance', 'Ending Cash Balance']),
+  beginning_balance: money(['Beginning Balance', 'Beginning Cash', 'Opening Balance', 'Starting Balance', 'Anfangsbestand', 'Solde initial', 'Saldo inicial', 'Saldo iniziale', '期首残高', '期初余额', '기초잔액']),
+  income: money(['Income', 'Total Income', 'Cash In', 'Receipts', 'Rent Collected', 'Einnahmen', 'Recettes', 'Ingresos', 'Receitas', 'Entrate', '収入', '收入', '수입']),
+  expenses: money(['Expenses', 'Total Expenses', 'Cash Out', 'Disbursements', 'Ausgaben', 'Dépenses', 'Gastos', 'Despesas', 'Spese', '支出', '지출']),
+  management_fee: money(['Management Fee', 'Management Fees', 'Mgmt Fee', 'Property Management Fee', 'Verwaltungsgebühr', 'Verwaltervergütung', 'Honoraires de gestion', 'Honorarios de gestión', 'Taxa de administração', 'Compenso di gestione', '管理手数料', '管理费', '관리수수료']),
+  owner_draw: money(['Owner Draw', 'Owner Distribution', 'Distribution', 'Owner Disbursement', 'Contributions/Distributions', 'Owner Payment', 'Ausschüttung', 'Distribution au propriétaire', 'Distribución', 'Repasse', 'Distribuzione', 'オーナー送金', '业主分配', '소유주 송금']),
+  reserve: money(['Reserve', 'Property Reserve', 'Operating Reserve', 'Held Reserve', 'Rücklage', 'Réserve', 'Reserva', 'Riserva', '留保金', '储备金', '유보금']),
+  ending_balance: money(['Ending Balance', 'Ending Cash', 'Closing Balance', 'Ending Cash Balance', 'Endbestand', 'Solde final', 'Saldo final', 'Saldo finale', '期末残高', '期末余额', '기말잔액']),
 });
 
 export const BANK_FIELDS = Object.freeze({
