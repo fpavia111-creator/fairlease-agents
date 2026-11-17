@@ -1,0 +1,7 @@
+Guest Card ID,Property,Name,Email,Phone,Source,Bed / Bath Preference,Received,First Response,Showing,Application Date,Approved,Lease Signed,Status,Inactive Reason
+GC-2001,Birch Street Lofts (fictional),Jordan Lee (fictional),jordan.lee@example.com,,Zillow,1/1,11/01/2026,11/01/2026,,,,,Active,
+GC-2002,Birch Street Lofts (fictional),Jordan Lee (fictional),jlee88@example.org,,Website,2/1,11/02/2026,11/02/2026,,,,,Active,
+GC-2003,Birch Street Lofts (fictional),Kim Osei (fictional),kim.osei@example.com,,Zillow,1/1,11/01/2026,11/01/2026,,,,,Active,
+GC-2004,Birch Street Lofts (fictional),Kim Osei (fictional),Kim.Osei@Example.com,,Website,1/1,11/04/2026,11/04/2026,11/05/2026,11/06/2026,11/07/2026,11/09/2026,Leased,
+GC-2005,Birch Street Lofts (fictional),Walker Inn (fictional),walker.inn@example.com,,Walk-in,2/2,11/08/2026,,11/08/2026,,,,Active,
+GC-2006,Birch Street Lofts (fictional),Noor Aziz (fictional),noor.aziz@example.com,,Zillow,1/1,11/05/2026,11/05/2026,,,,,Inactive,N/A

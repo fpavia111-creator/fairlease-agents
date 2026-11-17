@@ -292,6 +292,28 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "repeat-inquiry-lease-counted-once-for-first-source",
+      "tool": "mica_check",
+      "args": {
+        "leads": "fixtures/guest-cards-edge-cases.csv",
+        "as_of": "2026-11-10"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "5 lead(s) (1 duplicate(s) set aside)",
+          "1 leased",
+          "0 with no response",
+          "lost_reason_missing"
+        ],
+        "equals": {
+          "result.sources.0.source": "Zillow",
+          "result.sources.0.count": 3,
+          "result.sources.0.leases": 1
+        }
+      }
     }
   ]
 }

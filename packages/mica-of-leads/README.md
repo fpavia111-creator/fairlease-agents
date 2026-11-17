@@ -17,10 +17,11 @@ npx -y mica-of-leads mcp --root ./leasing
 | `follow_up_due` | Open lead with no step for `follow_up_days` (default 3) |
 | `approved_not_leased` | Approved more than `approved_days` (default 7) ago with no lease signed |
 | `stale_open` | Open longer than `stale_days` (default 30) |
-| `duplicate` | Same email, phone or name as an earlier lead within `duplicate_days` (default 30); set aside in the source table |
+| `duplicate` | Same email or phone as an earlier lead within `duplicate_days` (default 30), or the same name when the emails and phones do not say otherwise; set aside in the source table |
 | `lost_reason_missing`, `dates_out_of_order` | Closed as lost with no reason; a tour, application or lease dated before the lead came in |
+| `created_in_future` | The lead is dated after `as_of`; it is not judged for response time |
 
-The report adds a **By source** table and the **Lost reasons** tally. Sources with spend and no leads are listed too. Dates are whole days, because most exports carry dates without times.
+The report adds a **By source** table and the **Lost reasons** tally. Sources with spend and no leads are listed too. Dates are whole days, because most exports carry dates without times. When someone asks twice and tours, applies or leases on the later inquiry, that progress is carried back to their first lead, so the lease is counted once for the source that brought them first. A tour or application counts as contact, so a walk-in with no first response logged is not reported as ignored. Spend entered under an alias goes to the source the alias stands for.
 
 
 <!-- generated:start -->
