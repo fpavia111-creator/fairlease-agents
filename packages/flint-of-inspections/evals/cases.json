@@ -3,16 +3,205 @@
   "root": "..",
   "data_note": "Fictional Maple Court inspections, rent roll and work orders in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "flint_check", "args": {"inspections": "fixtures/inspections-2026.csv", "policy": "fixtures/inspection-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "work_orders": "fixtures/work-orders.csv", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.items.length": 24, "result.items.0.unit": "106"}, "contains": ["1 overdue", "1 never inspected", "(4 item(s))"]}},
-    {"id": "move-out-vs-move-in", "tool": "flint_explain", "args": {"inspections": "fixtures/inspections-2026.csv", "policy": "fixtures/inspection-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "work_orders": "fixtures/work-orders.csv", "as_of": "2026-11-15", "unit": "204"}, "expect": {"contains": ["Carpet: Good → Damaged (photo)", "no_photo", "Bathroom: Mirror"], "equals": {"result.item.worse.length": 4}}},
-    {"id": "no-baseline", "tool": "flint_explain", "args": {"inspections": "fixtures/inspections-2026.csv", "policy": "fixtures/inspection-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15", "unit": "305"}, "expect": {"contains": ["no_move_in_baseline"]}},
-    {"id": "poor-no-work-order", "tool": "flint_explain", "args": {"inspections": "fixtures/inspections-2026.csv", "policy": "fixtures/inspection-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "work_orders": "fixtures/work-orders.csv", "as_of": "2026-11-15", "unit": "202"}, "expect": {"contains": ["poor_no_work_order", "Smoke detector: Missing"]}},
-    {"id": "work-order-followed", "tool": "flint_explain", "args": {"inspections": "fixtures/inspections-2026.csv", "policy": "fixtures/inspection-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "work_orders": "fixtures/work-orders.csv", "as_of": "2026-11-15", "unit": "301"}, "expect": {"equals": {"result.item.status": "ok"}}},
-    {"id": "german-export", "tool": "flint_check", "args": {"inspections": "fixtures/exports/begehung-de.csv", "policy": "fixtures/inspection-policy.json", "as_of": "2026-11-15"}, "expect": {"contains": ["Teppich gut → beschädigt", "1 overdue"]}},
-    {"id": "vacant-no-notice", "tool": "flint_draft_notice", "mode": "auto", "auto_actions": ["flint_draft_notice"], "args": {"inspections": "fixtures/inspections-2026.csv", "policy": "fixtures/inspection-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15", "unit": "204"}, "expect": {"status": "error", "contains": ["vacant"]}},
-    {"id": "not-due", "tool": "flint_draft_notice", "mode": "auto", "auto_actions": ["flint_draft_notice"], "args": {"inspections": "fixtures/inspections-2026.csv", "policy": "fixtures/inspection-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15", "unit": "101"}, "expect": {"status": "error", "contains": ["not due"]}},
-    {"id": "never-charges", "tool": "post_tenant_charge", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-dispatches", "tool": "vendor_dispatch", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "send-is-one-click", "tool": "flint_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+    {
+      "id": "totals",
+      "tool": "flint_check",
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "work_orders": "fixtures/work-orders.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 24,
+          "result.items.0.unit": "106"
+        },
+        "contains": [
+          "1 overdue",
+          "1 never inspected",
+          "(4 item(s))"
+        ]
+      }
+    },
+    {
+      "id": "move-out-vs-move-in",
+      "tool": "flint_explain",
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "work_orders": "fixtures/work-orders.csv",
+        "as_of": "2026-11-15",
+        "unit": "204"
+      },
+      "expect": {
+        "contains": [
+          "Carpet: Good → Damaged (photo)",
+          "no_photo",
+          "Bathroom: Mirror"
+        ],
+        "equals": {
+          "result.item.worse.length": 4
+        }
+      }
+    },
+    {
+      "id": "no-baseline",
+      "tool": "flint_explain",
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "305"
+      },
+      "expect": {
+        "contains": [
+          "no_move_in_baseline"
+        ]
+      }
+    },
+    {
+      "id": "poor-no-work-order",
+      "tool": "flint_explain",
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "work_orders": "fixtures/work-orders.csv",
+        "as_of": "2026-11-15",
+        "unit": "202"
+      },
+      "expect": {
+        "contains": [
+          "poor_no_work_order",
+          "Smoke detector: Missing"
+        ]
+      }
+    },
+    {
+      "id": "work-order-followed",
+      "tool": "flint_explain",
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "work_orders": "fixtures/work-orders.csv",
+        "as_of": "2026-11-15",
+        "unit": "301"
+      },
+      "expect": {
+        "equals": {
+          "result.item.status": "ok"
+        }
+      }
+    },
+    {
+      "id": "german-export",
+      "tool": "flint_check",
+      "args": {
+        "inspections": "fixtures/exports/begehung-de.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "Teppich gut → beschädigt",
+          "1 overdue"
+        ]
+      }
+    },
+    {
+      "id": "vacant-no-notice",
+      "tool": "flint_draft_notice",
+      "mode": "auto",
+      "auto_actions": [
+        "flint_draft_notice"
+      ],
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "204"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "vacant"
+        ]
+      }
+    },
+    {
+      "id": "not-due",
+      "tool": "flint_draft_notice",
+      "mode": "auto",
+      "auto_actions": [
+        "flint_draft_notice"
+      ],
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "101"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not due"
+        ]
+      }
+    },
+    {
+      "id": "never-charges",
+      "tool": "post_tenant_charge",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-dispatches",
+      "tool": "vendor_dispatch",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "flint_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "flint_write_report",
+      "args": {
+        "inspections": "fixtures/inspections-2026.csv",
+        "policy": "fixtures/inspection-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "work_orders": "fixtures/work-orders.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

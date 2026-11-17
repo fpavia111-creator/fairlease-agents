@@ -3,16 +3,194 @@
   "root": "..",
   "data_note": "Fictional building, rent roll and listings in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "cobalt_check", "args": {"listings": "fixtures/listings-2026-11.csv", "rent_roll": "fixtures/rent-roll-2026-11.csv", "policy": "fixtures/listing-policy.json", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.items.length": 7, "result.items.0.unit": "103"}, "contains": ["1 missing a site", "1 occupied unit(s) still listed", "2 with wording to review"]}},
-    {"id": "occupied-and-listed", "tool": "cobalt_explain", "args": {"listings": "fixtures/listings-2026-11.csv", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15", "unit": "105"}, "expect": {"contains": ["listed_while_occupied"]}},
-    {"id": "leased-listing-ignored", "tool": "cobalt_check", "args": {"listings": "fixtures/listings-2026-11.csv", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15"}, "expect": {"not_contains": ["\"unit\": \"101\""]}},
-    {"id": "notice-unit-dates", "tool": "cobalt_explain", "args": {"listings": "fixtures/listings-2026-11.csv", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15", "unit": "104"}, "expect": {"contains": ["available_before_move_out", "Website 2026-11-25"], "not_contains": ["Zillow 2026-12-10"]}},
-    {"id": "wording-is-for-review", "tool": "cobalt_explain", "args": {"listings": "fixtures/listings-2026-11.csv", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15", "unit": "106"}, "expect": {"contains": ["adults only", "does not judge"], "not_contains": ["illegal", "unlawful", "violat"]}},
-    {"id": "not-listed-without-policy", "tool": "cobalt_check", "args": {"listings": "fixtures/listings-2026-11.csv", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15"}, "expect": {"contains": ["0 missing a site"]}},
-    {"id": "french-export", "tool": "cobalt_check", "args": {"listings": "fixtures/exports/annonces-fr.csv", "rent_roll": "fixtures/exports/lots-fr.csv", "as_of": "2026-11-15"}, "expect": {"contains": ["pas d'enfants", "Portail régional asks 1190"], "not_contains": ["available_date_stale"]}},
-    {"id": "nothing-to-correct", "tool": "cobalt_draft_correction", "mode": "auto", "auto_actions": ["cobalt_draft_correction"], "args": {"listings": "fixtures/listings-2026-11.csv", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15", "unit": "102"}, "expect": {"status": "error", "contains": ["nothing to correct"]}},
-    {"id": "never-publishes", "tool": "publish_listing", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-writes-prospects", "tool": "reply_to_prospect", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "send-is-one-click", "tool": "cobalt_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+    {
+      "id": "totals",
+      "tool": "cobalt_check",
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "policy": "fixtures/listing-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 7,
+          "result.items.0.unit": "103"
+        },
+        "contains": [
+          "1 missing a site",
+          "1 occupied unit(s) still listed",
+          "2 with wording to review"
+        ]
+      }
+    },
+    {
+      "id": "occupied-and-listed",
+      "tool": "cobalt_explain",
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "105"
+      },
+      "expect": {
+        "contains": [
+          "listed_while_occupied"
+        ]
+      }
+    },
+    {
+      "id": "leased-listing-ignored",
+      "tool": "cobalt_check",
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "not_contains": [
+          "\"unit\": \"101\""
+        ]
+      }
+    },
+    {
+      "id": "notice-unit-dates",
+      "tool": "cobalt_explain",
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "104"
+      },
+      "expect": {
+        "contains": [
+          "available_before_move_out",
+          "Website 2026-11-25"
+        ],
+        "not_contains": [
+          "Zillow 2026-12-10"
+        ]
+      }
+    },
+    {
+      "id": "wording-is-for-review",
+      "tool": "cobalt_explain",
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "106"
+      },
+      "expect": {
+        "contains": [
+          "adults only",
+          "does not judge"
+        ],
+        "not_contains": [
+          "illegal",
+          "unlawful",
+          "violat"
+        ]
+      }
+    },
+    {
+      "id": "not-listed-without-policy",
+      "tool": "cobalt_check",
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "0 missing a site"
+        ]
+      }
+    },
+    {
+      "id": "french-export",
+      "tool": "cobalt_check",
+      "args": {
+        "listings": "fixtures/exports/annonces-fr.csv",
+        "rent_roll": "fixtures/exports/lots-fr.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "pas d'enfants",
+          "Portail régional asks 1190"
+        ],
+        "not_contains": [
+          "available_date_stale"
+        ]
+      }
+    },
+    {
+      "id": "nothing-to-correct",
+      "tool": "cobalt_draft_correction",
+      "mode": "auto",
+      "auto_actions": [
+        "cobalt_draft_correction"
+      ],
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "102"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "nothing to correct"
+        ]
+      }
+    },
+    {
+      "id": "never-publishes",
+      "tool": "publish_listing",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-writes-prospects",
+      "tool": "reply_to_prospect",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "cobalt_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "cobalt_write_report",
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "policy": "fixtures/listing-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

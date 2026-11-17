@@ -3,16 +3,189 @@
   "root": "..",
   "data_note": "Fictional old and new rent rolls in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "tourmaline_check", "args": {"before": "fixtures/rent-roll-old-system.csv", "after": "fixtures/rent-roll-new-system.csv", "policy": "fixtures/migration-policy.json"}, "expect": {"status": "executed", "equals": {"result.items.0.unit": "B-305", "result.totals.4.difference": -862}, "contains": ["6 differ", "1 missing from the new system", "deposit 12450 vs 10550"]}},
-    {"id": "deposit-typo", "tool": "tourmaline_explain", "args": {"before": "fixtures/rent-roll-old-system.csv", "after": "fixtures/rent-roll-new-system.csv", "unit": "103"}, "expect": {"contains": ["Deposit 1000 became 100 (-900)"]}},
-    {"id": "unit-map", "tool": "tourmaline_explain", "args": {"before": "fixtures/rent-roll-old-system.csv", "after": "fixtures/rent-roll-new-system.csv", "policy": "fixtures/migration-policy.json", "unit": "B-202"}, "expect": {"equals": {"result.item.new_unit": "202", "result.item.matched_by": "unit map"}}},
-    {"id": "paired-by-number-needs-review", "tool": "tourmaline_explain", "args": {"before": "fixtures/rent-roll-old-system.csv", "after": "fixtures/rent-roll-new-system.csv", "unit": "B-201"}, "expect": {"contains": ["matched_by_number", "teach it as a unit alias"], "equals": {"result.item.status": "review"}}},
-    {"id": "spelling-change", "tool": "tourmaline_explain", "args": {"before": "fixtures/rent-roll-old-system.csv", "after": "fixtures/rent-roll-new-system.csv", "unit": "107"}, "expect": {"contains": ["tenant_differs"]}},
-    {"id": "compare-only-chosen-fields", "tool": "tourmaline_check", "args": {"before": "fixtures/rent-roll-old-system.csv", "after": "fixtures/rent-roll-new-system.csv"}, "expect": {"contains": ["lease_dates_differ"]}},
-    {"id": "german-export", "tool": "tourmaline_check", "args": {"before": "fixtures/exports/mieterliste-alt-de.csv", "after": "fixtures/exports/mieterliste-neu-de.csv"}, "expect": {"contains": ["Balance -610 became 0", "balance -610 vs 0"]}},
-    {"id": "nothing-to-punch", "tool": "tourmaline_draft_punchlist", "mode": "auto", "auto_actions": ["tourmaline_draft_punchlist"], "args": {"before": "fixtures/exports/mieterliste-neu-de.csv", "after": "fixtures/exports/mieterliste-neu-de.csv"}, "expect": {"status": "error", "contains": ["nothing to put on a punch list"]}},
-    {"id": "never-goes-live", "tool": "approve_go_live", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-deletes", "tool": "delete_old_system_data", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "send-is-one-click", "tool": "tourmaline_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+    {
+      "id": "totals",
+      "tool": "tourmaline_check",
+      "args": {
+        "before": "fixtures/rent-roll-old-system.csv",
+        "after": "fixtures/rent-roll-new-system.csv",
+        "policy": "fixtures/migration-policy.json"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.unit": "B-305",
+          "result.totals.4.difference": -862
+        },
+        "contains": [
+          "6 differ",
+          "1 missing from the new system",
+          "deposit 12450 vs 10550"
+        ]
+      }
+    },
+    {
+      "id": "deposit-typo",
+      "tool": "tourmaline_explain",
+      "args": {
+        "before": "fixtures/rent-roll-old-system.csv",
+        "after": "fixtures/rent-roll-new-system.csv",
+        "unit": "103"
+      },
+      "expect": {
+        "contains": [
+          "Deposit 1000 became 100 (-900)"
+        ]
+      }
+    },
+    {
+      "id": "unit-map",
+      "tool": "tourmaline_explain",
+      "args": {
+        "before": "fixtures/rent-roll-old-system.csv",
+        "after": "fixtures/rent-roll-new-system.csv",
+        "policy": "fixtures/migration-policy.json",
+        "unit": "B-202"
+      },
+      "expect": {
+        "equals": {
+          "result.item.new_unit": "202",
+          "result.item.matched_by": "unit map"
+        }
+      }
+    },
+    {
+      "id": "paired-by-number-needs-review",
+      "tool": "tourmaline_explain",
+      "args": {
+        "before": "fixtures/rent-roll-old-system.csv",
+        "after": "fixtures/rent-roll-new-system.csv",
+        "unit": "B-201"
+      },
+      "expect": {
+        "contains": [
+          "matched_by_number",
+          "teach it as a unit alias"
+        ],
+        "equals": {
+          "result.item.status": "review"
+        }
+      }
+    },
+    {
+      "id": "spelling-change",
+      "tool": "tourmaline_explain",
+      "args": {
+        "before": "fixtures/rent-roll-old-system.csv",
+        "after": "fixtures/rent-roll-new-system.csv",
+        "unit": "107"
+      },
+      "expect": {
+        "contains": [
+          "tenant_differs"
+        ]
+      }
+    },
+    {
+      "id": "compare-only-chosen-fields",
+      "tool": "tourmaline_check",
+      "args": {
+        "before": "fixtures/rent-roll-old-system.csv",
+        "after": "fixtures/rent-roll-new-system.csv"
+      },
+      "expect": {
+        "contains": [
+          "lease_dates_differ"
+        ]
+      }
+    },
+    {
+      "id": "german-export",
+      "tool": "tourmaline_check",
+      "args": {
+        "before": "fixtures/exports/mieterliste-alt-de.csv",
+        "after": "fixtures/exports/mieterliste-neu-de.csv"
+      },
+      "expect": {
+        "contains": [
+          "Balance -610 became 0",
+          "balance -610 vs 0"
+        ]
+      }
+    },
+    {
+      "id": "nothing-to-punch",
+      "tool": "tourmaline_draft_punchlist",
+      "mode": "auto",
+      "auto_actions": [
+        "tourmaline_draft_punchlist"
+      ],
+      "args": {
+        "before": "fixtures/exports/mieterliste-neu-de.csv",
+        "after": "fixtures/exports/mieterliste-neu-de.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "nothing to put on a punch list"
+        ]
+      }
+    },
+    {
+      "id": "never-goes-live",
+      "tool": "approve_go_live",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-deletes",
+      "tool": "delete_old_system_data",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "tourmaline_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "tourmaline_write_report",
+      "args": {
+        "before": "fixtures/rent-roll-old-system.csv",
+        "after": "fixtures/rent-roll-new-system.csv",
+        "policy": "fixtures/migration-policy.json"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "recall-empty-memory",
+      "tool": "tourmaline_recall",
+      "args": {},
+      "expect": {
+        "contains": [
+          "memory is empty",
+          "verifies"
+        ]
+      }
+    }
   ]
 }

@@ -3,15 +3,164 @@
   "root": "..",
   "data_note": "Fictional owner ledgers, agreement terms and rent roll in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "pyrite_check", "args": {"ledger": "fixtures/owner-ledger-2026.csv", "agreements": "fixtures/agreements.json", "rent_roll": "fixtures/rent-roll-2026-11.csv"}, "expect": {"status": "executed", "equals": {"result.overcharge_total": 8689, "result.items.length": 4, "result.items.0.property": "Harbor Point Plaza"}}},
-    {"id": "excluded-income-and-duplicate", "tool": "pyrite_explain", "args": {"ledger": "fixtures/owner-ledger-2026.csv", "agreements": "fixtures/agreements.json", "owner": "Harbor Point Plaza"}, "expect": {"contains": ["charged 2 times", "4% of 100000 collected", "Over by 2050", "Technology fee 95"]}},
-    {"id": "deposit-excluded", "tool": "pyrite_check", "args": {"ledger": "fixtures/owner-ledger-2026.csv", "agreements": "fixtures/agreements.json", "period": "2026-09"}, "expect": {"contains": ["Management fee charged 2466; the agreement gives 2256", "Over by 210"]}},
-    {"id": "renewal-flat-leasing-pct", "tool": "pyrite_check", "args": {"ledger": "fixtures/owner-ledger-2026.csv", "agreements": "fixtures/agreements.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "period": "2026-10"}, "expect": {"contains": ["Renewal fee - unit 102: charged 250; the agreement gives 150"]}},
-    {"id": "leasing-unverified-without-roll", "tool": "pyrite_check", "args": {"ledger": "fixtures/owner-ledger-2026.csv", "agreements": "fixtures/agreements.json", "period": "2026-10"}, "expect": {"contains": ["leasing_fee_unverified"]}},
-    {"id": "minimum-and-markup", "tool": "pyrite_explain", "args": {"ledger": "fixtures/owner-ledger-2026.csv", "agreements": "fixtures/agreements.json", "owner": "Pine Street"}, "expect": {"contains": ["minimum 150", "10% of 1180 in maintenance bills is 118"]}},
-    {"id": "french-ledger", "tool": "pyrite_check", "args": {"ledger": "fixtures/exports/grand-livre-fr.csv", "agreements": "fixtures/exports/agreements-fr.json"}, "expect": {"contains": ["8% of 12400 collected", "Over by 84"]}},
-    {"id": "credit-draft", "tool": "pyrite_draft_credit", "mode": "auto", "auto_actions": ["pyrite_draft_credit"], "args": {"ledger": "fixtures/owner-ledger-2026.csv", "agreements": "fixtures/agreements.json", "owner": "Harbor Point Plaza"}, "expect": {"status": "executed"}},
-    {"id": "never-credits", "tool": "post_owner_credit", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "send-is-one-click", "tool": "pyrite_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+    {
+      "id": "totals",
+      "tool": "pyrite_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.overcharge_total": 8689,
+          "result.items.length": 4,
+          "result.items.0.property": "Harbor Point Plaza"
+        }
+      }
+    },
+    {
+      "id": "excluded-income-and-duplicate",
+      "tool": "pyrite_explain",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "contains": [
+          "charged 2 times",
+          "4% of 100000 collected",
+          "Over by 2050",
+          "Technology fee 95"
+        ]
+      }
+    },
+    {
+      "id": "deposit-excluded",
+      "tool": "pyrite_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "period": "2026-09"
+      },
+      "expect": {
+        "contains": [
+          "Management fee charged 2466; the agreement gives 2256",
+          "Over by 210"
+        ]
+      }
+    },
+    {
+      "id": "renewal-flat-leasing-pct",
+      "tool": "pyrite_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "period": "2026-10"
+      },
+      "expect": {
+        "contains": [
+          "Renewal fee - unit 102: charged 250; the agreement gives 150"
+        ]
+      }
+    },
+    {
+      "id": "leasing-unverified-without-roll",
+      "tool": "pyrite_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "period": "2026-10"
+      },
+      "expect": {
+        "contains": [
+          "leasing_fee_unverified"
+        ]
+      }
+    },
+    {
+      "id": "minimum-and-markup",
+      "tool": "pyrite_explain",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Pine Street"
+      },
+      "expect": {
+        "contains": [
+          "minimum 150",
+          "10% of 1180 in maintenance bills is 118"
+        ]
+      }
+    },
+    {
+      "id": "french-ledger",
+      "tool": "pyrite_check",
+      "args": {
+        "ledger": "fixtures/exports/grand-livre-fr.csv",
+        "agreements": "fixtures/exports/agreements-fr.json"
+      },
+      "expect": {
+        "contains": [
+          "8% of 12400 collected",
+          "Over by 84"
+        ]
+      }
+    },
+    {
+      "id": "credit-draft",
+      "tool": "pyrite_draft_credit",
+      "mode": "auto",
+      "auto_actions": [
+        "pyrite_draft_credit"
+      ],
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "status": "executed"
+      }
+    },
+    {
+      "id": "never-credits",
+      "tool": "post_owner_credit",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "pyrite_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "pyrite_write_report",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

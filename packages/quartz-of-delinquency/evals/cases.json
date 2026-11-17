@@ -3,19 +3,247 @@
   "root": "..",
   "data_note": "Fictional 24-unit apartment building (Maple Court), three months of tenant ledger, a policy file and two aging exports in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "quartz_check", "args": {"ledger": "fixtures/ledger-2026-11.csv", "leases": "fixtures/leases.json", "policy": "fixtures/policy.json", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.total_delinquent": 10600, "result.buckets.61-90": 1850, "result.by_stage.manager_review": 2, "result.by_stage.on_plan": 1, "result.items.0.unit": "106"}}},
-    {"id": "fifo-aging", "tool": "quartz_explain", "args": {"ledger": "fixtures/ledger-2026-11.csv", "leases": "fixtures/leases.json", "policy": "fixtures/policy.json", "as_of": "2026-11-15", "tenant": "402"}, "expect": {"contains": ["on_payment_plan"], "equals": {"result.item.balance": 750, "result.item.open.0.date": "2026-11-01", "result.item.stage": "on_plan"}}},
-    {"id": "late-fee-in-grace", "tool": "quartz_explain", "args": {"ledger": "fixtures/ledger-2026-11.csv", "leases": "fixtures/leases.json", "policy": "fixtures/policy.json", "as_of": "2026-11-15", "tenant": "Marco Bianchi"}, "expect": {"contains": ["late_fee_in_grace"], "equals": {"result.item.fee_adjustment": 75}}},
-    {"id": "late-fee-over-cap", "tool": "quartz_explain", "args": {"ledger": "fixtures/ledger-2026-11.csv", "leases": "fixtures/leases.json", "policy": "fixtures/policy.json", "as_of": "2026-11-15", "tenant": "401"}, "expect": {"contains": ["late_fee_over_policy", "above your policy's 75"]}},
-    {"id": "credit-and-minimum", "tool": "quartz_check", "args": {"ledger": "fixtures/ledger-2026-11.csv", "leases": "fixtures/leases.json", "policy": "fixtures/policy.json", "as_of": "2026-11-15"}, "expect": {"contains": ["credit_balance", "below_minimum", "balance_over_deposit"]}},
-    {"id": "no-policy-no-fee-checks", "tool": "quartz_check", "args": {"ledger": "fixtures/ledger-2026-11.csv", "as_of": "2026-11-15"}, "expect": {"equals": {"result.total_delinquent": 10612.5}}},
-    {"id": "appfolio-delinquency", "tool": "quartz_check", "args": {"aging": "fixtures/exports/appfolio-delinquency.csv", "leases": "fixtures/leases.json", "policy": "fixtures/policy.json", "as_of": "2026-11-15"}, "expect": {"contains": ["in_collections", "former_tenant"], "equals": {"result.total_delinquent": 12685, "result.items.length": 5}}},
-    {"id": "spanish-aging", "tool": "quartz_check", "args": {"aging": "fixtures/exports/aging-es.csv", "policy": "fixtures/policy.json", "as_of": "2026-11-15"}, "expect": {"equals": {"result.total_delinquent": 9150, "result.items.2.status": "below_minimum"}}},
-    {"id": "one-source-only", "tool": "quartz_check", "args": {"ledger": "fixtures/ledger-2026-11.csv", "aging": "fixtures/exports/aging-es.csv"}, "expect": {"status": "error", "contains": ["exactly one"]}},
-    {"id": "no-reminder-on-plan", "tool": "quartz_draft_reminder", "mode": "auto", "auto_actions": ["quartz_draft_reminder"], "args": {"ledger": "fixtures/ledger-2026-11.csv", "policy": "fixtures/policy.json", "as_of": "2026-11-15", "tenant": "402"}, "expect": {"status": "error", "contains": ["payment plan"]}},
-    {"id": "reminder-is-not-a-notice", "tool": "quartz_draft_reminder", "mode": "auto", "auto_actions": ["quartz_draft_reminder"], "args": {"ledger": "fixtures/ledger-2026-11.csv", "policy": "fixtures/policy.json", "as_of": "2026-11-15", "tenant": "104"}, "expect": {"status": "executed", "equals": {"result.amount": 3600}}},
-    {"id": "never-serves-notice", "tool": "serve_legal_notice", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-files-eviction", "tool": "file_eviction", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "send-is-one-click", "tool": "quartz_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+    {
+      "id": "totals",
+      "tool": "quartz_check",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.total_delinquent": 10600,
+          "result.buckets.61-90": 1850,
+          "result.by_stage.manager_review": 2,
+          "result.by_stage.on_plan": 1,
+          "result.items.0.unit": "106"
+        }
+      }
+    },
+    {
+      "id": "fifo-aging",
+      "tool": "quartz_explain",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15",
+        "tenant": "402"
+      },
+      "expect": {
+        "contains": [
+          "on_payment_plan"
+        ],
+        "equals": {
+          "result.item.balance": 750,
+          "result.item.open.0.date": "2026-11-01",
+          "result.item.stage": "on_plan"
+        }
+      }
+    },
+    {
+      "id": "late-fee-in-grace",
+      "tool": "quartz_explain",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15",
+        "tenant": "Marco Bianchi"
+      },
+      "expect": {
+        "contains": [
+          "late_fee_in_grace"
+        ],
+        "equals": {
+          "result.item.fee_adjustment": 75
+        }
+      }
+    },
+    {
+      "id": "late-fee-over-cap",
+      "tool": "quartz_explain",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15",
+        "tenant": "401"
+      },
+      "expect": {
+        "contains": [
+          "late_fee_over_policy",
+          "above your policy's 75"
+        ]
+      }
+    },
+    {
+      "id": "credit-and-minimum",
+      "tool": "quartz_check",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "credit_balance",
+          "below_minimum",
+          "balance_over_deposit"
+        ]
+      }
+    },
+    {
+      "id": "no-policy-no-fee-checks",
+      "tool": "quartz_check",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "equals": {
+          "result.total_delinquent": 10612.5
+        }
+      }
+    },
+    {
+      "id": "appfolio-delinquency",
+      "tool": "quartz_check",
+      "args": {
+        "aging": "fixtures/exports/appfolio-delinquency.csv",
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "in_collections",
+          "former_tenant"
+        ],
+        "equals": {
+          "result.total_delinquent": 12685,
+          "result.items.length": 5
+        }
+      }
+    },
+    {
+      "id": "spanish-aging",
+      "tool": "quartz_check",
+      "args": {
+        "aging": "fixtures/exports/aging-es.csv",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "equals": {
+          "result.total_delinquent": 9150,
+          "result.items.2.status": "below_minimum"
+        }
+      }
+    },
+    {
+      "id": "one-source-only",
+      "tool": "quartz_check",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "aging": "fixtures/exports/aging-es.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "exactly one"
+        ]
+      }
+    },
+    {
+      "id": "no-reminder-on-plan",
+      "tool": "quartz_draft_reminder",
+      "mode": "auto",
+      "auto_actions": [
+        "quartz_draft_reminder"
+      ],
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15",
+        "tenant": "402"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "payment plan"
+        ]
+      }
+    },
+    {
+      "id": "reminder-is-not-a-notice",
+      "tool": "quartz_draft_reminder",
+      "mode": "auto",
+      "auto_actions": [
+        "quartz_draft_reminder"
+      ],
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15",
+        "tenant": "104"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.amount": 3600
+        }
+      }
+    },
+    {
+      "id": "never-serves-notice",
+      "tool": "serve_legal_notice",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-files-eviction",
+      "tool": "file_eviction",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "quartz_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "quartz_write_report",
+      "args": {
+        "ledger": "fixtures/ledger-2026-11.csv",
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

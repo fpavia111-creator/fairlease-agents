@@ -152,6 +152,23 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "writes-abstract",
+      "tool": "slate_write_abstract",
+      "args": {
+        "text": "fixtures/lease-acme-bagels.txt",
+        "lease_id": "L-101"
+      },
+      "expect": {
+        "contains": [
+          "abstract-L-101.json",
+          "passes the leases schema"
+        ],
+        "equals": {
+          "result.schema_ok": true
+        }
+      }
     }
   ]
 }

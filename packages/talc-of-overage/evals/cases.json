@@ -3,16 +3,218 @@
   "root": "..",
   "data_note": "Fictional leases, tenant sales reports and percentage rent charges in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "talc_check", "args": {"leases": "fixtures/leases.json", "sales": "fixtures/sales-2025.csv", "year": 2025, "billed": "fixtures/billed-2025.csv", "as_of": "2026-06-30"}, "expect": {"status": "executed", "equals": {"result.total_owed": 24367.5, "result.total_balance_due": 6367.5, "result.items.length": 3, "result.unmatched.0.tenant": "Gizmo Kiosk"}}},
-    {"id": "natural-breakpoint-with-escalation", "tool": "talc_explain", "args": {"leases": "fixtures/leases.json", "sales": "fixtures/sales-2025.csv", "year": 2025, "billed": "fixtures/billed-2025.csv", "as_of": "2026-06-30", "tenant": "Acme"}, "expect": {"contains": ["sales_revised", "76520 to 80520"], "equals": {"result.item.base_rent": 50676, "result.item.breakpoint": 844600, "result.item.owed": 3675, "result.item.status": "owes"}}},
-    {"id": "fixed-breakpoint-billed-and-late", "tool": "talc_explain", "args": {"leases": "fixtures/leases.json", "sales": "fixtures/sales-2025.csv", "year": 2025, "billed": "fixtures/billed-2025.csv", "as_of": "2026-06-30", "tenant": "L-105"}, "expect": {"contains": ["report_late", "2025-12 (20 days)"], "equals": {"result.item.billed": 18000, "result.item.balance": 2692.5}}},
-    {"id": "missing-month-is-review", "tool": "talc_explain", "args": {"leases": "fixtures/leases.json", "sales": "fixtures/sales-2025.csv", "year": 2025, "as_of": "2026-06-30", "tenant": "Fable Books"}, "expect": {"contains": ["sales_missing", "2025-10", "the missing months decide"], "equals": {"result.item.status": "review", "result.item.owed": null, "result.item.lease_year": "2025-02-01 to 2026-01-31"}}},
-    {"id": "not-due-is-not-missing", "tool": "talc_explain", "args": {"leases": "fixtures/leases.json", "sales": "fixtures/exports/sales-ja.csv", "year": 2025, "as_of": "2025-04-30", "tenant": "L-101"}, "expect": {"contains": ["reports_not_due"], "equals": {"result.item.months_reported": 3, "result.item.gross_sales": 205875}}},
-    {"id": "japanese-headers", "tool": "talc_check", "args": {"leases": "fixtures/leases.json", "sales": "fixtures/exports/sales-ja.csv", "year": 2025, "as_of": "2025-04-30"}, "expect": {"equals": {"result.unreadable.length": 0, "result.unmatched.length": 0}}},
-    {"id": "statement-or-request", "tool": "talc_draft_statement", "mode": "auto", "auto_actions": ["talc_draft_statement"], "args": {"leases": "fixtures/leases.json", "sales": "fixtures/sales-2025.csv", "year": 2025, "as_of": "2026-06-30", "tenant": "L-106"}, "expect": {"status": "executed", "contains": ["TO CONFIRM: report missing"]}},
-    {"id": "unknown-lease-refused", "tool": "talc_draft_statement", "mode": "auto", "auto_actions": ["talc_draft_statement"], "args": {"leases": "fixtures/leases.json", "sales": "fixtures/sales-2025.csv", "year": 2025, "tenant": "L-102"}, "expect": {"status": "error", "contains": ["no percentage rent"]}},
-    {"id": "send-is-one-click", "tool": "talc_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}},
-    {"id": "never-bills", "tool": "post_tenant_charge", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-audits", "tool": "start_sales_audit", "mode": "auto", "args": {}, "expect": {"status": "blocked"}}
+    {
+      "id": "totals",
+      "tool": "talc_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "billed": "fixtures/billed-2025.csv",
+        "as_of": "2026-06-30"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.total_owed": 24367.5,
+          "result.total_balance_due": 6367.5,
+          "result.items.length": 3,
+          "result.unmatched.0.tenant": "Gizmo Kiosk"
+        }
+      }
+    },
+    {
+      "id": "natural-breakpoint-with-escalation",
+      "tool": "talc_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "billed": "fixtures/billed-2025.csv",
+        "as_of": "2026-06-30",
+        "tenant": "Acme"
+      },
+      "expect": {
+        "contains": [
+          "sales_revised",
+          "76520 to 80520"
+        ],
+        "equals": {
+          "result.item.base_rent": 50676,
+          "result.item.breakpoint": 844600,
+          "result.item.owed": 3675,
+          "result.item.status": "owes"
+        }
+      }
+    },
+    {
+      "id": "fixed-breakpoint-billed-and-late",
+      "tool": "talc_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "billed": "fixtures/billed-2025.csv",
+        "as_of": "2026-06-30",
+        "tenant": "L-105"
+      },
+      "expect": {
+        "contains": [
+          "report_late",
+          "2025-12 (20 days)"
+        ],
+        "equals": {
+          "result.item.billed": 18000,
+          "result.item.balance": 2692.5
+        }
+      }
+    },
+    {
+      "id": "missing-month-is-review",
+      "tool": "talc_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "as_of": "2026-06-30",
+        "tenant": "Fable Books"
+      },
+      "expect": {
+        "contains": [
+          "sales_missing",
+          "2025-10",
+          "the missing months decide"
+        ],
+        "equals": {
+          "result.item.status": "review",
+          "result.item.owed": null,
+          "result.item.lease_year": "2025-02-01 to 2026-01-31"
+        }
+      }
+    },
+    {
+      "id": "not-due-is-not-missing",
+      "tool": "talc_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/exports/sales-ja.csv",
+        "year": 2025,
+        "as_of": "2025-04-30",
+        "tenant": "L-101"
+      },
+      "expect": {
+        "contains": [
+          "reports_not_due"
+        ],
+        "equals": {
+          "result.item.months_reported": 3,
+          "result.item.gross_sales": 205875
+        }
+      }
+    },
+    {
+      "id": "japanese-headers",
+      "tool": "talc_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/exports/sales-ja.csv",
+        "year": 2025,
+        "as_of": "2025-04-30"
+      },
+      "expect": {
+        "equals": {
+          "result.unreadable.length": 0,
+          "result.unmatched.length": 0
+        }
+      }
+    },
+    {
+      "id": "statement-or-request",
+      "tool": "talc_draft_statement",
+      "mode": "auto",
+      "auto_actions": [
+        "talc_draft_statement"
+      ],
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "as_of": "2026-06-30",
+        "tenant": "L-106"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "TO CONFIRM: report missing"
+        ]
+      }
+    },
+    {
+      "id": "unknown-lease-refused",
+      "tool": "talc_draft_statement",
+      "mode": "auto",
+      "auto_actions": [
+        "talc_draft_statement"
+      ],
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "tenant": "L-102"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "no percentage rent"
+        ]
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "talc_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "never-bills",
+      "tool": "post_tenant_charge",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-audits",
+      "tool": "start_sales_audit",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "talc_write_report",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "billed": "fixtures/billed-2025.csv",
+        "as_of": "2026-06-30"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

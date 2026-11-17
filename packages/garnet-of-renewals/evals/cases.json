@@ -3,16 +3,209 @@
   "root": "..",
   "data_note": "Fictional leases, rent roll, renewal policy and offers for a fictional 24-unit building in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "pipeline", "tool": "garnet_check", "args": {"leases": "fixtures/leases.json", "policy": "fixtures/renewal-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "offers": "fixtures/offers.csv", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.items.length": 8, "result.monthly_uplift": 285, "result.items.0.unit": "302", "result.items.0.stage": "overdue"}}},
-    {"id": "cap-applies", "tool": "garnet_explain", "args": {"leases": "fixtures/leases.json", "policy": "fixtures/renewal-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "offers": "fixtures/offers.csv", "as_of": "2026-11-15", "unit": "101"}, "expect": {"contains": ["capped"], "equals": {"result.item.proposed": 1470, "result.item.increase_pct": 5}}},
-    {"id": "rounding-never-above-cap", "tool": "garnet_explain", "args": {"leases": "fixtures/leases.json", "policy": "fixtures/renewal-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15", "unit": "402"}, "expect": {"equals": {"result.item.proposed": 1415}}},
-    {"id": "offer-over-cap", "tool": "garnet_explain", "args": {"leases": "fixtures/leases.json", "policy": "fixtures/renewal-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "offers": "fixtures/offers.csv", "as_of": "2026-11-15", "unit": "402"}, "expect": {"contains": ["offer_over_cap", "7.41%"]}},
-    {"id": "moved-out-cross-check", "tool": "garnet_explain", "args": {"leases": "fixtures/leases.json", "policy": "fixtures/renewal-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15", "unit": "105"}, "expect": {"contains": ["vacant_on_rent_roll"], "equals": {"result.item.stage": "moved_out"}}},
-    {"id": "french-offers", "tool": "garnet_explain", "args": {"leases": "fixtures/leases.json", "policy": "fixtures/renewal-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "offers": "fixtures/exports/offres-fr.csv", "as_of": "2026-11-15", "unit": "402"}, "expect": {"equals": {"result.item.offered_rent": 1450, "result.item.stage": "pending"}}},
-    {"id": "policy-required-fields", "tool": "garnet_check", "args": {"leases": "fixtures/leases.json", "policy": "fixtures/offers.csv"}, "expect": {"status": "error"}},
-    {"id": "offer-over-cap-refused", "tool": "garnet_draft_offer", "mode": "auto", "auto_actions": ["garnet_draft_offer"], "args": {"leases": "fixtures/leases.json", "policy": "fixtures/renewal-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15", "unit": "206", "offer_rent": 1950}, "expect": {"status": "error", "contains": ["above your 5% cap"]}},
-    {"id": "no-offer-on-notice", "tool": "garnet_draft_offer", "mode": "auto", "auto_actions": ["garnet_draft_offer"], "args": {"leases": "fixtures/leases.json", "policy": "fixtures/renewal-policy.json", "offers": "fixtures/offers.csv", "as_of": "2026-11-15", "unit": "106"}, "expect": {"status": "error", "contains": ["notice to vacate"]}},
-    {"id": "never-esigns", "tool": "esign_send", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "send-is-one-click", "tool": "garnet_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+    {
+      "id": "pipeline",
+      "tool": "garnet_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/renewal-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "offers": "fixtures/offers.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 8,
+          "result.monthly_uplift": 285,
+          "result.items.0.unit": "302",
+          "result.items.0.stage": "overdue"
+        }
+      }
+    },
+    {
+      "id": "cap-applies",
+      "tool": "garnet_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/renewal-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "offers": "fixtures/offers.csv",
+        "as_of": "2026-11-15",
+        "unit": "101"
+      },
+      "expect": {
+        "contains": [
+          "capped"
+        ],
+        "equals": {
+          "result.item.proposed": 1470,
+          "result.item.increase_pct": 5
+        }
+      }
+    },
+    {
+      "id": "rounding-never-above-cap",
+      "tool": "garnet_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/renewal-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "402"
+      },
+      "expect": {
+        "equals": {
+          "result.item.proposed": 1415
+        }
+      }
+    },
+    {
+      "id": "offer-over-cap",
+      "tool": "garnet_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/renewal-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "offers": "fixtures/offers.csv",
+        "as_of": "2026-11-15",
+        "unit": "402"
+      },
+      "expect": {
+        "contains": [
+          "offer_over_cap",
+          "7.41%"
+        ]
+      }
+    },
+    {
+      "id": "moved-out-cross-check",
+      "tool": "garnet_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/renewal-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "105"
+      },
+      "expect": {
+        "contains": [
+          "vacant_on_rent_roll"
+        ],
+        "equals": {
+          "result.item.stage": "moved_out"
+        }
+      }
+    },
+    {
+      "id": "french-offers",
+      "tool": "garnet_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/renewal-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "offers": "fixtures/exports/offres-fr.csv",
+        "as_of": "2026-11-15",
+        "unit": "402"
+      },
+      "expect": {
+        "equals": {
+          "result.item.offered_rent": 1450,
+          "result.item.stage": "pending"
+        }
+      }
+    },
+    {
+      "id": "policy-required-fields",
+      "tool": "garnet_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/offers.csv"
+      },
+      "expect": {
+        "status": "error"
+      }
+    },
+    {
+      "id": "offer-over-cap-refused",
+      "tool": "garnet_draft_offer",
+      "mode": "auto",
+      "auto_actions": [
+        "garnet_draft_offer"
+      ],
+      "args": {
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/renewal-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15",
+        "unit": "206",
+        "offer_rent": 1950
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "above your 5% cap"
+        ]
+      }
+    },
+    {
+      "id": "no-offer-on-notice",
+      "tool": "garnet_draft_offer",
+      "mode": "auto",
+      "auto_actions": [
+        "garnet_draft_offer"
+      ],
+      "args": {
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/renewal-policy.json",
+        "offers": "fixtures/offers.csv",
+        "as_of": "2026-11-15",
+        "unit": "106"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "notice to vacate"
+        ]
+      }
+    },
+    {
+      "id": "never-esigns",
+      "tool": "esign_send",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "garnet_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "garnet_write_report",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/renewal-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "offers": "fixtures/offers.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

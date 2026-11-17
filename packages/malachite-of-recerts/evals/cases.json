@@ -3,16 +3,187 @@
   "root": "..",
   "data_note": "Fictional households, rent roll and schedule in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "malachite_check", "args": {"tracker": "fixtures/recert-tracker-2026.csv", "policy": "fixtures/recert-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.items.0.unit": "103", "result.items.length": 9}, "contains": ["1 overdue", "5 notice(s) not recorded", "1 occupied unit(s) not in the tracker"]}},
-    {"id": "old-cycle-notice-does-not-count", "tool": "malachite_explain", "args": {"tracker": "fixtures/recert-tracker-2026.csv", "policy": "fixtures/recert-policy.json", "as_of": "2026-11-15", "household": "101"}, "expect": {"contains": ["120-day notice (by 2026-11-01) is not recorded"]}},
-    {"id": "due-from-move-in", "tool": "malachite_explain", "args": {"tracker": "fixtures/recert-tracker-2026.csv", "policy": "fixtures/recert-policy.json", "as_of": "2026-11-15", "household": "106"}, "expect": {"contains": ["move-in anniversary 2026-12-15", "confirm it"]}},
-    {"id": "due-date-differs", "tool": "malachite_explain", "args": {"tracker": "fixtures/recert-tracker-2026.csv", "policy": "fixtures/recert-policy.json", "as_of": "2026-11-15", "household": "105"}, "expect": {"contains": ["due_date_differs", "2027-02-01"]}},
-    {"id": "market-units-skipped", "tool": "malachite_check", "args": {"tracker": "fixtures/recert-tracker-2026.csv", "policy": "fixtures/recert-policy.json", "rent_roll": "fixtures/rent-roll-2026-11.csv", "as_of": "2026-11-15"}, "expect": {"not_contains": ["Jordan Fox"]}},
-    {"id": "calendar", "tool": "malachite_calendar", "args": {"tracker": "fixtures/recert-tracker-2026.csv", "policy": "fixtures/recert-policy.json", "as_of": "2026-11-15", "out_dir": "keystone-out/eval-malachite"}, "expect": {"status": "executed", "contains": ["malachite-calendar.ics", "10 date(s)"]}},
-    {"id": "japanese-export", "tool": "malachite_check", "args": {"tracker": "fixtures/exports/shuunyuu-shinkoku-ja.csv", "policy": "fixtures/exports/koei-policy.json", "as_of": "2026-11-15"}, "expect": {"contains": ["佐藤世帯", "60-day notice"]}},
-    {"id": "nothing-to-remind", "tool": "malachite_draft_reminder", "mode": "auto", "auto_actions": ["malachite_draft_reminder"], "args": {"tracker": "fixtures/recert-tracker-2026.csv", "policy": "fixtures/recert-policy.json", "as_of": "2026-11-15", "household": "104"}, "expect": {"status": "error", "contains": ["nothing to remind"]}},
-    {"id": "never-certifies", "tool": "certify_household", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-submits", "tool": "submit_to_agency", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "send-is-one-click", "tool": "malachite_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+    {
+      "id": "totals",
+      "tool": "malachite_check",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.unit": "103",
+          "result.items.length": 9
+        },
+        "contains": [
+          "1 overdue",
+          "5 notice(s) not recorded",
+          "1 occupied unit(s) not in the tracker"
+        ]
+      }
+    },
+    {
+      "id": "old-cycle-notice-does-not-count",
+      "tool": "malachite_explain",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "101"
+      },
+      "expect": {
+        "contains": [
+          "120-day notice (by 2026-11-01) is not recorded"
+        ]
+      }
+    },
+    {
+      "id": "due-from-move-in",
+      "tool": "malachite_explain",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "106"
+      },
+      "expect": {
+        "contains": [
+          "move-in anniversary 2026-12-15",
+          "confirm it"
+        ]
+      }
+    },
+    {
+      "id": "due-date-differs",
+      "tool": "malachite_explain",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "105"
+      },
+      "expect": {
+        "contains": [
+          "due_date_differs",
+          "2027-02-01"
+        ]
+      }
+    },
+    {
+      "id": "market-units-skipped",
+      "tool": "malachite_check",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "not_contains": [
+          "Jordan Fox"
+        ]
+      }
+    },
+    {
+      "id": "calendar",
+      "tool": "malachite_calendar",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "out_dir": "keystone-out/eval-malachite"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "malachite-calendar.ics",
+          "10 date(s)"
+        ]
+      }
+    },
+    {
+      "id": "japanese-export",
+      "tool": "malachite_check",
+      "args": {
+        "tracker": "fixtures/exports/shuunyuu-shinkoku-ja.csv",
+        "policy": "fixtures/exports/koei-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "佐藤世帯",
+          "60-day notice"
+        ]
+      }
+    },
+    {
+      "id": "nothing-to-remind",
+      "tool": "malachite_draft_reminder",
+      "mode": "auto",
+      "auto_actions": [
+        "malachite_draft_reminder"
+      ],
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "104"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "nothing to remind"
+        ]
+      }
+    },
+    {
+      "id": "never-certifies",
+      "tool": "certify_household",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-submits",
+      "tool": "submit_to_agency",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "malachite_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "malachite_write_report",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

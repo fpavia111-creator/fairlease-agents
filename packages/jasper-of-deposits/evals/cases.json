@@ -3,15 +3,184 @@
   "root": "..",
   "data_note": "Fictional move-outs, deductions, leases and a final ledger for a fictional apartment building in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "jasper_check", "args": {"move_outs": "fixtures/move-outs.json", "deductions": "fixtures/deductions.csv", "leases": "fixtures/leases.json", "ledger": "fixtures/final-ledger.csv", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.items.0.unit": "204", "result.items.0.status": "overdue", "result.items.0.refund": 80.8, "result.items.2.status": "ready", "result.items.2.refund": 1650}}},
-    {"id": "useful-life-proration", "tool": "jasper_explain", "args": {"move_outs": "fixtures/move-outs.json", "deductions": "fixtures/deductions.csv", "as_of": "2026-11-15", "unit": "204"}, "expect": {"contains": ["1200 → 480", "possible_normal_wear", "no_evidence", "deadline_passed"], "equals": {"result.item.lines.0.allowed": 480}}},
-    {"id": "deposit-from-lease-and-no-address", "tool": "jasper_explain", "args": {"move_outs": "fixtures/move-outs.json", "deductions": "fixtures/deductions.csv", "leases": "fixtures/leases.json", "as_of": "2026-11-15", "unit": "105"}, "expect": {"contains": ["no_forwarding_address", "nail holes"], "equals": {"result.item.deposit": 2150, "result.item.status": "review"}}},
-    {"id": "no-deposit-is-review", "tool": "jasper_explain", "args": {"move_outs": "fixtures/move-outs.json", "deductions": "fixtures/deductions.csv", "as_of": "2026-11-15", "unit": "105"}, "expect": {"contains": ["deposit_unknown"], "equals": {"result.item.refund": null}}},
-    {"id": "german-deductions", "tool": "jasper_explain", "args": {"move_outs": "fixtures/move-outs.json", "deductions": "fixtures/exports/deductions-de.csv", "as_of": "2026-11-15", "unit": "305"}, "expect": {"equals": {"result.item.deducted": 480, "result.item.lines.0.evidence": "Foto 305-wall.jpg"}}},
-    {"id": "rules-file-validated", "tool": "jasper_check", "args": {"move_outs": "fixtures/leases.json", "deductions": "fixtures/deductions.csv"}, "expect": {"status": "error", "contains": ["move_outs"]}},
-    {"id": "statement-draft", "tool": "jasper_draft_statement", "mode": "auto", "auto_actions": ["jasper_draft_statement"], "args": {"move_outs": "fixtures/move-outs.json", "deductions": "fixtures/deductions.csv", "as_of": "2026-11-15", "unit": "204"}, "expect": {"status": "executed", "contains": ["wear and tear?", "photo or invoice"]}},
-    {"id": "never-refunds", "tool": "issue_refund", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-collections", "tool": "send_to_collections", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "send-is-one-click", "tool": "jasper_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+    {
+      "id": "totals",
+      "tool": "jasper_check",
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/deductions.csv",
+        "leases": "fixtures/leases.json",
+        "ledger": "fixtures/final-ledger.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.unit": "204",
+          "result.items.0.status": "overdue",
+          "result.items.0.refund": 80.8,
+          "result.items.2.status": "ready",
+          "result.items.2.refund": 1650
+        }
+      }
+    },
+    {
+      "id": "useful-life-proration",
+      "tool": "jasper_explain",
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/deductions.csv",
+        "as_of": "2026-11-15",
+        "unit": "204"
+      },
+      "expect": {
+        "contains": [
+          "1200 → 480",
+          "possible_normal_wear",
+          "no_evidence",
+          "deadline_passed"
+        ],
+        "equals": {
+          "result.item.lines.0.allowed": 480
+        }
+      }
+    },
+    {
+      "id": "deposit-from-lease-and-no-address",
+      "tool": "jasper_explain",
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/deductions.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-11-15",
+        "unit": "105"
+      },
+      "expect": {
+        "contains": [
+          "no_forwarding_address",
+          "nail holes"
+        ],
+        "equals": {
+          "result.item.deposit": 2150,
+          "result.item.status": "review"
+        }
+      }
+    },
+    {
+      "id": "no-deposit-is-review",
+      "tool": "jasper_explain",
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/deductions.csv",
+        "as_of": "2026-11-15",
+        "unit": "105"
+      },
+      "expect": {
+        "contains": [
+          "deposit_unknown"
+        ],
+        "equals": {
+          "result.item.refund": null
+        }
+      }
+    },
+    {
+      "id": "german-deductions",
+      "tool": "jasper_explain",
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/exports/deductions-de.csv",
+        "as_of": "2026-11-15",
+        "unit": "305"
+      },
+      "expect": {
+        "equals": {
+          "result.item.deducted": 480,
+          "result.item.lines.0.evidence": "Foto 305-wall.jpg"
+        }
+      }
+    },
+    {
+      "id": "rules-file-validated",
+      "tool": "jasper_check",
+      "args": {
+        "move_outs": "fixtures/leases.json",
+        "deductions": "fixtures/deductions.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "move_outs"
+        ]
+      }
+    },
+    {
+      "id": "statement-draft",
+      "tool": "jasper_draft_statement",
+      "mode": "auto",
+      "auto_actions": [
+        "jasper_draft_statement"
+      ],
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/deductions.csv",
+        "as_of": "2026-11-15",
+        "unit": "204"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "wear and tear?",
+          "photo or invoice"
+        ]
+      }
+    },
+    {
+      "id": "never-refunds",
+      "tool": "issue_refund",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-collections",
+      "tool": "send_to_collections",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "jasper_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "jasper_write_report",
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/deductions.csv",
+        "leases": "fixtures/leases.json",
+        "ledger": "fixtures/final-ledger.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

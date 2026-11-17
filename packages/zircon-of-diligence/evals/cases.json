@@ -3,15 +3,169 @@
   "root": "..",
   "data_note": "Fictional seller rent roll and T-12 in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "zircon_check", "args": {"rent_roll": "fixtures/rent-roll-2026-11.csv", "t12": "fixtures/t12-2026-11.csv", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.rent_roll.scheduled_monthly": 35500, "result.t12.noi": 193006.96, "result.t12.months": 12, "result.items.0.subject": "reconciliation"}, "contains": ["1850 below the roll"]}},
-    {"id": "gap", "tool": "zircon_explain", "args": {"rent_roll": "fixtures/rent-roll-2026-11.csv", "t12": "fixtures/t12-2026-11.csv", "as_of": "2026-11-15", "subject": "reconciliation"}, "expect": {"contains": ["1850 (5.21%) less", "5.71% below"]}},
-    {"id": "expired-lease", "tool": "zircon_explain", "args": {"rent_roll": "fixtures/rent-roll-2026-11.csv", "t12": "fixtures/t12-2026-11.csv", "as_of": "2026-11-15", "subject": "101"}, "expect": {"contains": ["Lease ended 2026-10-31"]}},
-    {"id": "outlier", "tool": "zircon_explain", "args": {"rent_roll": "fixtures/rent-roll-2026-11.csv", "t12": "fixtures/t12-2026-11.csv", "as_of": "2026-11-15", "subject": "5000"}, "expect": {"contains": ["2026-07: 18500"]}},
-    {"id": "blank-month", "tool": "zircon_explain", "args": {"rent_roll": "fixtures/rent-roll-2026-11.csv", "t12": "fixtures/t12-2026-11.csv", "as_of": "2026-11-15", "subject": "5400"}, "expect": {"contains": ["No amount in 2026-03"]}},
-    {"id": "lumpy-account-quiet", "tool": "zircon_check", "args": {"rent_roll": "fixtures/rent-roll-2026-11.csv", "t12": "fixtures/t12-2026-11.csv", "as_of": "2026-11-15"}, "expect": {"equals": {"result.items.length": 8}}},
-    {"id": "spanish-long-t12", "tool": "zircon_check", "args": {"rent_roll": "fixtures/rent-roll-2026-11.csv", "t12": "fixtures/exports/t12-es.csv", "as_of": "2026-11-15"}, "expect": {"contains": ["t12_months_missing", "Last month's rent income 33650"]}},
-    {"id": "questions-draft", "tool": "zircon_draft_questions", "mode": "auto", "auto_actions": ["zircon_draft_questions"], "args": {"rent_roll": "fixtures/rent-roll-2026-11.csv", "t12": "fixtures/t12-2026-11.csv", "as_of": "2026-11-15", "property": "Maple Court (fictional)"}, "expect": {"status": "executed"}},
-    {"id": "never-offers", "tool": "submit_offer", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "send-is-one-click", "tool": "zircon_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+    {
+      "id": "totals",
+      "tool": "zircon_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.rent_roll.scheduled_monthly": 35500,
+          "result.t12.noi": 193006.96,
+          "result.t12.months": 12,
+          "result.items.0.subject": "reconciliation"
+        },
+        "contains": [
+          "1850 below the roll"
+        ]
+      }
+    },
+    {
+      "id": "gap",
+      "tool": "zircon_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "subject": "reconciliation"
+      },
+      "expect": {
+        "contains": [
+          "1850 (5.21%) less",
+          "5.71% below"
+        ]
+      }
+    },
+    {
+      "id": "expired-lease",
+      "tool": "zircon_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "subject": "101"
+      },
+      "expect": {
+        "contains": [
+          "Lease ended 2026-10-31"
+        ]
+      }
+    },
+    {
+      "id": "outlier",
+      "tool": "zircon_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "subject": "5000"
+      },
+      "expect": {
+        "contains": [
+          "2026-07: 18500"
+        ]
+      }
+    },
+    {
+      "id": "blank-month",
+      "tool": "zircon_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "subject": "5400"
+      },
+      "expect": {
+        "contains": [
+          "No amount in 2026-03"
+        ]
+      }
+    },
+    {
+      "id": "lumpy-account-quiet",
+      "tool": "zircon_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "equals": {
+          "result.items.length": 8
+        }
+      }
+    },
+    {
+      "id": "spanish-long-t12",
+      "tool": "zircon_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/exports/t12-es.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "t12_months_missing",
+          "Last month's rent income 33650"
+        ]
+      }
+    },
+    {
+      "id": "questions-draft",
+      "tool": "zircon_draft_questions",
+      "mode": "auto",
+      "auto_actions": [
+        "zircon_draft_questions"
+      ],
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "property": "Maple Court (fictional)"
+      },
+      "expect": {
+        "status": "executed"
+      }
+    },
+    {
+      "id": "never-offers",
+      "tool": "submit_offer",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "zircon_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "zircon_write_report",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

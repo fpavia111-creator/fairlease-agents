@@ -11,6 +11,7 @@
   "main": "src/index.js",
   "exports": {
     ".": "./src/index.js",
+    "./testkit": "./src/testkit.js",
     "./package.json": "./package.json"
   },
   "bin": {

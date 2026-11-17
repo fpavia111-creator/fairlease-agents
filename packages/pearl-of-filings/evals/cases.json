@@ -3,16 +3,209 @@
   "root": "..",
   "data_note": "Fictional vendors, owners and payments in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "pearl_check", "args": {"payments": "fixtures/payments-2026.csv", "vendors": "fixtures/vendors-2026.csv", "tax_year": 2026, "threshold": 2000}, "expect": {"status": "executed", "equals": {"result.items.length": 10, "result.items.0.payee": "Maple Court Holdings LLC", "result.items.0.form": "MISC"}, "contains": ["8 at or above your 2000 threshold", "5 to fix", "1 payment(s) outside 2026 ignored"]}},
-    {"id": "threshold-is-yours", "tool": "pearl_check", "args": {"payments": "fixtures/payments-2026.csv", "vendors": "fixtures/vendors-2026.csv", "tax_year": 2026, "threshold": 600}, "expect": {"contains": ["9 at or above your 600 threshold"]}},
-    {"id": "shared-tin-combined", "tool": "pearl_explain", "args": {"payments": "fixtures/payments-2026.csv", "vendors": "fixtures/vendors-2026.csv", "tax_year": 2026, "threshold": 2000, "payee": "FlowRight LLC"}, "expect": {"contains": ["shared_tin", "4850"], "equals": {"result.item.records.length": 2}}},
-    {"id": "card-left-out", "tool": "pearl_explain", "args": {"payments": "fixtures/payments-2026.csv", "vendors": "fixtures/vendors-2026.csv", "tax_year": 2026, "threshold": 2000, "payee": "Volt Electric"}, "expect": {"contains": ["tin_missing", "Credit Card"], "equals": {"result.item.total": 3200, "result.item.excluded": 800}}},
-    {"id": "tin-masked", "tool": "pearl_explain", "args": {"payments": "fixtures/payments-2026.csv", "vendors": "fixtures/vendors-2026.csv", "tax_year": 2026, "threshold": 2000, "payee": "Greenleaf Landscaping"}, "expect": {"not_contains": ["55-4433221", "554433221"], "equals": {"result.item.status": "ready"}}},
-    {"id": "spanish-export", "tool": "pearl_check", "args": {"payments": "fixtures/exports/pagos-proveedores-es.csv", "vendors": "fixtures/exports/proveedores-es.csv", "tax_year": 2026, "threshold": 2000}, "expect": {"contains": ["Tarjeta de crédito", "2 at or above"]}},
-    {"id": "nothing-to-request", "tool": "pearl_draft_request", "mode": "auto", "auto_actions": ["pearl_draft_request"], "args": {"payments": "fixtures/payments-2026.csv", "vendors": "fixtures/vendors-2026.csv", "tax_year": 2026, "threshold": 2000, "payee": "Greenleaf Landscaping"}, "expect": {"status": "error", "contains": ["nothing to request"]}},
-    {"id": "draft-has-no-tin", "tool": "pearl_draft_request", "mode": "auto", "auto_actions": ["pearl_draft_request"], "args": {"payments": "fixtures/payments-2026.csv", "vendors": "fixtures/vendors-2026.csv", "tax_year": 2026, "threshold": 2000, "payee": "Sparkle Cleaning"}, "expect": {"status": "executed", "not_contains": ["123-45-678", "12345678"]}},
-    {"id": "never-files", "tool": "file_1099", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-tin-match", "tool": "tin_match_submit", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "send-is-one-click", "tool": "pearl_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+    {
+      "id": "totals",
+      "tool": "pearl_check",
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 10,
+          "result.items.0.payee": "Maple Court Holdings LLC",
+          "result.items.0.form": "MISC"
+        },
+        "contains": [
+          "8 at or above your 2000 threshold",
+          "5 to fix",
+          "1 payment(s) outside 2026 ignored"
+        ]
+      }
+    },
+    {
+      "id": "threshold-is-yours",
+      "tool": "pearl_check",
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 600
+      },
+      "expect": {
+        "contains": [
+          "9 at or above your 600 threshold"
+        ]
+      }
+    },
+    {
+      "id": "shared-tin-combined",
+      "tool": "pearl_explain",
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000,
+        "payee": "FlowRight LLC"
+      },
+      "expect": {
+        "contains": [
+          "shared_tin",
+          "4850"
+        ],
+        "equals": {
+          "result.item.records.length": 2
+        }
+      }
+    },
+    {
+      "id": "card-left-out",
+      "tool": "pearl_explain",
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000,
+        "payee": "Volt Electric"
+      },
+      "expect": {
+        "contains": [
+          "tin_missing",
+          "Credit Card"
+        ],
+        "equals": {
+          "result.item.total": 3200,
+          "result.item.excluded": 800
+        }
+      }
+    },
+    {
+      "id": "tin-masked",
+      "tool": "pearl_explain",
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000,
+        "payee": "Greenleaf Landscaping"
+      },
+      "expect": {
+        "not_contains": [
+          "55-4433221",
+          "554433221"
+        ],
+        "equals": {
+          "result.item.status": "ready"
+        }
+      }
+    },
+    {
+      "id": "spanish-export",
+      "tool": "pearl_check",
+      "args": {
+        "payments": "fixtures/exports/pagos-proveedores-es.csv",
+        "vendors": "fixtures/exports/proveedores-es.csv",
+        "tax_year": 2026,
+        "threshold": 2000
+      },
+      "expect": {
+        "contains": [
+          "Tarjeta de crédito",
+          "2 at or above"
+        ]
+      }
+    },
+    {
+      "id": "nothing-to-request",
+      "tool": "pearl_draft_request",
+      "mode": "auto",
+      "auto_actions": [
+        "pearl_draft_request"
+      ],
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000,
+        "payee": "Greenleaf Landscaping"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "nothing to request"
+        ]
+      }
+    },
+    {
+      "id": "draft-has-no-tin",
+      "tool": "pearl_draft_request",
+      "mode": "auto",
+      "auto_actions": [
+        "pearl_draft_request"
+      ],
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000,
+        "payee": "Sparkle Cleaning"
+      },
+      "expect": {
+        "status": "executed",
+        "not_contains": [
+          "123-45-678",
+          "12345678"
+        ]
+      }
+    },
+    {
+      "id": "never-files",
+      "tool": "file_1099",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-tin-match",
+      "tool": "tin_match_submit",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "pearl_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "pearl_write_report",
+      "args": {
+        "payments": "fixtures/payments-2026.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

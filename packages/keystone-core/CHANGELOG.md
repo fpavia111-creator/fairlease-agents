@@ -10,6 +10,8 @@ Added (property)
 - `exports.js`: 25 named property export layouts (AppFolio, Yardi Voyager, Buildium, Rent Manager, Entrata, RealPage OneSite, MRI, Airbnb, Vrbo). Recalled from knowledge of the exports, not checked against live accounts; `inspect` shows which one matched.
 - Date order hint: when no row settles day-first or month-first and the columns were translated from German, French, Spanish, Portuguese or Italian headers, dates are read day-first and a warning says so.
 - Report labels for property terms in nine languages.
+- `keystone-core/testkit`: shared contract tests every agent runs (every tool that runs has an eval case, readable argument errors, files outside `--root` refused, Review mode and kill switch, drafts tied to their sha256, repeatable results, own column layout read as is).
+- A number column with no telling value (650, 900, 1.150) takes the decimal mark the rest of the file uses (another column with 3.980,00, dates with dots, or headers in German, French, Spanish, Portuguese or Italian), and a warning says so. Before, 1.150 square metres read as 1.15.
 
 The sections below are the core's history before Keystone.
 

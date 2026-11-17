@@ -3,15 +3,177 @@
   "root": "..",
   "data_note": "Fictional utility bills, occupancy and RUBS charges for a fictional 24-unit building in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "topaz_check", "args": {"bills": "fixtures/bills-2026.csv", "occupancy": "fixtures/occupancy.csv", "rubs": "fixtures/rubs.json", "billed": "fixtures/rubs-billed.csv"}, "expect": {"status": "executed", "equals": {"result.overbilled_total": 416.12, "result.periods.4.residents_share": 4901.76, "result.periods.4.owner_share": 518.24, "result.periods.0.billed": 3781}}},
-    {"id": "spike-and-over-recovery", "tool": "topaz_check", "args": {"bills": "fixtures/bills-2026.csv", "occupancy": "fixtures/occupancy.csv", "rubs": "fixtures/rubs.json", "billed": "fixtures/rubs-billed.csv"}, "expect": {"contains": ["bill_spike", "32.76% above", "over_recovery", "330 more than their share"]}},
-    {"id": "vacant-billed", "tool": "topaz_explain", "args": {"bills": "fixtures/bills-2026.csv", "occupancy": "fixtures/occupancy.csv", "rubs": "fixtures/rubs.json", "billed": "fixtures/rubs-billed.csv", "unit": "204"}, "expect": {"contains": ["billed_while_vacant"], "equals": {"result.item.difference": 180}}},
-    {"id": "duplicate", "tool": "topaz_explain", "args": {"bills": "fixtures/bills-2026.csv", "occupancy": "fixtures/occupancy.csv", "rubs": "fixtures/rubs.json", "billed": "fixtures/rubs-billed.csv", "unit": "Farah Haddad"}, "expect": {"contains": ["duplicate_charge"], "equals": {"result.item.difference": 236.12}}},
-    {"id": "not-billed", "tool": "topaz_explain", "args": {"bills": "fixtures/bills-2026.csv", "occupancy": "fixtures/occupancy.csv", "rubs": "fixtures/rubs.json", "billed": "fixtures/rubs-billed.csv", "unit": "401"}, "expect": {"contains": ["not_billed", "trash 2026-08"]}},
-    {"id": "part-month-move-out", "tool": "topaz_check", "args": {"bills": "fixtures/bills-2026.csv", "occupancy": "fixtures/occupancy.csv", "rubs": "fixtures/rubs.json"}, "expect": {"contains": ["No billing file"], "equals": {"result.periods.5.owner_share": 36.13, "result.items.0.status": "review"}}},
-    {"id": "japanese-bills", "tool": "topaz_check", "args": {"bills": "fixtures/exports/bills-ja.csv", "occupancy": "fixtures/occupancy.csv", "rubs": "fixtures/rubs.json"}, "expect": {"equals": {"result.periods.length": 2, "result.skipped_bills.length": 0, "result.periods.0.residents_share": 3781}}},
-    {"id": "rubs-file-validated", "tool": "topaz_check", "args": {"bills": "fixtures/bills-2026.csv", "occupancy": "fixtures/occupancy.csv", "rubs": "fixtures/bills-2026.csv"}, "expect": {"status": "error"}},
-    {"id": "never-posts", "tool": "post_tenant_charge", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-changes-system", "tool": "utility_portal_update", "mode": "auto", "args": {}, "expect": {"status": "blocked"}}
+    {
+      "id": "totals",
+      "tool": "topaz_check",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.overbilled_total": 416.12,
+          "result.periods.4.residents_share": 4901.76,
+          "result.periods.4.owner_share": 518.24,
+          "result.periods.0.billed": 3781
+        }
+      }
+    },
+    {
+      "id": "spike-and-over-recovery",
+      "tool": "topaz_check",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "contains": [
+          "bill_spike",
+          "32.76% above",
+          "over_recovery",
+          "330 more than their share"
+        ]
+      }
+    },
+    {
+      "id": "vacant-billed",
+      "tool": "topaz_explain",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv",
+        "unit": "204"
+      },
+      "expect": {
+        "contains": [
+          "billed_while_vacant"
+        ],
+        "equals": {
+          "result.item.difference": 180
+        }
+      }
+    },
+    {
+      "id": "duplicate",
+      "tool": "topaz_explain",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv",
+        "unit": "Farah Haddad"
+      },
+      "expect": {
+        "contains": [
+          "duplicate_charge"
+        ],
+        "equals": {
+          "result.item.difference": 236.12
+        }
+      }
+    },
+    {
+      "id": "not-billed",
+      "tool": "topaz_explain",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv",
+        "unit": "401"
+      },
+      "expect": {
+        "contains": [
+          "not_billed",
+          "trash 2026-08"
+        ]
+      }
+    },
+    {
+      "id": "part-month-move-out",
+      "tool": "topaz_check",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json"
+      },
+      "expect": {
+        "contains": [
+          "No billing file"
+        ],
+        "equals": {
+          "result.periods.5.owner_share": 36.13,
+          "result.items.0.status": "review"
+        }
+      }
+    },
+    {
+      "id": "japanese-bills",
+      "tool": "topaz_check",
+      "args": {
+        "bills": "fixtures/exports/bills-ja.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json"
+      },
+      "expect": {
+        "equals": {
+          "result.periods.length": 2,
+          "result.skipped_bills.length": 0,
+          "result.periods.0.residents_share": 3781
+        }
+      }
+    },
+    {
+      "id": "rubs-file-validated",
+      "tool": "topaz_check",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/bills-2026.csv"
+      },
+      "expect": {
+        "status": "error"
+      }
+    },
+    {
+      "id": "never-posts",
+      "tool": "post_tenant_charge",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-changes-system",
+      "tool": "utility_portal_update",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "topaz_write_report",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

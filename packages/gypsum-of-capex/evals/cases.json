@@ -3,15 +3,169 @@
   "root": "..",
   "data_note": "Fictional capital projects and reserves in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "gypsum_check", "args": {"projects": "fixtures/capex-projects-2026.csv", "policy": "fixtures/capex-policy.json", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.items.length": 8, "result.reserves.0.short": 154000}, "contains": ["budget 658500", "Replacement reserve by 154000"]}},
-    {"id": "forecast-over-and-late", "tool": "gypsum_explain", "args": {"projects": "fixtures/capex-projects-2026.csv", "policy": "fixtures/capex-policy.json", "as_of": "2026-11-15", "project": "P-01"}, "expect": {"contains": ["forecast_over", "past_finish", "8.33%"]}},
-    {"id": "over-budget", "tool": "gypsum_explain", "args": {"projects": "fixtures/capex-projects-2026.csv", "as_of": "2026-11-15", "project": "Parking"}, "expect": {"contains": ["7500 (7.89%) over"]}},
-    {"id": "spending-ahead", "tool": "gypsum_explain", "args": {"projects": "fixtures/capex-projects-2026.csv", "policy": "fixtures/capex-policy.json", "as_of": "2026-11-15", "project": "P-08"}, "expect": {"equals": {"result.item.state": "watch"}, "contains": ["75% of the budget spent"]}},
-    {"id": "unbudgeted-noted", "tool": "gypsum_check", "args": {"projects": "fixtures/capex-projects-2026.csv", "policy": "fixtures/capex-policy.json", "as_of": "2026-11-15"}, "expect": {"contains": ["1 open project(s) with no budget are not counted"]}},
-    {"id": "japanese-list", "tool": "gypsum_check", "args": {"projects": "fixtures/exports/koji-ja.csv", "as_of": "2026-11-15"}, "expect": {"contains": ["budget 8300000", "1 over budget"], "equals": {"result.items.0.project_id": "K-01"}}},
-    {"id": "within-budget-no-request", "tool": "gypsum_draft_request", "mode": "auto", "auto_actions": ["gypsum_draft_request"], "args": {"projects": "fixtures/capex-projects-2026.csv", "as_of": "2026-11-15", "project": "P-03"}, "expect": {"status": "error", "contains": ["within its budget"]}},
-    {"id": "never-approves-change-order", "tool": "approve_change_order", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-posts", "tool": "gl_post", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "send-is-one-click", "tool": "gypsum_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+    {
+      "id": "totals",
+      "tool": "gypsum_check",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 8,
+          "result.reserves.0.short": 154000
+        },
+        "contains": [
+          "budget 658500",
+          "Replacement reserve by 154000"
+        ]
+      }
+    },
+    {
+      "id": "forecast-over-and-late",
+      "tool": "gypsum_explain",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15",
+        "project": "P-01"
+      },
+      "expect": {
+        "contains": [
+          "forecast_over",
+          "past_finish",
+          "8.33%"
+        ]
+      }
+    },
+    {
+      "id": "over-budget",
+      "tool": "gypsum_explain",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "as_of": "2026-11-15",
+        "project": "Parking"
+      },
+      "expect": {
+        "contains": [
+          "7500 (7.89%) over"
+        ]
+      }
+    },
+    {
+      "id": "spending-ahead",
+      "tool": "gypsum_explain",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15",
+        "project": "P-08"
+      },
+      "expect": {
+        "equals": {
+          "result.item.state": "watch"
+        },
+        "contains": [
+          "75% of the budget spent"
+        ]
+      }
+    },
+    {
+      "id": "unbudgeted-noted",
+      "tool": "gypsum_check",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "1 open project(s) with no budget are not counted"
+        ]
+      }
+    },
+    {
+      "id": "japanese-list",
+      "tool": "gypsum_check",
+      "args": {
+        "projects": "fixtures/exports/koji-ja.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "budget 8300000",
+          "1 over budget"
+        ],
+        "equals": {
+          "result.items.0.project_id": "K-01"
+        }
+      }
+    },
+    {
+      "id": "within-budget-no-request",
+      "tool": "gypsum_draft_request",
+      "mode": "auto",
+      "auto_actions": [
+        "gypsum_draft_request"
+      ],
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "as_of": "2026-11-15",
+        "project": "P-03"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "within its budget"
+        ]
+      }
+    },
+    {
+      "id": "never-approves-change-order",
+      "tool": "approve_change_order",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-posts",
+      "tool": "gl_post",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "gypsum_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "gypsum_write_report",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    }
   ]
 }

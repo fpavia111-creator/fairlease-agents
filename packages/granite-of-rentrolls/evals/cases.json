@@ -3,17 +3,221 @@
   "root": "..",
   "data_note": "Fictional shopping center rent roll and leases in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "totals", "tool": "granite_check", "args": {"rent_roll": "fixtures/rent-roll-2026-01.csv", "leases": "fixtures/leases.json", "as_of": "2026-01-31", "indexes": "fixtures/indexes.json"}, "expect": {"status": "executed", "equals": {"result.units": 8, "result.under_lease_monthly": 222.79, "result.items.6.vacant": true}}},
-    {"id": "every-planted-issue-found", "tool": "granite_check", "args": {"rent_roll": "fixtures/rent-roll-2026-01.csv", "leases": "fixtures/leases.json", "as_of": "2026-01-31", "indexes": "fixtures/indexes.json"}, "expect": {"contains": ["rent_under_lease", "deposit_mismatch", "area_mismatch", "tenant_mismatch", "no_lease", "deposit_not_cash"]}},
-    {"id": "missed-step", "tool": "granite_explain", "args": {"rent_roll": "fixtures/rent-roll-2026-01.csv", "leases": "fixtures/leases.json", "as_of": "2026-01-31", "unit": "Brightside Dental PC"}, "expect": {"contains": ["Rent roll 7426.3, lease 7649.09 on 2026-01-31"], "equals": {"result.item.difference": -222.79}}},
-    {"id": "cpi-needs-index", "tool": "granite_explain", "args": {"rent_roll": "fixtures/rent-roll-2026-01.csv", "leases": "fixtures/leases.json", "as_of": "2026-01-31", "unit": "Suite 120"}, "expect": {"contains": ["rent_needs_index"], "equals": {"result.item.status": "review"}}},
-    {"id": "holdover-later", "tool": "granite_explain", "args": {"rent_roll": "fixtures/rent-roll-2026-01.csv", "leases": "fixtures/leases.json", "as_of": "2026-06-01", "indexes": "fixtures/indexes.json", "unit": "Suite 130"}, "expect": {"contains": ["holdover", "ended 2026-04-30"]}},
-    {"id": "yardi-charge-rows", "tool": "granite_check", "args": {"rent_roll": "fixtures/exports/yardi-rent-roll-charges.csv", "leases": "fixtures/leases.json", "as_of": "2026-01-31"}, "expect": {"contains": ["yardi_rent_roll_charges", "rent_under_lease"], "equals": {"result.units": 6, "result.items.0.rent_roll_rent": 4243.6, "result.items.1.status": "ok"}}},
-    {"id": "missing-from-rent-roll", "tool": "granite_check", "args": {"rent_roll": "fixtures/exports/yardi-rent-roll-charges.csv", "leases": "fixtures/leases.json", "as_of": "2026-01-31"}, "expect": {"contains": ["missing_from_rent_roll", "Cobalt Fitness Inc"]}},
-    {"id": "german-columns", "tool": "granite_check", "args": {"rent_roll": "fixtures/exports/rent-roll-de.csv", "leases": "fixtures/leases.json", "as_of": "2026-01-31", "indexes": "fixtures/indexes.json"}, "expect": {"equals": {"result.items.0.status": "ok", "result.items.0.rent_roll_rent": 4243.6, "result.items.1.lease_rent": 14038.64}}},
-    {"id": "bad-date-refused", "tool": "granite_check", "args": {"rent_roll": "fixtures/rent-roll-2026-01.csv", "leases": "fixtures/leases.json", "as_of": "soon"}, "expect": {"status": "error", "contains": ["as_of"]}},
-    {"id": "accept-learning-stays-one-click", "tool": "granite_accept_learning", "mode": "auto", "args": {"id": "MEM-000000000000", "decision": "accept"}, "expect": {"status": "needs_approval", "decision": "ask"}},
-    {"id": "never-changes-system", "tool": "pm_system_update", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-bills", "tool": "post_tenant_charge", "mode": "auto", "args": {}, "expect": {"status": "blocked"}}
+    {
+      "id": "totals",
+      "tool": "granite_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-01.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-01-31",
+        "indexes": "fixtures/indexes.json"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.units": 8,
+          "result.under_lease_monthly": 222.79,
+          "result.items.6.vacant": true
+        }
+      }
+    },
+    {
+      "id": "every-planted-issue-found",
+      "tool": "granite_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-01.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-01-31",
+        "indexes": "fixtures/indexes.json"
+      },
+      "expect": {
+        "contains": [
+          "rent_under_lease",
+          "deposit_mismatch",
+          "area_mismatch",
+          "tenant_mismatch",
+          "no_lease",
+          "deposit_not_cash"
+        ]
+      }
+    },
+    {
+      "id": "missed-step",
+      "tool": "granite_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-01.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-01-31",
+        "unit": "Brightside Dental PC"
+      },
+      "expect": {
+        "contains": [
+          "Rent roll 7426.3, lease 7649.09 on 2026-01-31"
+        ],
+        "equals": {
+          "result.item.difference": -222.79
+        }
+      }
+    },
+    {
+      "id": "cpi-needs-index",
+      "tool": "granite_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-01.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-01-31",
+        "unit": "Suite 120"
+      },
+      "expect": {
+        "contains": [
+          "rent_needs_index"
+        ],
+        "equals": {
+          "result.item.status": "review"
+        }
+      }
+    },
+    {
+      "id": "holdover-later",
+      "tool": "granite_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-01.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-06-01",
+        "indexes": "fixtures/indexes.json",
+        "unit": "Suite 130"
+      },
+      "expect": {
+        "contains": [
+          "holdover",
+          "ended 2026-04-30"
+        ]
+      }
+    },
+    {
+      "id": "yardi-charge-rows",
+      "tool": "granite_check",
+      "args": {
+        "rent_roll": "fixtures/exports/yardi-rent-roll-charges.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-01-31"
+      },
+      "expect": {
+        "contains": [
+          "yardi_rent_roll_charges",
+          "rent_under_lease"
+        ],
+        "equals": {
+          "result.units": 6,
+          "result.items.0.rent_roll_rent": 4243.6,
+          "result.items.1.status": "ok"
+        }
+      }
+    },
+    {
+      "id": "missing-from-rent-roll",
+      "tool": "granite_check",
+      "args": {
+        "rent_roll": "fixtures/exports/yardi-rent-roll-charges.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-01-31"
+      },
+      "expect": {
+        "contains": [
+          "missing_from_rent_roll",
+          "Cobalt Fitness Inc"
+        ]
+      }
+    },
+    {
+      "id": "german-columns",
+      "tool": "granite_check",
+      "args": {
+        "rent_roll": "fixtures/exports/rent-roll-de.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-01-31",
+        "indexes": "fixtures/indexes.json"
+      },
+      "expect": {
+        "equals": {
+          "result.items.0.status": "ok",
+          "result.items.0.rent_roll_rent": 4243.6,
+          "result.items.1.lease_rent": 14038.64
+        }
+      }
+    },
+    {
+      "id": "bad-date-refused",
+      "tool": "granite_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-01.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "soon"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "as_of"
+        ]
+      }
+    },
+    {
+      "id": "accept-learning-stays-one-click",
+      "tool": "granite_accept_learning",
+      "mode": "auto",
+      "args": {
+        "id": "MEM-000000000000",
+        "decision": "accept"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "never-changes-system",
+      "tool": "pm_system_update",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-bills",
+      "tool": "post_tenant_charge",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "granite_write_report",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-01.csv",
+        "leases": "fixtures/leases.json",
+        "as_of": "2026-01-31",
+        "indexes": "fixtures/indexes.json"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "recall-empty-memory",
+      "tool": "granite_recall",
+      "args": {},
+      "expect": {
+        "contains": [
+          "memory is empty",
+          "verifies"
+        ]
+      }
+    }
   ]
 }

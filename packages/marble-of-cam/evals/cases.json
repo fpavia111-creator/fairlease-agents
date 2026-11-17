@@ -3,18 +3,250 @@
   "root": "..",
   "data_note": "Fictional shopping center, leases, GL and tenant ledger in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
-    {"id": "pools-and-recovery", "tool": "marble_check", "args": {"leases": "fixtures/leases.json", "cam": "fixtures/cam-2025.json", "gl": "fixtures/gl-2025.csv", "billed": "fixtures/cam-billed-2025.csv"}, "expect": {"status": "executed", "equals": {"result.pools_total": 433000, "result.pools.1.grossed_up": 69666.67, "result.shares_total_pct": 91.75, "result.items.0.balance": 754.75, "result.items.2.balance": -3266.67}}},
-    {"id": "every-planted-issue-found", "tool": "marble_check", "args": {"leases": "fixtures/leases.json", "cam": "fixtures/cam-2025.json", "gl": "fixtures/gl-2025.csv", "billed": "fixtures/cam-billed-2025.csv"}, "expect": {"contains": ["cap_applied", "gross_up_applied", "expense_stop", "pool_excluded", "cap_needs_data", "estimate_months_missing", "unmapped_accounts", "7200"]}},
-    {"id": "cumulative-cap", "tool": "marble_explain", "args": {"leases": "fixtures/leases.json", "cam": "fixtures/cam-2025.json", "gl": "fixtures/gl-2025.csv", "billed": "fixtures/cam-billed-2025.csv", "tenant": "Acme Bagels LLC"}, "expect": {"contains": ["over the 5% cumulative cap (9922.5); reduced by 1510.83"], "equals": {"result.item.admin_fee": 2032.25, "result.item.total_due": 22354.75}}},
-    {"id": "expense-stop-anchor", "tool": "marble_explain", "args": {"leases": "fixtures/leases.json", "cam": "fixtures/cam-2025.json", "gl": "fixtures/gl-2025.csv", "billed": "fixtures/cam-billed-2025.csv", "tenant": "L-105"}, "expect": {"equals": {"result.item.total_due": 28333.34, "result.item.direction": "credit to tenant"}}},
-    {"id": "noncumulative-cap-needs-prior-year", "tool": "marble_explain", "args": {"leases": "fixtures/leases.json", "cam": "fixtures/cam-2025.json", "gl": "fixtures/gl-2025.csv", "billed": "fixtures/cam-billed-2025.csv", "tenant": "Fable Books"}, "expect": {"equals": {"result.item.status": "review", "result.item.occupied_days": 334}}},
-    {"id": "estimates-from-lease-without-ledger", "tool": "marble_check", "args": {"leases": "fixtures/leases.json", "cam": "fixtures/cam-2025.json", "gl": "fixtures/gl-2025.csv"}, "expect": {"contains": ["estimates_from_lease"], "equals": {"result.items.1.billed": 34800}}},
-    {"id": "appfolio-gl-headings", "tool": "marble_check", "args": {"leases": "fixtures/leases.json", "cam": "fixtures/cam-2025.json", "gl": "fixtures/exports/appfolio-general-ledger.csv"}, "expect": {"equals": {"result.pools_total": 208000, "result.pools.2.total": 48000, "result.pools.3.total": 160000}}},
-    {"id": "german-gl-columns", "tool": "marble_check", "args": {"leases": "fixtures/leases.json", "cam": "fixtures/cam-2025.json", "gl": "fixtures/exports/gl-de.csv"}, "expect": {"equals": {"result.pools_total": 51000, "result.pools.0.total": 3000}}},
-    {"id": "bad-cam-file-refused", "tool": "marble_check", "args": {"leases": "fixtures/leases.json", "cam": "fixtures/cam-typo.json", "gl": "fixtures/gl-2025.csv"}, "expect": {"status": "error", "contains": ["/pools/0/varible"]}},
-    {"id": "send-stays-one-click-in-auto", "tool": "marble_request_send", "mode": "auto", "args": {"draft": "fixtures/leases.json", "draft_sha256": "0"}, "expect": {"status": "needs_approval", "decision": "ask"}},
-    {"id": "accept-learning-stays-one-click", "tool": "marble_accept_learning", "mode": "auto", "args": {"id": "MEM-000000000000", "decision": "accept"}, "expect": {"status": "needs_approval", "decision": "ask"}},
-    {"id": "never-posts", "tool": "post_tenant_charge", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
-    {"id": "never-emails", "tool": "email_send", "mode": "auto", "args": {}, "expect": {"status": "blocked"}}
+    {
+      "id": "pools-and-recovery",
+      "tool": "marble_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.pools_total": 433000,
+          "result.pools.1.grossed_up": 69666.67,
+          "result.shares_total_pct": 91.75,
+          "result.items.0.balance": 754.75,
+          "result.items.2.balance": -3266.67
+        }
+      }
+    },
+    {
+      "id": "every-planted-issue-found",
+      "tool": "marble_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv"
+      },
+      "expect": {
+        "contains": [
+          "cap_applied",
+          "gross_up_applied",
+          "expense_stop",
+          "pool_excluded",
+          "cap_needs_data",
+          "estimate_months_missing",
+          "unmapped_accounts",
+          "7200"
+        ]
+      }
+    },
+    {
+      "id": "cumulative-cap",
+      "tool": "marble_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv",
+        "tenant": "Acme Bagels LLC"
+      },
+      "expect": {
+        "contains": [
+          "over the 5% cumulative cap (9922.5); reduced by 1510.83"
+        ],
+        "equals": {
+          "result.item.admin_fee": 2032.25,
+          "result.item.total_due": 22354.75
+        }
+      }
+    },
+    {
+      "id": "expense-stop-anchor",
+      "tool": "marble_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv",
+        "tenant": "L-105"
+      },
+      "expect": {
+        "equals": {
+          "result.item.total_due": 28333.34,
+          "result.item.direction": "credit to tenant"
+        }
+      }
+    },
+    {
+      "id": "noncumulative-cap-needs-prior-year",
+      "tool": "marble_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv",
+        "tenant": "Fable Books"
+      },
+      "expect": {
+        "equals": {
+          "result.item.status": "review",
+          "result.item.occupied_days": 334
+        }
+      }
+    },
+    {
+      "id": "estimates-from-lease-without-ledger",
+      "tool": "marble_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv"
+      },
+      "expect": {
+        "contains": [
+          "estimates_from_lease"
+        ],
+        "equals": {
+          "result.items.1.billed": 34800
+        }
+      }
+    },
+    {
+      "id": "appfolio-gl-headings",
+      "tool": "marble_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/exports/appfolio-general-ledger.csv"
+      },
+      "expect": {
+        "equals": {
+          "result.pools_total": 208000,
+          "result.pools.2.total": 48000,
+          "result.pools.3.total": 160000
+        }
+      }
+    },
+    {
+      "id": "german-gl-columns",
+      "tool": "marble_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/exports/gl-de.csv"
+      },
+      "expect": {
+        "equals": {
+          "result.pools_total": 51000,
+          "result.pools.0.total": 3000
+        }
+      }
+    },
+    {
+      "id": "bad-cam-file-refused",
+      "tool": "marble_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-typo.json",
+        "gl": "fixtures/gl-2025.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "/pools/0/varible"
+        ]
+      }
+    },
+    {
+      "id": "send-stays-one-click-in-auto",
+      "tool": "marble_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "fixtures/leases.json",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "accept-learning-stays-one-click",
+      "tool": "marble_accept_learning",
+      "mode": "auto",
+      "args": {
+        "id": "MEM-000000000000",
+        "decision": "accept"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "never-posts",
+      "tool": "post_tenant_charge",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-emails",
+      "tool": "email_send",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "marble_write_report",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "statement-draft-waits",
+      "tool": "marble_draft_statement",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/gl-2025.csv",
+        "billed": "fixtures/cam-billed-2025.csv",
+        "tenant": "L-102"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "recall-empty-memory",
+      "tool": "marble_recall",
+      "args": {},
+      "expect": {
+        "contains": [
+          "memory is empty",
+          "verifies"
+        ]
+      }
+    }
   ]
 }
