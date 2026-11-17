@@ -29,19 +29,23 @@ export function reconcileTrust({ bankRows, bookRows, ledgerRows = null, policy }
   const bankIn = bank.filter((x) => x.date <= end);
   // Match: same amount; same reference when both have one, else nearest date within the window (bank on or after the book date, less 3 days).
   const used = new Set(); const matched = new Map();
+  // Bank lines by amount in cents (the cent either side too), so each book line only looks at lines of the same amount.
+  const byCents = new Map(); for (const x of bank) { const c = Math.round(x.amount * 100); if (!byCents.has(c)) byCents.set(c, []); byCents.get(c).push(x); }
+  const sameAmount = (amt) => { const c = Math.round(amt * 100); return [c - 1, c, c + 1].flatMap((k) => byCents.get(k) || []).sort((p, q) => p.i - q.i); };
   const pass = (byRef) => { for (const b of book) { if (matched.has(b.i)) continue;
-    const c = bank.filter((x) => !used.has(x.i) && Math.abs(x.amount - b.amount) < 0.005 && (byRef ? b.key && x.key === b.key : (!b.key || !x.key || x.key === b.key) && daysBetween(b.date, x.date) >= -3 && daysBetween(b.date, x.date) <= win))
+    const c = sameAmount(b.amount).filter((x) => !used.has(x.i) && Math.abs(x.amount - b.amount) < 0.005 && (byRef ? b.key && x.key === b.key : (!b.key || !x.key || x.key === b.key) && daysBetween(b.date, x.date) >= -3 && daysBetween(b.date, x.date) <= win))
       .sort((p, q) => Math.abs(daysBetween(b.date, p.date)) - Math.abs(daysBetween(b.date, q.date)))[0];
     if (c) { used.add(c.i); matched.set(b.i, c); } } };
   pass(true); pass(false);
   const items = []; const push = (o) => items.push(o);
   // Book items not cleared by the statement end: outstanding checks and deposits in transit.
+  const bookByKey = new Map(); for (const o of book) if (o.key) { if (!bookByKey.has(o.key)) bookByKey.set(o.key, []); bookByKey.get(o.key).push(o); }
   for (const b of book) {
     const c = matched.get(b.i); if (c && c.date <= end) continue;
     const age = daysBetween(b.date, end); const findings = []; const kind = b.amount < 0 ? 'outstanding_check' : 'deposit_in_transit';
     if (kind === 'outstanding_check' && age > staleDays) findings.push({ code: 'stale_check', detail: `Outstanding ${age} days; contact the payee, and follow your state's unclaimed property rules before voiding.` });
     if (kind === 'deposit_in_transit' && !c && age > transit) findings.push({ code: 'old_deposit_in_transit', detail: `Recorded ${b.date}, ${age} days before the statement end, and not on the bank statement; confirm the deposit was made.` });
-    const twin = book.find((o) => o.i !== b.i && matched.has(o.i) && Math.abs(o.amount - b.amount) < 0.005 && o.key && o.key === b.key);
+    const twin = (b.key ? bookByKey.get(b.key) || [] : []).find((o) => o.i !== b.i && matched.has(o.i) && Math.abs(o.amount - b.amount) < 0.005 && o.key && o.key === b.key);
     if (twin) findings.push({ code: 'possible_duplicate', detail: `Same reference ${b.ref} and amount as an entry on ${twin.date} that cleared; it may be entered twice.` });
     if (c) findings.unshift({ code: 'cleared_after_end', detail: `Cleared the bank ${c.date}, after the statement end.`, severity: 'note' });
     push({ type: kind, date: b.date, reference: b.ref, description: b.desc, amount: b.amount, age_days: age, status: findings.some((f) => !f.severity) ? 'issue' : 'ok', findings });

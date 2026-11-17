@@ -1,6 +1,6 @@
 // Year-end 1099 readiness for vendors and owners: totals per payee against the threshold the user gives. Pure functions.
 // Pearl makes no tax determination: the threshold, the excluded payment methods and the form are the user's (or their preparer's) call.
-import { r2, num, str, isoDate, maskId as maskRaw, partyKey, sameParty, foldText } from 'keystone-core';
+import { r2, num, str, isoDate, maskId as maskRaw, partyKey, foldText } from 'keystone-core';
 
 export const DEFAULT_EXCLUDE_METHODS = Object.freeze(['card', 'credit card', 'debit card', 'paypal', 'venmo', 'tarjeta', 'karte', 'carte', 'cartão', 'carta']);
 const RENT_WORDS = ['rent', 'rents', 'lease', 'owner distribution', 'owner draw', 'miete', 'loyer', 'alquiler', 'renta', 'aluguel', 'affitto', '家賃', '賃料', '租金', '임대료', '임차료'];
@@ -41,7 +41,11 @@ export function checkFilings({ vendors = [], payments, taxYear, threshold, exclu
     if (!groups.has(k)) groups.set(k, { key: k, records: [], payments: [], excluded: [], undated: 0, other_years: 0 });
     groups.get(k).records.push(r);
   }
-  const findRecord = (payee) => records.find((r) => sameParty(r.name, payee) || (r.id && fold(r.id) === fold(payee)));
+  const recGroup = new Map(); for (const g of groups.values()) for (const r of g.records) recGroup.set(r, g);
+  const byParty = new Map(); const byId = new Map();
+  for (const r of records) { const pk = partyKey(r.name); if (pk && !byParty.has(pk)) byParty.set(pk, r); const fid = r.id ? fold(r.id) : ''; if (r.id && !byId.has(fid)) byId.set(fid, r); }
+  // The first directory record that matches by name or by vendor id, as a scan in file order would find it.
+  const findRecord = (payee) => { const pk = partyKey(payee); const a = pk ? byParty.get(pk) : undefined; const b = byId.get(fold(payee)); return a && b ? (a.i <= b.i ? a : b) : a || b; };
   const outside = new Map(); let otherYear = 0; let undated = 0; const methodsSeen = new Set();
   for (const p of payments) {
     const amount = num(p.amount); if (amount === null) continue;
@@ -50,7 +54,7 @@ export function checkFilings({ vendors = [], payments, taxYear, threshold, exclu
     if (d.slice(0, 4) !== year) { otherYear += 1; continue; }
     const rec = findRecord(p.payee);
     let g;
-    if (rec) g = [...groups.values()].find((x) => x.records.includes(rec));
+    if (rec) g = recGroup.get(rec);
     else { const k = `new:${partyKey(p.payee)}`; if (!outside.has(k)) outside.set(k, { key: k, records: [], name: str(p.payee), payments: [], excluded: [] }); g = outside.get(k); }
     const method = str(p.method); if (method) methodsSeen.add(method);
     const row = { date: d, amount, method, account: str(p.account), reference: str(p.reference) };

@@ -2,6 +2,12 @@
   "suite": "topaz-of-utilities",
   "root": "..",
   "data_note": "Fictional utility bills, occupancy and RUBS charges for a fictional 24-unit building in ../fixtures. Deterministic checks; no model is called.",
+  "bench": {
+    "fixed": [
+      "bills"
+    ],
+    "why": "A building has one utility bill per utility per month, and every bill is split across every unit, so the scale test grows occupancy and charges and keeps the bills file at its fixture size."
+  },
   "cases": [
     {
       "id": "totals",

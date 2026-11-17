@@ -1,5 +1,5 @@
 // Owner statements checked before they go out. Pure functions.
-import { r2, num, str, isoDate, periodKey, sameParty, foldText } from 'keystone-core';
+import { r2, num, str, isoDate, periodKey, partyKey, foldText } from 'keystone-core';
 
 export const STATEMENT_POLICY_SCHEMA = Object.freeze({
   type: 'object', additionalProperties: false,
@@ -13,7 +13,8 @@ export const STATEMENT_POLICY_SCHEMA = Object.freeze({
   },
 });
 
-const k = (s) => foldText(str(s)).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+const KS = new Map();
+const k = (s) => { const raw = str(s); let v = KS.get(raw); if (v === undefined) { v = foldText(raw).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); if (KS.size >= 100000) KS.clear(); KS.set(raw, v); } return v; };
 
 export function checkStatements({ rows, ledgerRows = null, policy = {} }) {
   const tol = policy.tolerance ?? 1; const feeIn = !!policy.fee_in_expenses; const dmin = policy.distribution_min ?? 0;
@@ -23,6 +24,7 @@ export function checkStatements({ rows, ledgerRows = null, policy = {} }) {
   const latest = policy.period || [...new Set(stmts.map((s) => s.period))].sort().pop();
   const reserveFor = (s) => { const r = policy.reserves || {}; const hit = Object.keys(r).find((p) => k(p) === k(s.property)); return hit !== undefined ? r[hit] : policy.default_reserve ?? s.reserve ?? 0; };
   const led = ledgerRows ? ledgerRows.map((r) => ({ owner: str(r.owner), property: str(r.property), period: isoDate(r.date) ? isoDate(r.date).slice(0, 7) : periodKey(r.period), type: str(r.type), income: num(r.income), expense: num(r.expense), amount: num(r.amount), text: `${str(r.type)} ${str(r.description)} ${str(r.account)}` })) : null;
+  const ledIdx = new Map(); for (const l of led || []) { const pk = partyKey(l.owner); if (!pk) continue; const key2 = `${l.period}\u0000${pk}`; if (!ledIdx.has(key2)) ledIdx.set(key2, []); ledIdx.get(key2).push(l); }
   const items = [];
   for (const list of byKey.values()) {
     list.sort((a, b) => a.period.localeCompare(b.period));
@@ -38,7 +40,7 @@ export function checkStatements({ rows, ledgerRows = null, policy = {} }) {
       if (s.end !== null && s.draw <= 0 && s.end - reserve >= Math.max(dmin, tol) && dmin > 0) add('cash_not_distributed', `${r2(s.end - reserve)} above the reserve and no distribution this period.`, { severity: 'note' });
       if (s.draw < 0) add('owner_contribution', `Owner contributed ${-s.draw}.`, { severity: 'note' });
       if (led) {
-        const mine = led.filter((l) => l.period === s.period && sameParty(l.owner, s.owner) && (!l.property || k(l.property) === k(s.property)));
+        const pk = partyKey(s.owner); const mine = (pk ? ledIdx.get(`${s.period}\u0000${pk}`) || [] : []).filter((l) => !l.property || k(l.property) === k(s.property));
         if (mine.length) {
           const isFee = (l) => /management fee|mgmt fee|verwaltung|honoraires|honorarios|administra|gestione|管理/i.test(l.text);
           const inc = r2(mine.reduce((t, l) => t + (l.income ?? (l.amount > 0 ? l.amount : 0)), 0));

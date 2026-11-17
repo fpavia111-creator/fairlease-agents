@@ -1,5 +1,5 @@
 // RUBS (ratio utility billing) re-worked from bills and occupancy, against what was billed. Pure functions.
-import { r2, num, str, isoDate, addDays, daysBetween, overlapDays, rubsSplit, chargeKind, sameUnit, sameParty, foldText } from 'keystone-core';
+import { r2, num, str, isoDate, addDays, daysBetween, overlapDays, rubsSplit, chargeKind, unitKey, sameParty, foldText } from 'keystone-core';
 
 const METHOD = { oneOf: [{ type: 'string', enum: ['sqft', 'occupants', 'units'] }, { type: 'object', additionalProperties: false, minProperties: 1, properties: { sqft: { type: 'number', minimum: 0 }, occupants: { type: 'number', minimum: 0 }, units: { type: 'number', minimum: 0 } } }] };
 export const RUBS_SCHEMA = Object.freeze({
@@ -58,6 +58,7 @@ export function checkRubs({ bills, occupancy, billedRows = null, cfg, aliases = 
   const history = {};
   // Each charge belongs to the latest bill of its utility that ended before it, within the window.
   const owner_of = billed.map((x) => sorted.filter((b) => b.key && b.to && (x.key === b.key || (!x.key && Object.keys(cfg.utilities).length === 1)) && x.date > b.to && x.date <= addDays(b.to, window)).sort((a, c) => c.to.localeCompare(a.to))[0] || null);
+  const chargesOf = new Map(); billed.forEach((x, i) => { const o = owner_of[i]; if (!o) return; if (!chargesOf.has(o)) chargesOf.set(o, []); chargesOf.get(o).push({ ...x, i }); });
   for (const b of sorted) {
     if (!b.key || !b.from || !b.to || b.amount === null) { unknown.push({ utility: str(b.utility), period: `${b.from || '?'} to ${b.to || '?'}`, amount: b.amount, reason: !b.key ? 'utility not in your RUBS file' : 'period or amount unreadable' }); continue; }
     const u = cfg.utilities[b.key]; const findings = [];
@@ -71,11 +72,15 @@ export function checkRubs({ bills, occupancy, billedRows = null, cfg, aliases = 
     (history[b.key] = prior).push(perDay);
     const owner = r2(common + split.filter((s) => s.vacant).reduce((s, x) => s + x.share, 0));
     // What was billed for this bill: utility charges dated after the period end, within the window.
-    const inWin = billed.map((x, i) => ({ ...x, i })).filter((x) => owner_of[x.i] === b);
+    const inWin = (chargesOf.get(b) || []);
     for (const x of inWin) usedBilled.add(x.i);
+    // Charges and occupied slots by unit, so each unit only looks at its own lines.
+    const byUnit = (list, unitOf) => { const m = new Map(); for (const x of list) { const k = unitKey(unitOf(x)); if (!k) continue; if (!m.has(k)) m.set(k, []); m.get(k).push(x); } return m; };
+    const occupiedSlots = split.filter((x) => !x.vacant);
+    const winByUnit = byUnit(inWin, (x) => x.unit); const slotByUnit = byUnit(occupiedSlots, (x) => x.unit);
     const lines = [];
-    for (const s of split.filter((x) => !x.vacant)) {
-      const got = inWin.filter((x) => sameUnit(x.unit, s.unit) && (!x.tenant || sameParty(x.tenant, s.tenant)));
+    for (const s of occupiedSlots) {
+      const got = (winByUnit.get(unitKey(s.unit)) || []).filter((x) => !x.tenant || sameParty(x.tenant, s.tenant));
       const amt = got.length ? r2(got.reduce((t, x) => t + x.amount, 0)) : null;
       const allowed = u.cap_per_unit !== undefined ? Math.min(s.share, u.cap_per_unit) : s.share;
       let code = 'ok';
@@ -85,7 +90,7 @@ export function checkRubs({ bills, occupancy, billedRows = null, cfg, aliases = 
       lines.push({ unit: s.unit, tenant: s.tenant, days: s.days, ratio: s.ratio, share: s.share, allowed: r2(allowed), billed: amt, difference: amt === null ? null : r2(amt - allowed), code });
     }
     for (const x of inWin) {
-      const occupied = split.some((s) => !s.vacant && sameUnit(s.unit, x.unit) && (!x.tenant || sameParty(x.tenant, s.tenant)));
+      const occupied = (slotByUnit.get(unitKey(x.unit)) || []).some((s) => !x.tenant || sameParty(x.tenant, s.tenant));
       if (!occupied) lines.push({ unit: x.unit, tenant: x.tenant, days: 0, ratio: 0, share: 0, allowed: 0, billed: x.amount, difference: x.amount, code: 'billed_while_vacant' });
     }
     const totalBilled = r2(inWin.reduce((s, x) => s + x.amount, 0));

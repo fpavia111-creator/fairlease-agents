@@ -33,8 +33,13 @@ export function normHeader(h) {
 }
 
 /** Lower case, no accents, letters, digits and single spaces only (any script). For comparing names and words. */
+const FOLDS = new Map();
 export function foldText(s) {
-  let t = String(s ?? '');
+  const raw = String(s ?? ''); const hit = FOLDS.get(raw); if (hit !== undefined) return hit;
+  const out = foldOf(raw); if (FOLDS.size >= 100000) FOLDS.clear(); FOLDS.set(raw, out); return out;
+}
+function foldOf(raw) {
+  let t = raw;
   if (NON_ASCII.test(t)) t = stripMarks(t.normalize('NFKC')).replace(/ß/g, 'ss');
   return t.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 }

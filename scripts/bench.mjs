@@ -80,7 +80,8 @@ for (const n of agents) {
     const t = manifest.tools.find((x) => x.name === c.tool); if (!t || seen.has(t.name) || !['read', 'report'].includes(t.kind)) continue;
     const rule = rules.find((r) => r.tool === t.name); if (!rule || rule.decision !== 'allow') continue;
     if (c.expect && (c.expect.status === 'error' || c.expect.status === 'blocked')) continue;
-    const tables = Object.entries(c.args || {}).filter(([, v]) => typeof v === 'string' && /\.(csv|tsv)$/i.test(v) && existsSync(join(base, v)));
+    const fixed = new Set((suite.bench && suite.bench.fixed) || []);
+    const tables = Object.entries(c.args || {}).filter(([k, v]) => !fixed.has(k) && typeof v === 'string' && /\.(csv|tsv)$/i.test(v) && existsSync(join(base, v)));
     if (!tables.length) continue;
     seen.add(t.name);
     for (const size of SIZES) {

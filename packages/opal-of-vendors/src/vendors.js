@@ -1,5 +1,5 @@
 // Vendor compliance against the buyer's requirements, and payments made while out of compliance. Pure functions.
-import { r2, num, str, isoDate, addDays, daysBetween, maskId, sameParty } from 'keystone-core';
+import { r2, num, str, isoDate, addDays, daysBetween, maskId, sameParty, partyKey } from 'keystone-core';
 
 const REQ = { type: 'object', additionalProperties: false, properties: { gl: { type: 'boolean' }, wc: { type: 'boolean' }, auto: { type: 'boolean' }, license: { type: 'boolean' }, tax_id: { type: 'boolean' }, w9: { type: 'boolean' } } };
 export const REQUIREMENTS_SCHEMA = Object.freeze({
@@ -16,6 +16,7 @@ const yes = (v) => /^(y|yes|true|1|x|on file|received|ja|oui|sí|si|sim|はい|�
 
 export function checkVendors({ rows, req, payments = null, asOf }) {
   const warn = req.warn_days ?? 30; const items = [];
+  const payBy = new Map(); for (const p of payments || []) { const pk = partyKey(p.payee); if (!pk) continue; if (!payBy.has(pk)) payBy.set(pk, []); payBy.get(pk).push(p); }
   for (const r of rows) {
     const vendor = str(r.vendor); if (!vendor) continue;
     const trade = str(r.trade);
@@ -35,8 +36,8 @@ export function checkVendors({ rows, req, payments = null, asOf }) {
     if (need.tax_id && !exempt.has('tax_id') && !str(r.tax_id)) add('tax_id_missing', 'No tax ID on file.');
     if (need.w9 && !exempt.has('w9') && r.w9_on_file !== undefined && !yes(r.w9_on_file)) add('w9_missing', 'W-9 (or your tax form) not marked as on file.');
     let paid = 0; const late = [];
-    if (payments) for (const p of payments) {
-      if (!sameParty(p.payee, vendor)) continue; const d = isoDate(p.date); const amt = num(p.amount); if (!d || amt === null) continue;
+    if (payments) for (const p of payBy.get(partyKey(vendor)) || []) {
+      const d = isoDate(p.date); const amt = num(p.amount); if (!d || amt === null) continue;
       const lapse = lapses.filter((l) => d >= l.from);
       if (lapse.length) { paid = r2(paid + amt); late.push(`${d} ${amt}${p.reference ? ` (${str(p.reference)})` : ''}`); }
     }

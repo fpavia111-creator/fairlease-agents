@@ -16,7 +16,9 @@ export const pct = (part, whole) => (whole ? round2((part / whole) * 100) : 0);
 // ------------------------------------------------------------------- dates ----
 
 const DAY = 86400000;
-const toMs = (v) => { if (v instanceof Date) return v.getTime(); const s = str(v); if (!s) return NaN; const iso = /^\d{4}-\d{2}-\d{2}$/.test(s) ? `${s}T00:00:00Z` : /^\d{4}-\d{2}$/.test(s) ? `${s}-01T00:00:00Z` : /[zZ]|[+-]\d{2}:?\d{2}$/.test(s) ? s : `${s.replace(' ', 'T')}Z`; return Date.parse(iso); };
+const MS = new Map();
+const toMs = (v) => { if (v instanceof Date) return v.getTime(); const s = str(v); if (!s) return NaN; const hit = MS.get(s); if (hit !== undefined) return hit; const t = msOf(s); if (MS.size >= 100000) MS.clear(); MS.set(s, t); return t; };
+const msOf = (s) => { const iso = /^\d{4}-\d{2}-\d{2}$/.test(s) ? `${s}T00:00:00Z` : /^\d{4}-\d{2}$/.test(s) ? `${s}-01T00:00:00Z` : /[zZ]|[+-]\d{2}:?\d{2}$/.test(s) ? s : `${s.replace(' ', 'T')}Z`; return Date.parse(iso); };
 export const isoDate = (v) => { const t = toMs(v); return Number.isFinite(t) ? new Date(t).toISOString().slice(0, 10) : null; };
 export function daysBetween(a, b) { const x = toMs(a), y = toMs(b); return Number.isFinite(x) && Number.isFinite(y) ? Math.round((y - x) / DAY) : null; }
 export function addDays(d, n) { const t = toMs(d); return Number.isFinite(t) ? new Date(t + n * DAY).toISOString().slice(0, 10) : null; }
