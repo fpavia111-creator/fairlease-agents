@@ -17,10 +17,12 @@ npx -y onyx-of-statements mcp --root ./statements
 | `beginning_differs` | Beginning differs from the previous period's ending for the same owner and property |
 | `negative_balance` | Ending below zero; the amount owed includes refilling the reserve |
 | `distribution_below_reserve`, `reserve_short` | Ending below the reserve after a distribution, or without one |
-| `income_differs`, `expenses_differ`, `fee_differs` | Statement totals against the owner ledger for the period |
+| `income_differs`, `expenses_differ`, `fee_differs`, `distribution_differs` | Statement totals against the owner ledger for the period. Distributions and owner contributions in the ledger are money to and from the owner, not expenses or income |
+| `period_missing`, `duplicate_statement` | A month with no statement between two others (the beginning balance is then not checked against an older ending); the same period twice in the file |
+| `fee_rate_differs` | With `fee_pct` in the policy: the management fee is not that share of income |
 | `cash_not_distributed`, `owner_contribution`, `no_ledger_detail` (notes) | Cash above reserve + `distribution_min` held back; owner paid in; no ledger lines to check |
 
-Periods are read in any common spelling ("Oct 2026", "10/2026", "2026年10月"). The reserve comes from `policy.reserves` by property name, then `default_reserve`, then the statement's own reserve column.
+Exports that show money out as negative numbers are read that way round when the statement only adds up so. Periods are read in any common spelling ("Oct 2026", "10/2026", "2026年10月"). The reserve comes from `policy.reserves` by property name, then `default_reserve`, then the statement's own reserve column.
 
 
 <!-- generated:start -->

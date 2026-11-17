@@ -1,0 +1,5 @@
+Owner,Property,Date,Type,GL Account,Description,Cash In,Cash Out,Reference
+Cedar Lane Partners (fictional),Cedar Lane Fourplex,2026-10-03,Receipt,4000,Rent deposit batch,"6,000.00",,DEP-1
+Cedar Lane Partners (fictional),Cedar Lane Fourplex,2026-10-12,Bill,5000,Plumbing (fictional vendor),,"1,200.00",B-1
+Cedar Lane Partners (fictional),Cedar Lane Fourplex,2026-10-31,Management Fee,5300,Management fee October,,480.00,FEE-10
+Cedar Lane Partners (fictional),Cedar Lane Fourplex,2026-10-15,Owner Draw,3200,Owner distribution,,"4,000.00",ACH-9

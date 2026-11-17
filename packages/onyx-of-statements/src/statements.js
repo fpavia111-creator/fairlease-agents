@@ -9,12 +9,17 @@ export const STATEMENT_POLICY_SCHEMA = Object.freeze({
     distribution_min: { type: 'number', minimum: 0 },
     tolerance: { type: 'number', minimum: 0, maximum: 100 },
     fee_in_expenses: { type: 'boolean' },
+    fee_pct: { type: 'number', minimum: 0, maximum: 100 },
     period: { type: 'string', pattern: '^\\d{4}-\\d{2}$' },
   },
 });
 
 const KS = new Map();
 const k = (s) => { const raw = str(s); let v = KS.get(raw); if (v === undefined) { v = foldText(raw).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); if (KS.size >= 100000) KS.clear(); KS.set(raw, v); } return v; };
+
+const monthsApart = (a, b) => (Number(b.slice(0, 4)) - Number(a.slice(0, 4))) * 12 + Number(b.slice(5, 7)) - Number(a.slice(5, 7));
+const nextMonth = (p) => { const y = Number(p.slice(0, 4)); const m = Number(p.slice(5, 7)); return m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, '0')}`; };
+const IS_DRAW = /owner draw|owner distribution|distribution|owner payment|owner contribution|contribution|capital call|ausschuttung|entnahme|einlage|distribution au proprietaire|apport|distribucion|aportacion|distribuicao|aporte|distribuzione|apporto|分配|出資|拠出|分红|注资|배당|출자/;
 
 export function checkStatements({ rows, ledgerRows = null, policy = {} }) {
   const tol = policy.tolerance ?? 1; const feeIn = !!policy.fee_in_expenses; const dmin = policy.distribution_min ?? 0;
@@ -30,7 +35,18 @@ export function checkStatements({ rows, ledgerRows = null, policy = {} }) {
     list.sort((a, b) => a.period.localeCompare(b.period));
     list.forEach((s, idx) => {
       const findings = []; const add = (code, detail, extra = {}) => findings.push({ code, detail, ...extra });
-      const prev = list[idx - 1];
+      const twice = list.filter((x) => x.period === s.period).length;
+      if (twice > 1) add('duplicate_statement', `${twice} statements for ${s.period} in the file; keep one.`);
+      let prev = list[idx - 1]; if (prev && prev.period === s.period) prev = null;
+      if (prev && monthsApart(prev.period, s.period) > 1) {
+        const gap = monthsApart(prev.period, s.period) - 1; let lastGap = prev.period; for (let n = gap; n > 0; n--) lastGap = nextMonth(lastGap);
+        add('period_missing', `No statement for ${nextMonth(prev.period)}${gap > 1 ? ` to ${lastGap}` : ''} between ${prev.period} and this one, so the beginning balance is not checked against an earlier ending.`); prev = null;
+      }
+      // Some exports show money out as negative numbers. If the statement only adds up that way round, read it that way.
+      if (s.expenses < 0 || s.fee < 0) {
+        const fits = (e, f) => s.begin !== null && s.end !== null && Math.abs(r2(s.begin + s.income - e - (feeIn ? 0 : f) - s.draw) - s.end) <= tol;
+        if (!fits(s.expenses, s.fee)) { s.expenses = Math.abs(s.expenses); s.fee = Math.abs(s.fee); }
+      }
       const calc = s.begin === null ? null : r2(s.begin + s.income - s.expenses - (feeIn ? 0 : s.fee) - s.draw);
       if (calc !== null && s.end !== null && Math.abs(calc - s.end) > tol) add('math_error', `Beginning ${s.begin} + income ${s.income} − expenses ${s.expenses}${feeIn ? '' : ` − fee ${s.fee}`} − distribution ${s.draw} = ${calc}, but the statement shows ${s.end} (${r2(s.end - calc)}).`, { amount: r2(s.end - calc) });
       if (prev && prev.end !== null && s.begin !== null && Math.abs(prev.end - s.begin) > tol) add('beginning_differs', `Beginning ${s.begin} differs from ${prev.period}'s ending ${prev.end} (${r2(s.begin - prev.end)}).`, { amount: r2(s.begin - prev.end) });
@@ -38,14 +54,20 @@ export function checkStatements({ rows, ledgerRows = null, policy = {} }) {
       if (s.end !== null && s.end < -tol) add('negative_balance', `Ending balance ${s.end}: the owner owes ${r2(-s.end + reserve)} to bring the account back to the ${reserve} reserve.`, { amount: r2(-s.end + reserve) });
       else if (s.end !== null && s.end + tol < reserve) add(s.draw > 0 ? 'distribution_below_reserve' : 'reserve_short', s.draw > 0 ? `Distributed ${s.draw} and left ${s.end}, below the ${reserve} reserve.` : `Ending ${s.end} is below the ${reserve} reserve.`, { amount: r2(reserve - s.end) });
       if (s.end !== null && s.draw <= 0 && s.end - reserve >= Math.max(dmin, tol) && dmin > 0) add('cash_not_distributed', `${r2(s.end - reserve)} above the reserve and no distribution this period.`, { severity: 'note' });
+      if (policy.fee_pct !== undefined && s.income > 0 && s.fee) { const want = r2((s.income * policy.fee_pct) / 100); if (Math.abs(want - s.fee) > tol) add('fee_rate_differs', `Management fee ${s.fee} is ${r2((s.fee / s.income) * 100)}% of income ${s.income}; your rate is ${policy.fee_pct}% (${want}). A minimum fee or fees on other items can explain it.`, { amount: r2(s.fee - want) }); }
       if (s.draw < 0) add('owner_contribution', `Owner contributed ${-s.draw}.`, { severity: 'note' });
       if (led) {
         const pk = partyKey(s.owner); const mine = (pk ? ledIdx.get(`${s.period}\u0000${pk}`) || [] : []).filter((l) => !l.property || k(l.property) === k(s.property));
         if (mine.length) {
           const isFee = (l) => /management fee|mgmt fee|verwaltung|honoraires|honorarios|administra|gestione|管理/i.test(l.text);
-          const inc = r2(mine.reduce((t, l) => t + (l.income ?? (l.amount > 0 ? l.amount : 0)), 0));
-          const exp = r2(mine.filter((l) => feeIn || !isFee(l)).reduce((t, l) => t + (l.expense ?? (l.amount < 0 ? -l.amount : 0)), 0));
-          const fee = r2(mine.filter(isFee).reduce((t, l) => t + (l.expense ?? (l.amount < 0 ? -l.amount : 0)), 0));
+          // Money to and from the owner is neither income nor an expense of the property.
+          const isDraw = (l) => IS_DRAW.test(foldText(l.text).toLowerCase());
+          const draws = mine.filter(isDraw); const ops = mine.filter((l) => !isDraw(l));
+          const net = r2(draws.reduce((t, l) => t + (l.expense ?? (l.amount < 0 ? -l.amount : 0)) - (l.income ?? (l.amount > 0 ? l.amount : 0)), 0));
+          if (draws.length && Math.abs(net - s.draw) > tol) add('distribution_differs', `Owner ledger shows ${net} paid to the owner in ${s.period} (distributions less contributions); the statement shows ${s.draw}.`, { amount: r2(s.draw - net) });
+          const inc = r2(ops.reduce((t, l) => t + (l.income ?? (l.amount > 0 ? l.amount : 0)), 0));
+          const exp = r2(ops.filter((l) => feeIn || !isFee(l)).reduce((t, l) => t + (l.expense ?? (l.amount < 0 ? -l.amount : 0)), 0));
+          const fee = r2(ops.filter(isFee).reduce((t, l) => t + (l.expense ?? (l.amount < 0 ? -l.amount : 0)), 0));
           if (Math.abs(inc - s.income) > tol) add('income_differs', `Owner ledger income for ${s.period} is ${inc}; the statement shows ${s.income} (${r2(s.income - inc)}).`, { amount: r2(s.income - inc) });
           if (Math.abs(exp - s.expenses) > tol) add('expenses_differ', `Owner ledger expenses for ${s.period} are ${exp}; the statement shows ${s.expenses} (${r2(s.expenses - exp)}).`, { amount: r2(s.expenses - exp) });
           if (!feeIn && fee && Math.abs(fee - s.fee) > tol) add('fee_differs', `Owner ledger management fee for ${s.period} is ${fee}; the statement shows ${s.fee}.`, { amount: r2(s.fee - fee) });
@@ -58,7 +80,7 @@ export function checkStatements({ rows, ledgerRows = null, policy = {} }) {
   const rank = { issue: 0, note: 1, ok: 2 };
   items.sort((a, b) => (b.current - a.current) || rank[a.status] - rank[b.status] || a.owner.localeCompare(b.owner) || b.period.localeCompare(a.period));
   const cur = items.filter((i) => i.current);
-  const summary = `${cur.length} statement(s) for ${latest}, ${items.length} in all: ${cur.filter((i) => i.status === 'issue').length} to fix before sending (${cur.filter((i) => i.findings.some((f) => f.code === 'math_error')).length} math, ${cur.filter((i) => i.findings.some((f) => f.code === 'beginning_differs')).length} beginning balance, ${cur.filter((i) => i.findings.some((f) => f.code === 'negative_balance')).length} negative, ${cur.filter((i) => i.findings.some((f) => /_differs?$/.test(f.code) && f.code !== 'beginning_differs')).length} not matching the ledger). Earlier periods: ${items.filter((i) => !i.current && i.status === 'issue').length} with issues.`;
+  const summary = `${cur.length} statement(s) for ${latest}, ${items.length} in all: ${cur.filter((i) => i.status === 'issue').length} to fix before sending (${cur.filter((i) => i.findings.some((f) => f.code === 'math_error')).length} math, ${cur.filter((i) => i.findings.some((f) => f.code === 'beginning_differs')).length} beginning balance, ${cur.filter((i) => i.findings.some((f) => f.code === 'negative_balance')).length} negative, ${cur.filter((i) => i.findings.some((f) => ['income_differs', 'expenses_differ', 'fee_differs', 'distribution_differs'].includes(f.code))).length} not matching the ledger). Earlier periods: ${items.filter((i) => !i.current && i.status === 'issue').length} with issues.`;
   return { summary, period: latest, items };
 }
 

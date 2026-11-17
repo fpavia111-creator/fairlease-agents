@@ -211,6 +211,73 @@
           "statements"
         ]
       }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "onyx_draft_request",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "policy": "fixtures/statement-policy.json",
+        "owner": "Pine Street"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "onyx_draft_request",
+      "approve": "Dana Example",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "policy": "fixtures/statement-policy.json",
+        "owner": "Pine Street"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "onyx_draft_request",
+      "mode": "review",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "policy": "fixtures/statement-policy.json",
+        "owner": "Pine Street"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "missing-month-duplicate-and-negative-signs",
+      "tool": "onyx_check",
+      "args": {
+        "statements": "fixtures/owner-statements-edge-cases.csv",
+        "ledger": "fixtures/owner-ledger-edge-cases.csv",
+        "policy": "fixtures/statement-policy-edge-cases.json"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "period_missing",
+          "No statement for 2026-08 to 2026-09",
+          "duplicate_statement",
+          "fee_rate_differs",
+          "0 math, 0 beginning balance, 0 negative, 0 not matching the ledger"
+        ],
+        "not_contains": [
+          "math_error",
+          "beginning_differs",
+          "expenses_differ",
+          "distribution_differs"
+        ]
+      }
     }
   ]
 }
