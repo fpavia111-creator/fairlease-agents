@@ -1,5 +1,5 @@
 // Seller's rent roll against the trailing-twelve-month income statement (T-12). Pure functions.
-import { r2, num, str, isoDate, periodKey, readNumber, groupRentRoll, foldText } from 'keystone-core';
+import { r2, str, groupRentRoll, foldText, monthlyByAccount } from 'keystone-core';
 
 export const DILIGENCE_POLICY_SCHEMA = Object.freeze({
   type: 'object', additionalProperties: false,
@@ -17,26 +17,8 @@ export const DILIGENCE_POLICY_SCHEMA = Object.freeze({
 const RENT_NAME = /^(rent|rental|base rent|gross potential rent|apartment rent|residential rent|miete|mieteinnahmen|loyer|loyers|alquiler|ingresos por alquiler|renta|aluguel|aluguéis|receita de aluguel|canoni|affitti|canone|賃料|家賃|賃料収入|租金|租金收入|임대료|임대수입)/i;
 const NOT_RENT = /late|fee|utility|reimb|parking|pet|other|concession|vacancy|loss|bad debt|säum|gebühr|frais|retard|recargo|multa|mora|遅延|滞纳|연체/i;
 const median = (xs) => { const s = [...xs].sort((a, b) => a - b); const m = Math.floor(s.length / 2); return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : null; };
-const KNOWN = new Set(['property', 'account', 'account_name', 'date', 'period', 'description', 'vendor', 'debit', 'credit', 'amount', 'reference']);
-
 /** T-12 rows (wide month columns or long period/amount rows) as { account, name, months: {YYYY-MM: amount} }. */
-export function readT12(rows) {
-  const acc = new Map();
-  const get = (r) => { const a = str(r.account); if (!a || /^(total|net|noi)\b/i.test(a) || /^(total|net)\b/i.test(str(r.account_name))) return null; if (!acc.has(a)) acc.set(a, { account: a, name: str(r.account_name), months: {} }); return acc.get(a); };
-  for (const r of rows || []) {
-    const e = get(r); if (!e) continue;
-    const p = periodKey(r.period) || (isoDate(r.date) ? isoDate(r.date).slice(0, 7) : null);
-    if (p) { const v = num(r.amount) ?? ((num(r.credit) || 0) - (num(r.debit) || 0)); e.months[p] = r2((e.months[p] || 0) + (v || 0)); continue; }
-    for (const [k, v] of Object.entries(r)) {
-      if (KNOWN.has(k) || /total|ytd|summe|gesamt|cumul|acumulado|totale|合計|合计|합계/i.test(k)) continue;
-      const m = periodKey(k); if (!m) continue;
-      const blank = v === null || v === undefined || String(v).trim() === '';
-      const n = blank ? null : typeof v === 'number' ? v : readNumber(v);
-      if (!(m in e.months) || n !== null) e.months[m] = n === null ? (e.months[m] ?? null) : r2((e.months[m] || 0) + n);
-    }
-  }
-  return [...acc.values()];
-}
+export const readT12 = (rows) => monthlyByAccount(rows);
 
 const startsWithAny = (a, list) => list.some((p) => a.startsWith(p));
 

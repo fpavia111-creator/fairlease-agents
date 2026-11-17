@@ -1,0 +1,16 @@
+{
+  "suite": "beryl-of-budgets",
+  "root": "..",
+  "data_note": "Fictional 2026 budget, twelve-month actuals and a Japanese budget file in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {"id": "totals", "tool": "beryl_check", "args": {"budget": "fixtures/budget-2026.csv", "actuals": "fixtures/actuals-t12-2026-11.csv", "policy": "fixtures/budget-policy.json", "as_of": "2026-11-15"}, "expect": {"status": "executed", "equals": {"result.month": "2026-10", "result.noi.ytd_budget": 172300, "result.noi.ytd_actual": 164177.3, "result.items.0.account": "5600"}, "contains": ["2 account(s) need a variance explanation", "1 already explained"]}},
+    {"id": "month-variance", "tool": "beryl_explain", "args": {"budget": "fixtures/budget-2026.csv", "actuals": "fixtures/actuals-t12-2026-11.csv", "policy": "fixtures/budget-policy.json", "as_of": "2026-11-15", "account": "5600"}, "expect": {"contains": ["Month: expense over budget by 2100 (210%)", "unfavorable"]}},
+    {"id": "explained-and-forecast", "tool": "beryl_explain", "args": {"budget": "fixtures/budget-2026.csv", "actuals": "fixtures/actuals-t12-2026-11.csv", "policy": "fixtures/budget-policy.json", "as_of": "2026-11-15", "account": "5000"}, "expect": {"contains": ["forecast_over_annual", "sewer line"], "equals": {"result.item.status": "explained"}}},
+    {"id": "unfavorable-only", "tool": "beryl_check", "args": {"budget": "fixtures/budget-2026.csv", "actuals": "fixtures/actuals-t12-2026-11.csv", "as_of": "2026-10-31"}, "expect": {"contains": ["need a variance explanation"]}},
+    {"id": "unbudgeted-income-is-a-note", "tool": "beryl_explain", "args": {"budget": "fixtures/budget-2026.csv", "actuals": "fixtures/actuals-t12-2026-11.csv", "policy": "fixtures/budget-policy.json", "as_of": "2026-11-15", "account": "4300"}, "expect": {"equals": {"result.item.status": "note"}}},
+    {"id": "japanese-budget", "tool": "beryl_check", "args": {"budget": "fixtures/exports/yosan-ja.csv", "as_of": "2026-10-31"}, "expect": {"contains": ["NOI 670000 against a budget of 870000"]}},
+    {"id": "memo", "tool": "beryl_draft_memo", "mode": "auto", "auto_actions": ["beryl_draft_memo"], "args": {"budget": "fixtures/budget-2026.csv", "actuals": "fixtures/actuals-t12-2026-11.csv", "policy": "fixtures/budget-policy.json", "as_of": "2026-11-15"}, "expect": {"status": "executed", "contains": ["TO CONFIRM: explanation"]}},
+    {"id": "never-changes-budget", "tool": "budget_update", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
+    {"id": "send-is-one-click", "tool": "beryl_request_send", "mode": "auto", "args": {"draft": "x.md", "draft_sha256": "0"}, "expect": {"status": "needs_approval"}}
+  ]
+}

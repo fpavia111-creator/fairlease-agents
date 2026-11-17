@@ -1,0 +1,11 @@
+{
+  "month": "2026-10",
+  "fiscal_start_month": 1,
+  "threshold_pct": 10,
+  "threshold_amount": 1000,
+  "basis": "both",
+  "explain": "both",
+  "explanations": {
+    "5000": "July: emergency sewer line replacement after root intrusion, 15,400 (fictional invoice INV-2207)."
+  }
+}
