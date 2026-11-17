@@ -26,7 +26,10 @@ const KIND = [
 const DEFAULT_EXCLUDED = ['security deposit', 'deposit held', 'prepaid', 'owner contribution', 'kaution', 'dépôt de garantie', 'fianza', 'caução', 'deposito cauzionale', '敷金', '押金', '보증금'];
 const NOT_MAINT = /fee|tax|insurance|mortgage|loan|utility bill|utilities|water bill|electric bill|gas bill|payroll|management|distribution|reserve|steuer|versicherung|impôt|assurance|impuesto|seguro|imposto|tassa|assicurazione|税|保険|保险|세금|보험/i;
 
-const feeKind = (r) => { const s = `${r.type} ${r.description} ${r.account}`; for (const [k, re] of KIND) if (re.test(s)) return k; return /\bfee\b|gebühr|frais|honorario|taxa|commissione|手数料|费|수수료/i.test(s) ? 'other' : null; };
+// Fees other people charge and the owner simply bears (bank, city, association, court) are costs, not fees of the manager.
+const PASS_THROUGH = /\b(bank|wire|nsf|permit|hoa|homeowners?|association|condo|filing|court|recording|licen[cs]e|registration|city|county|municipal|attorney|legal)\b|bankgebühr|frais bancaires|comisión bancaria|tarifa bancária|spese bancarie|銀行手数料|银行手续费|은행 수수료/i;
+const REVERSAL = /\bnsf\b|returned (payment|check|cheque|item)|reversal|reversed|chargeback|rücklastschrift|rückbuchung|impayé|rejet|devuelto|devolvido|insoluto|不渡|退票|부도/i;
+const feeKind = (r) => { const s = `${r.type} ${r.description} ${r.account}`; for (const [k, re] of KIND) if (re.test(s)) return k; if (PASS_THROUGH.test(`${r.description}`)) return null; return /\bfee\b|gebühr|frais|honorario|taxa|commissione|手数料|费|수수료/i.test(s) ? 'other' : null; };
 
 export function checkFees({ ledgerRows, agreements, rentRoll = null, period = null }) {
   const tol = agreements.tolerance ?? 1; const roll = rentRoll ? groupRentRoll(rentRoll) : [];
@@ -41,9 +44,11 @@ export function checkFees({ ledgerRows, agreements, rentRoll = null, period = nu
     const findings = []; const add = (code, detail, extra = {}) => findings.push({ code, detail, ...extra });
     const fees = g.filter((l) => l.expense && feeKind(l)).map((l) => ({ ...l, kind: feeKind(l) }));
     const excl = [...DEFAULT_EXCLUDED, ...(ag.excluded_income || [])].map(t);
-    const incomeLines = g.filter((l) => l.income > 0);
-    const base = r2(incomeLines.filter((l) => !excl.some((w) => t(`${l.type} ${l.description} ${l.account}`).includes(w))).reduce((s, l) => s + l.income, 0));
-    const excluded = r2(incomeLines.reduce((s, l) => s + l.income, 0) - base);
+    // Money that came in and bounced was not collected: a negative receipt, or a returned-payment line in the money-out column.
+    const incomeLines = g.filter((l) => l.income);
+    const bounced = r2(g.filter((l) => l.expense > 0 && !l.income && !feeKind(l) && REVERSAL.test(`${l.type} ${l.description}`) && !/\bfee\b/i.test(l.description)).reduce((s, l) => s + l.expense, 0));
+    const base = r2(incomeLines.filter((l) => !excl.some((w) => t(`${l.type} ${l.description} ${l.account}`).includes(w))).reduce((s, l) => s + l.income, 0) - bounced);
+    const excluded = r2(incomeLines.reduce((s, l) => s + l.income, 0) - bounced - base);
     // Management fee.
     let expected = ag.flat_monthly ?? (ag.management_fee_pct !== undefined ? r2((base * ag.management_fee_pct) / 100) : null);
     if (expected !== null && ag.minimum_monthly !== undefined) expected = Math.max(expected, ag.minimum_monthly);
@@ -58,7 +63,10 @@ export function checkFees({ ledgerRows, agreements, rentRoll = null, period = nu
     }
     // Leasing and renewal fees.
     for (const [kind, term] of [['leasing', ag.leasing_fee], ['renewal', ag.renewal_fee]]) {
+      const seenFee = new Map();
       for (const f of fees.filter((x) => x.kind === kind)) {
+        const dk = `${t(f.description)}|${f.expense}`; seenFee.set(dk, (seenFee.get(dk) || 0) + 1);
+        if (seenFee.get(dk) > 1) { add('duplicate_fee', `${f.description} of ${f.expense} charged again on ${f.date}; the same fee is already in ${p}.`, { amount: f.expense }); continue; }
         if (!term) { add(`${kind}_fee_not_in_agreement`, `${f.description} ${f.expense} on ${f.date}: the agreement has no ${kind} fee.`, { amount: f.expense }); continue; }
         let exp = term.flat ?? null; let how = term.flat !== undefined ? `flat ${term.flat}` : '';
         if (exp === null && term.pct_of_monthly_rent !== undefined) {

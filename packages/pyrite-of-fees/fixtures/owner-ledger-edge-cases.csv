@@ -1,0 +1,8 @@
+Owner,Property,Date,Type,GL Account,Description,Cash In,Cash Out,Reference
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-01,Receipt,4000,Rent deposit batch,40000.00,,
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-06,Receipt,4000,NSF reversal - unit 204,-2000.00,,
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-31,Fee,5300,Management fee October,,2400.00,
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-08,Bill,5900,Bank service fee,,25.00,
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-12,Bill,5910,City permit fee - water heater,,180.00,
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-14,Fee,5320,Renewal fee unit 102,,150.00,
+Maple Court Holdings LLC (fictional),Maple Court Apartments,2026-10-21,Fee,5320,Renewal fee unit 102,,150.00,

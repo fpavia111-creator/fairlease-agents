@@ -258,6 +258,30 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "bounced-rent-pass-through-fees-and-duplicate-renewal",
+      "tool": "pyrite_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-edge-cases.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "management_fee_over",
+          "duplicate_fee",
+          "270 to refund or explain"
+        ],
+        "not_contains": [
+          "fee_not_in_agreement"
+        ],
+        "equals": {
+          "result.items.0.fee_base": 38000,
+          "result.overcharge_total": 270
+        }
+      }
     }
   ]
 }
