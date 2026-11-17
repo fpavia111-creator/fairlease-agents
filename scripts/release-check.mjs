@@ -10,7 +10,7 @@
 //   node scripts/release-check.mjs --json       print the report as JSON
 //
 // Exit code 0 only when nothing failed. "warn" lines do not fail the run but are listed.
-// The manual steps (website backup, Pages deployment id, tests on Windows and on each
+// The manual steps (tests on Windows and on each
 // Node version) are printed at the end; this script cannot do them for you.
 
 import { readdirSync, readFileSync, existsSync, mkdirSync, writeFileSync, statSync } from 'node:fs';
@@ -189,7 +189,6 @@ const publish = [
 ];
 const manual = [
   'Run the tests on Node 20, 22 and 24, and on Windows (the CI workflow does both; this script ran Node ' + process.version + ' on ' + process.platform + ' only).',
-  'Back up the website deploy folder and write down the current Cloudflare Pages deployment id before changing the site.',
   'Check the npm maintainers listed above are your own account before publishing.',
   'Tag the release in git after publishing (git tag v' + core.json.version + ').',
 ];

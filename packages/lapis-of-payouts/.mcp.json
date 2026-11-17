@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "lapis-of-payouts": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "lapis-of-payouts@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

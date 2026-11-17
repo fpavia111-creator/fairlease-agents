@@ -1,0 +1,403 @@
+{
+  "name": "keystone-property",
+  "owner": {
+    "name": "Keystone"
+  },
+  "metadata": {
+    "description": "Thirty property management agents for commercial and mid-size operators. Each reads your exported files, writes reports locally and waits for a named person before anything that moves money, sends a message or changes a live system."
+  },
+  "plugins": [
+    {
+      "name": "agate-of-workorders",
+      "source": "./packages/agate-of-workorders",
+      "description": "Agate of Work Orders: ages open work orders against your own targets by priority, finds repeat problems in the same unit, likely emergencies filed as routine, slow vendors and cost outliers.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "work-orders",
+        "maintenance",
+        "service-requests"
+      ]
+    },
+    {
+      "name": "amber-of-insurance",
+      "source": "./packages/amber-of-insurance",
+      "description": "Checks every tenant's insurance certificate against the limits, additional insured and dates their lease requires, and drafts requests for updated certificates.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "tenant-insurance",
+        "coi",
+        "certificates"
+      ]
+    },
+    {
+      "name": "basalt-of-turns",
+      "source": "./packages/basalt-of-turns",
+      "description": "Tracks unit turns from move-out to make-ready to move-in: days against your target, cost by trade against your budget, tenant-chargeable items and the rent lost while the unit sits.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "unit-turns",
+        "make-ready",
+        "maintenance"
+      ]
+    },
+    {
+      "name": "beryl-of-budgets",
+      "source": "./packages/beryl-of-budgets",
+      "description": "Compares actuals with the budget by account for the month and year to date, flags the variances your management agreement says must be explained, unbudgeted spend and the year-end forecast, and drafts the owner's variance memo.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "budgets"
+      ]
+    },
+    {
+      "name": "chert-of-taxes",
+      "source": "./packages/chert-of-taxes",
+      "description": "Tracks property tax assessments, installments and the appeal deadlines you enter, flags large assessment increases, unpaid or short installments, and writes a calendar of due dates.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "taxes"
+      ]
+    },
+    {
+      "name": "cobalt-of-listings",
+      "source": "./packages/cobalt-of-listings",
+      "description": "Checks rental listings across your website and listing sites against the rent roll: vacant or soon-vacant units not listed, units listed while occupied, rent, deposit and unit details that differ from the rent roll or between sites, stale dates and duplicates, and listing wording for a person to review; drafts correction requests.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "listings"
+      ]
+    },
+    {
+      "name": "coral-of-associations",
+      "source": "./packages/coral-of-associations",
+      "description": "Checks HOA and condo association owner accounts against your assessment and collection policy (missing or wrong assessments, late fees charged or missed, days delinquent and the next step your policy names) and tracks violations against your notice, cure and hearing steps; drafts owner notices.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "associations"
+      ]
+    },
+    {
+      "name": "feldspar-of-estoppels",
+      "source": "./packages/feldspar-of-estoppels",
+      "description": "Checks returned tenant estoppel certificates against your lease abstracts before a sale or refinancing (rent, dates, deposit, area, options, amendments, landlord defaults claimed), tracks which are missing or stale, and drafts follow-up requests.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "estoppels"
+      ]
+    },
+    {
+      "name": "flint-of-inspections",
+      "source": "./packages/flint-of-inspections",
+      "description": "Compares move-out inspections with move-in item by item, flags units overdue for their periodic inspection and poor items with no work order, and drafts inspection notices.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "inspections"
+      ]
+    },
+    {
+      "name": "garnet-of-renewals",
+      "source": "./packages/garnet-of-renewals",
+      "description": "Lists leases coming up for renewal with offer deadlines, proposes rents within your own increase cap, checks offers already made and drafts renewal offer letters.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "renewals",
+        "lease-renewal",
+        "retention"
+      ]
+    },
+    {
+      "name": "granite-of-rentrolls",
+      "source": "./packages/granite-of-rentrolls",
+      "description": "Granite of Rent Rolls: checks a rent roll against your lease abstracts: rents, escalations, dates, deposits, areas, tenants, vacancies and holdovers, unit by unit.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "rent-roll",
+        "lease-audit",
+        "commercial-real-estate",
+        "multifamily"
+      ]
+    },
+    {
+      "name": "gypsum-of-capex",
+      "source": "./packages/gypsum-of-capex",
+      "description": "Tracks capital projects against budget, commitments, schedule and reserve balances, flags overruns, late and stalled projects, and drafts budget change requests for owners.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "capex"
+      ]
+    },
+    {
+      "name": "jade-of-escalations",
+      "source": "./packages/jade-of-escalations",
+      "description": "Checks rent billed against each lease's escalation schedule (fixed steps, percentages, amounts and CPI with floors and caps) and lists the increases coming up.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "rent-escalation",
+        "cpi",
+        "lease-audit",
+        "commercial-real-estate"
+      ]
+    },
+    {
+      "name": "jasper-of-deposits",
+      "source": "./packages/jasper-of-deposits",
+      "description": "Checks every move-out deposit against your own rules (deadline, itemisation, wear and tear, useful-life proration) and drafts the itemised deposit statement. Refunds are a person's job.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "security-deposits",
+        "move-out",
+        "residential"
+      ]
+    },
+    {
+      "name": "lapis-of-payouts",
+      "source": "./packages/lapis-of-payouts",
+      "description": "Reconciles short-term rental payouts from Airbnb, Vrbo and other channels against your reservations and bank deposits: missing, short or duplicate payouts, channel fees and cleaning fees off your rates, nights that do not match, and payouts that never reached the bank; drafts payout inquiries.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "payouts"
+      ]
+    },
+    {
+      "name": "malachite-of-recerts",
+      "source": "./packages/malachite-of-recerts",
+      "description": "Tracks affordable housing recertification dates against the schedule in your policy file: due dates, the notices your policy sends before each one, overdue and soon-due households, and households missing from the tracker or the rent roll; drafts reminder notices. It never decides eligibility or changes rent.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "recertifications"
+      ]
+    },
+    {
+      "name": "marble-of-cam",
+      "source": "./packages/marble-of-cam",
+      "description": "Reconciles common area maintenance and operating expenses for commercial leases: expense pools, pro-rata shares, gross-ups, caps, base years, admin fees and tenant estimates, with statement drafts.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "cam",
+        "cam-reconciliation",
+        "operating-expenses",
+        "commercial-real-estate"
+      ]
+    },
+    {
+      "name": "mica-of-leads",
+      "source": "./packages/mica-of-leads",
+      "description": "Checks the leasing funnel from guest cards and lead exports: leads not answered or answered late, follow-ups due, approved applicants with no lease, stale and duplicate leads, and conversion and cost per lease by source; drafts follow-up messages for a person to send.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "leads"
+      ]
+    },
+    {
+      "name": "obsidian-of-trust",
+      "source": "./packages/obsidian-of-trust",
+      "description": "Three-way reconciliation of a trust or escrow bank account: bank statement against the book register against the owner and tenant ledgers, with outstanding checks, deposits in transit, unrecorded bank items and negative ledgers.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "trust"
+      ]
+    },
+    {
+      "name": "onyx-of-statements",
+      "source": "./packages/onyx-of-statements",
+      "description": "Checks owner statements before they go out: the math, beginning against last month's ending, reserves held, distributions made below the reserve, negative balances, and totals against the owner ledger; drafts contribution requests.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "statements"
+      ]
+    },
+    {
+      "name": "opal-of-vendors",
+      "source": "./packages/opal-of-vendors",
+      "description": "Checks every vendor's liability and workers' comp insurance, licence and tax form against your own requirements, finds payments made while a vendor was out of compliance, and drafts certificate requests.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "vendor-compliance",
+        "coi",
+        "insurance-certificates"
+      ]
+    },
+    {
+      "name": "pearl-of-filings",
+      "source": "./packages/pearl-of-filings",
+      "description": "Gets vendor and owner 1099s ready: totals each payee's payments for the tax year against the threshold you give, leaves out card payments, flags missing or malformed tax IDs, missing addresses, shared tax IDs and payees not in the directory, and drafts W-9 requests. Tax IDs are always masked.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "filings"
+      ]
+    },
+    {
+      "name": "pyrite-of-fees",
+      "source": "./packages/pyrite-of-fees",
+      "description": "Recomputes the management, leasing, renewal and markup fees you charged each owner from the terms of their management agreement, and flags overcharges, undercharges, duplicates and fees the agreement does not provide for.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "fees"
+      ]
+    },
+    {
+      "name": "quartz-of-delinquency",
+      "source": "./packages/quartz-of-delinquency",
+      "description": "Turns an aging report or tenant ledger into a delinquency worklist with stages from your own policy, late-fee checks and reminder drafts. Never serves notices or files evictions.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "delinquency",
+        "collections",
+        "aging",
+        "late-fees"
+      ]
+    },
+    {
+      "name": "shale-of-vacancy",
+      "source": "./packages/shale-of-vacancy",
+      "description": "Reads a rent roll and shows occupancy, leased percentage, exposure, vacancy loss and loss to lease unit by unit, with long-vacant units and rents far from market flagged.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "vacancy",
+        "occupancy",
+        "loss-to-lease"
+      ]
+    },
+    {
+      "name": "slate-of-leases",
+      "source": "./packages/slate-of-leases",
+      "description": "Abstracts commercial lease text into the Keystone leases format with a citation for every term, and checks existing abstracts against the lease text.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "lease-abstraction",
+        "lease-abstract",
+        "commercial-real-estate"
+      ]
+    },
+    {
+      "name": "talc-of-overage",
+      "source": "./packages/talc-of-overage",
+      "description": "Works out percentage rent from tenant sales reports (natural or fixed breakpoints, exclusions, partial years), flags late and missing reports and drafts the tenant statement.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "percentage-rent",
+        "retail",
+        "sales-reports"
+      ]
+    },
+    {
+      "name": "topaz-of-utilities",
+      "source": "./packages/topaz-of-utilities",
+      "description": "Re-works RUBS utility billbacks from the bills and occupancy, by your own method, and finds over-recovery, vacant units billed, bills that spike, and charges that differ from the split.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "rubs",
+        "utilities",
+        "billback"
+      ]
+    },
+    {
+      "name": "tourmaline-of-migration",
+      "source": "./packages/tourmaline-of-migration",
+      "description": "Checks a property management system migration by comparing the old system's rent roll with the new one's at cutover: units missing or added, tenants, rents, deposits, balances, areas and lease dates that changed, and totals that do not tie; drafts a punch list for the implementation team. Go-live is a person's call.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "migration"
+      ]
+    },
+    {
+      "name": "zircon-of-diligence",
+      "source": "./packages/zircon-of-diligence",
+      "description": "Reconciles a seller's rent roll with the trailing-twelve-month income statement before you buy or lend: rent roll against rent collected, occupancy, expired leases still billed, months missing or out of line, and NOI.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "diligence"
+      ]
+    }
+  ]
+}

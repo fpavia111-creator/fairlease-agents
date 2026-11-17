@@ -1,0 +1,21 @@
+{
+  "name": "granite-of-rentrolls",
+  "version": "0.1.0",
+  "description": "Granite of Rent Rolls: checks a rent roll against your lease abstracts: rents, escalations, dates, deposits, areas, tenants, vacancies and holdovers, unit by unit.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/granite-of-rentrolls#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "rent-roll",
+    "lease-audit",
+    "commercial-real-estate",
+    "multifamily"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "marble-of-cam": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "marble-of-cam@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

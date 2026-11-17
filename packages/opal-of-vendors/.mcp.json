@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "opal-of-vendors": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "opal-of-vendors@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

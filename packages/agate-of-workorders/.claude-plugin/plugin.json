@@ -1,0 +1,20 @@
+{
+  "name": "agate-of-workorders",
+  "version": "0.1.0",
+  "description": "Agate of Work Orders: ages open work orders against your own targets by priority, finds repeat problems in the same unit, likely emergencies filed as routine, slow vendors and cost outliers.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/agate-of-workorders#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "work-orders",
+    "maintenance",
+    "service-requests"
+  ]
+}

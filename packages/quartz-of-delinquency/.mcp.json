@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "quartz-of-delinquency": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "quartz-of-delinquency@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

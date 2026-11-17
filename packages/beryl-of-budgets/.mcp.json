@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "beryl-of-budgets": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "beryl-of-budgets@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

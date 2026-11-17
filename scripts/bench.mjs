@@ -3,7 +3,7 @@
 //
 //   node scripts/bench.mjs                      every agent, 1,000 and 10,000 rows
 //   node scripts/bench.mjs --sizes 1000,50000   other sizes
-//   node scripts/bench.mjs ladon-of-access ...  only these agents
+//   node scripts/bench.mjs granite-of-rentrolls ...  only these agents
 //
 // For each read or report tool that an eval case calls with a table file, the
 // case's fictional table files are grown to N rows (seeded and repeatable: rows

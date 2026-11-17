@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "cobalt-of-listings": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "cobalt-of-listings@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

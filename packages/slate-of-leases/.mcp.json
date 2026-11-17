@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "slate-of-leases": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "slate-of-leases@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

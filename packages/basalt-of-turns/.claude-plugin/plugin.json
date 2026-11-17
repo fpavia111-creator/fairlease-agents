@@ -1,0 +1,20 @@
+{
+  "name": "basalt-of-turns",
+  "version": "0.1.0",
+  "description": "Tracks unit turns from move-out to make-ready to move-in: days against your target, cost by trade against your budget, tenant-chargeable items and the rent lost while the unit sits.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/basalt-of-turns#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "unit-turns",
+    "make-ready",
+    "maintenance"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "topaz-of-utilities": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "topaz-of-utilities@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

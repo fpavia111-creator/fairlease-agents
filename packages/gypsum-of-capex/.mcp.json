@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "gypsum-of-capex": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "gypsum-of-capex@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

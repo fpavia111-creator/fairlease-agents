@@ -226,7 +226,7 @@ export class DomainMemory {
  *   retire_memory    action  ask    one-click: a named person stops an accepted fact
  */
 export function memoryTools(prefix, kinds = {}) {
-  if (!/^[a-z][a-z0-9]{1,20}$/.test(prefix || '')) throw new Error('memoryTools: prefix must be the agent\'s short tool prefix, e.g. "ladon"');
+  if (!/^[a-z][a-z0-9]{1,20}$/.test(prefix || '')) throw new Error('memoryTools: prefix must be the agent\'s short tool prefix, e.g. "granite"');
   const all = { note: NOTE_KIND, ...kinds };
   const kindNames = Object.keys(all);
   const kindList = Object.entries(all).map(([k, v]) => `${k} (${v.effect})`).join('; ');

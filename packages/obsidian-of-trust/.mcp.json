@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "obsidian-of-trust": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "obsidian-of-trust@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

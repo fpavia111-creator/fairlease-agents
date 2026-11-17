@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "flint-of-inspections": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "flint-of-inspections@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "garnet-of-renewals",
+  "version": "0.1.0",
+  "description": "Lists leases coming up for renewal with offer deadlines, proposes rents within your own increase cap, checks offers already made and drafts renewal offer letters.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/garnet-of-renewals#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "renewals",
+    "lease-renewal",
+    "retention"
+  ]
+}

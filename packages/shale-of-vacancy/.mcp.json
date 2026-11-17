@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "shale-of-vacancy": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "shale-of-vacancy@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

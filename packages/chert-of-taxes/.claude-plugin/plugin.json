@@ -1,0 +1,18 @@
+{
+  "name": "chert-of-taxes",
+  "version": "0.1.0",
+  "description": "Tracks property tax assessments, installments and the appeal deadlines you enter, flags large assessment increases, unpaid or short installments, and writes a calendar of due dates.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/chert-of-taxes#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "taxes"
+  ]
+}

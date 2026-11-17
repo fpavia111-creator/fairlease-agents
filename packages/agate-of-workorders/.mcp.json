@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "agate-of-workorders": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "agate-of-workorders@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

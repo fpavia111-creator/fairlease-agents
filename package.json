@@ -1,7 +1,7 @@
 {
   "name": "keystone-agents",
   "private": true,
-  "description": "Keystone freight and shipping cost agents monorepo.",
+  "description": "Keystone: 30 MCP agents for property management (rent rolls, leases, CAM, deposits, trust accounts and more).",
   "license": "MIT",
   "workspaces": [
     "packages/keystone-core",
@@ -15,7 +15,8 @@
     "release:check:offline": "node scripts/release-check.mjs --offline",
     "bench": "node scripts/bench.mjs",
     "plugin": "node scripts/plugin-files.mjs",
-    "plugin:check": "node scripts/plugin-files.mjs --check"
+    "plugin:check": "node scripts/plugin-files.mjs --check",
+    "mcp:check": "node scripts/mcp-conformance.mjs"
   },
   "engines": {
     "node": ">=20"

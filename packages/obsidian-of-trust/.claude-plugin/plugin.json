@@ -1,0 +1,18 @@
+{
+  "name": "obsidian-of-trust",
+  "version": "0.1.0",
+  "description": "Three-way reconciliation of a trust or escrow bank account: bank statement against the book register against the owner and tenant ledgers, with outstanding checks, deposits in transit, unrecorded bank items and negative ledgers.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/obsidian-of-trust#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "trust"
+  ]
+}

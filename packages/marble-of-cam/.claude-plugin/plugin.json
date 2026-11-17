@@ -1,0 +1,21 @@
+{
+  "name": "marble-of-cam",
+  "version": "0.1.0",
+  "description": "Reconciles common area maintenance and operating expenses for commercial leases: expense pools, pro-rata shares, gross-ups, caps, base years, admin fees and tenant estimates, with statement drafts.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/marble-of-cam#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "cam",
+    "cam-reconciliation",
+    "operating-expenses",
+    "commercial-real-estate"
+  ]
+}
