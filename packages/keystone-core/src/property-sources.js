@@ -366,14 +366,16 @@ export const VIOLATION_FIELDS = Object.freeze({
 });
 
 export const RECERT_FIELDS = Object.freeze({
-  household: text(['Household', 'Household ID', 'Resident ID', 'Tenant Code', 'Head of Household', 'Resident'], 'tenant', { required: true }),
+  household: text(['Household', 'Household ID', 'Resident ID', 'Tenant Code', 'Head of Household', 'Resident', 'Haushalt', 'Ménage', 'Hogar', 'Unidad familiar', 'Domicílio', 'Família', 'Nucleo familiare', '世帯', '世帯主', '家庭', '住户', '세대', '세대주'], 'tenant', { required: true }),
   property: PROPERTY, unit: UNIT,
-  program: text(['Program', 'Program Type', 'Subsidy', 'Funding', 'Set-Aside']),
-  move_in: date(['Move-in', 'Move In', 'Move-In Date', 'Initial Certification'], 'move_in'),
-  last_cert: date(['Last Certification', 'Last Cert', 'Effective Date', 'Last Recert', 'Last AR', 'Certification Date']),
-  next_due: date(['Next Certification', 'Next Recert', 'Recert Due', 'Next AR Due', 'Anniversary', 'Next Due'], 'due_date'),
-  status: text(['Status', 'Certification Status', 'Cert Status'], 'status'),
-  notice_sent: date(['Notice Sent', 'First Notice', '120-Day Notice', 'Reminder Sent']),
+  program: text(['Program', 'Program Type', 'Subsidy', 'Funding', 'Set-Aside', 'Programm', 'Förderprogramm', 'Programme', 'Programa', 'Programma', '制度', '事業', '项目', '보조 프로그램', '프로그램']),
+  move_in: date(['Move-in', 'Move In', 'Move-In Date', 'Initial Certification', '入居日', '入住日期', '입주일'], 'move_in'),
+  last_cert: date(['Last Certification', 'Last Cert', 'Effective Date', 'Last Recert', 'Last AR', 'Certification Date', 'Letzte Prüfung', 'Dernière certification', 'Última certificación', 'Última certificação', 'Ultima certificazione', '前回申告日', '前回認定日', '上次认证日期', '최근 인증일']),
+  next_due: date(['Next Certification', 'Next Recert', 'Recert Due', 'Next AR Due', 'Anniversary', 'Next Due', 'Nächste Prüfung', 'Prochaine certification', 'Próxima certificación', 'Próxima certificação', 'Prossima certificazione', '次回申告期限', '申告期限', '下次认证日期', '다음 인증일'], 'due_date'),
+  status: text(['Status', 'Certification Status', 'Cert Status', '状況', '申告状況'], 'status'),
+  notice_sent: date(['Notice Sent', 'First Notice', '120-Day Notice', 'Reminder Sent', 'Erste Erinnerung', 'Premier avis', 'Primer aviso', 'Primeiro aviso', 'Primo avviso', '通知日', '通知送付日', '首次通知', '1차 통지']),
+  second_notice: date(['Second Notice', '90-Day Notice', '2nd Notice', 'Second Reminder', 'Zweite Erinnerung', 'Deuxième avis', 'Segundo aviso', 'Secondo avviso', '再通知日', '第二次通知', '2차 통지']),
+  third_notice: date(['Third Notice', '60-Day Notice', '3rd Notice', 'Final Notice', 'Dritte Erinnerung', 'Troisième avis', 'Tercer aviso', 'Terceiro aviso', 'Terzo avviso', '最終通知日', '第三次通知', '3차 통지']),
 });
 
 export const TURN_FIELDS = Object.freeze({

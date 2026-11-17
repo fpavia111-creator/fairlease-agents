@@ -1,0 +1,53 @@
+{
+  "name": "malachite-of-recerts",
+  "version": "0.1.0",
+  "description": "Malachite of Recerts: tracks affordable housing recertification dates against the schedule in your policy file: due dates, the notices your policy sends before each one, overdue and soon-due households, and households missing from the tracker or the rent roll; drafts reminder notices. It never decides eligibility or changes rent.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "malachite-of-recerts": "bin/malachite-of-recerts.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/malachite-of-recerts.js demo",
+    "eval": "node bin/malachite-of-recerts.js eval"
+  },
+  "dependencies": {
+    "keystone-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/keystone-agents.git",
+    "directory": "packages/malachite-of-recerts"
+  },
+  "homepage": "https://github.com/fpavia111-creator/keystone-agents/tree/main/packages/malachite-of-recerts#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/keystone-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "recertifications"
+  ]
+}

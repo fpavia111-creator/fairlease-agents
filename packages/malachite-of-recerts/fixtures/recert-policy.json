@@ -1,0 +1,10 @@
+{
+  "programs": {
+    "Section 8": { "frequency_months": 12, "notice_days": [120, 90, 60], "start_days_before": 120, "words": ["hud", "hap", "section 8"] },
+    "LIHTC": { "frequency_months": 12, "notice_days": [90], "start_days_before": 90, "words": ["tax credit"] },
+    "HOME": { "frequency_months": 12, "notice_days": [60], "start_days_before": 60 }
+  },
+  "due_soon_days": 30,
+  "market_units": ["110"],
+  "documents": ["Photo ID for every adult", "Recent pay stubs or benefit letters for every adult", "Recent bank statements", "Any other documents your caseworker listed"]
+}

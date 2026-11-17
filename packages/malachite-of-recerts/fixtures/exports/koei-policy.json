@@ -1,0 +1,1 @@
+{ "programs": { "公営住宅": { "frequency_months": 12, "notice_days": [60], "start_days_before": 60 } }, "due_soon_days": 30 }
