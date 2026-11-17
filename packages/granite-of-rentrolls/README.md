@@ -17,12 +17,13 @@ npx -y granite-of-rentrolls mcp --root ./rent-roll
 | `deposit_mismatch`, `deposit_not_cash` | Deposit held against the lease; letters of credit and guaranties expect no cash |
 | `area_mismatch`, `start_mismatch`, `end_mismatch`, `tenant_mismatch` | The rent roll and the lease disagree |
 | `holdover` | The lease ended and the unit is still shown occupied |
+| `lease_not_started` | Occupied, but the unit's only lease starts after the as-of date (early occupancy, or a start date to correct) |
 | `no_lease` | Occupied, but there is no lease for the unit in your file |
 | `vacant_with_lease` | Shown vacant while a lease is in force |
 | `missing_from_rent_roll` | A lease in force whose unit is not on the rent roll |
 | `rent_needs_index`, `rent_not_in_lease` | Granite could not work out the lease rent and says what is missing (status **review**) |
 
-Unit spellings are matched ("Suite 100", "Ste. 0100", "#100", "101号室"), and tenant names are compared without legal forms.
+Unit spellings are matched ("Suite 100", "Ste. 0100", "#100", "101号室"), and tenant names are compared without legal forms. Roommates listed together ("Ann Example, Bob Sample") match a lease in one of their names. Total and subtotal rows are not counted as units. When the rent roll and the leases cover more than one property, a unit is checked against its own property's lease.
 
 
 ## Files it reads

@@ -100,6 +100,19 @@ export const partyKey = (v) => {
 };
 export const sameParty = (a, b) => { const k = partyKey(a); return !!k && k === partyKey(b); };
 
+/** True when two name cells share a party: the whole names match, or one of several people listed together ("Ann Example, Bob Sample", "Bob & Ann") matches. */
+export const sharesParty = (a, b) => {
+  if (sameParty(a, b)) return true;
+  const parts = (v) => str(v).split(/\s*(?:,|&|;|\/|\+|\band\b|\bund\b|\bet\b|\by\b|\be\b)\s*/i).map((x) => x.trim()).filter((x) => partyKey(x));
+  // Only names of people are split: every part must be at least two words, so "Fable Books & Cafe" stays one business.
+  const people = (ps) => ps.length >= 2 && ps.every((x) => x.split(/\s+/).length >= 2);
+  const pa = parts(a), pb = parts(b); if (!people(pa) && !people(pb)) return false;
+  if ((pa.length >= 2 && !people(pa)) || (pb.length >= 2 && !people(pb))) return false;
+  return pa.some((x) => pb.some((y) => sameParty(x, y)));
+};
+/** A total or subtotal line in the unit column of an export, not a unit. */
+export const isTotalRow = (unit) => /^(sub ?|grand |property |building )?totals?\b|^summe\b|^gesamt|^total general|^sous[- ]total|^合計|^小計|^合计|^小计|^합계|^소계/i.test(str(unit));
+
 /** Group rows by a key function into a Map, keeping order. */
 export function groupBy(rows, key) {
   const m = new Map();
@@ -374,7 +387,7 @@ export function groupRentRoll(rows, { aliases = {} } = {}) {
   for (const r of rows) {
     let u = str(r.unit);
     if (!u && last && (str(r.charge_code) || num(r.charge_amount) !== null)) u = last;
-    if (!u) continue; last = u;
+    if (!u) continue; if (isTotalRow(u)) { last = null; continue; } last = u;
     const key = `${str(r.property).toLowerCase()}|${unitKey(u)}`;
     let e = m.get(key);
     if (!e) { e = { property: str(r.property), unit: u, tenant: '', lease_id: '', status: '', sqft: null, bedrooms: '', market_rent: null, rent: null, annual_rent: null, deposit: null, lease_start: null, lease_end: null, move_in: null, move_out: null, balance: null, charges: {}, rows: 0 }; m.set(key, e); }

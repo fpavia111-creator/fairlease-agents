@@ -29,8 +29,8 @@ export function checkRenewals({ leases, marketRows = null, offers = [], policy, 
   for (const l of leases.leases || []) {
     if (l.end > until || l.end < addDays(asOf, -366)) continue;
     const findings = []; const add = (code, detail, extra = {}) => findings.push({ code, detail, ...extra });
-    // The rent paid today: the base rent after the lease's own steps and escalations, when they can be worked out.
-    const stepped = rentAt(l, l.end < asOf ? l.end : asOf); const rent = stepped ?? num(l.rent && l.rent.monthly);
+    // The contract rent today: the base rent after the lease's own steps and escalations (a free-rent month does not make it zero).
+    const stepped = rentAt({ ...l, free_rent: [] }, l.end < asOf ? l.end : asOf); const rent = stepped ?? num(l.rent && l.rent.monthly);
     const m = market.find((u) => sameUnit(u.unit, l.unit)); const mkt = m ? m.market_rent : null;
     const mtm = l.end < asOf;
     const gone = !!(m && m.vacant);
