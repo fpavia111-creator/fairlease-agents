@@ -253,8 +253,8 @@ export const OWNER_LEDGER_FIELDS = Object.freeze({
   account: text(['GL Account', 'Account', 'Account Name'], 'account'),
   description: text(['Description', 'Memo', 'Notes'], 'description'),
   amount: money(['Amount', 'Net Amount', 'Total'], 'amount'),
-  income: money(['Income', 'Cash In', 'Receipts', 'Deposits']),
-  expense: money(['Expense', 'Expenses', 'Cash Out', 'Disbursements', 'Bills Paid']),
+  income: money(['Income', 'Cash In', 'Receipts', 'Deposits', 'Einnahmen', 'Recettes', 'Encaissements', 'Ingresos', 'Cobros', 'Receitas', 'Entrate', 'Incassi', '入金', '収入', '收入', '수입']),
+  expense: money(['Expense', 'Expenses', 'Cash Out', 'Disbursements', 'Bills Paid', 'Ausgaben', 'Dépenses', 'Décaissements', 'Gastos', 'Pagos', 'Despesas', 'Uscite', 'Spese', '出金', '支出', '지출']),
   reference: text(['Reference', 'Ref', 'Check #', 'Check Number'], 'reference'),
 });
 

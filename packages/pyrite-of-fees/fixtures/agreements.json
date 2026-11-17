@@ -1,0 +1,49 @@
+{
+  "agreements": [
+    {
+      "owner": "Maple Court Holdings LLC (fictional)",
+      "property": "Maple Court Apartments",
+      "management_fee_pct": 6,
+      "minimum_monthly": 1000,
+      "excluded_income": [
+        "security deposit",
+        "utility reimbursement"
+      ],
+      "leasing_fee": {
+        "pct_of_monthly_rent": 50
+      },
+      "renewal_fee": {
+        "flat": 150
+      },
+      "maintenance_markup_pct": 0,
+      "other_fees": []
+    },
+    {
+      "owner": "Pine Street Partners (fictional)",
+      "property": "Pine Street Duplex",
+      "management_fee_pct": 8,
+      "minimum_monthly": 150,
+      "leasing_fee": {
+        "flat": 500
+      },
+      "maintenance_markup_pct": 10,
+      "other_fees": []
+    },
+    {
+      "owner": "Harbor Point Owner LLC (fictional)",
+      "property": "Harbor Point Plaza",
+      "management_fee_pct": 4,
+      "excluded_income": [
+        "CAM",
+        "reimburs"
+      ],
+      "other_fees": [
+        {
+          "name": "Annual audit fee",
+          "amount": 1500
+        }
+      ]
+    }
+  ],
+  "tolerance": 1
+}

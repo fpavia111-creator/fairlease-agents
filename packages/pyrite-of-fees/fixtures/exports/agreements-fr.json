@@ -1,0 +1,5 @@
+{
+  "agreements": [
+    { "owner": "SCI Les Tilleuls (fictive)", "property": "Résidence des Tilleuls (fictive)", "management_fee_pct": 8, "excluded_income": ["dépôt de garantie"] }
+  ]
+}
