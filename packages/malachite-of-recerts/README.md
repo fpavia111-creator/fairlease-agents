@@ -18,9 +18,10 @@ npx -y malachite-of-recerts mcp --root ./recerts
 | `due_date_differs` | The tracker's next due date is more than a month away from last certification plus the program frequency |
 | `last_cert_missing`, `due_from_move_in`, `due_unknown` | No last certification; due date taken from the move-in anniversary (confirm it); no date to place it at all |
 | `program_unknown` | The program is not in your policy file, so no schedule applies |
+| `unit_listed_twice`, `last_cert_in_future` | The same unit on two tracker rows; a last certification dated after `as_of` |
 | `not_tracked`, `not_in_rent_roll`, `name_differs` | With a rent roll: an occupied unit missing from the tracker (list market-rate units in `market_units`), a tracked unit that is vacant, or a different name in the unit |
 
-Notices dated before the last certification belong to the previous cycle and do not count. Yardi and OneSite style headers (Effective Date, Next AR Due, 120-Day Notice …) and local headers such as 世帯, 前回申告日, 次回申告期限 are read.
+Notices dated before the last certification belong to the previous cycle and do not count. A next-due date that is not after the last certification was never moved forward: the computed date is used and the row is marked for review instead of overdue. A household whose status says moved out is closed and left alone. A notice already recorded is not put on the calendar again. Program words match whole words ("Homeless preference" is not HOME). With a property column in both files, units are matched inside their property, and market units match however they are written (`110`, `Apt 110`). Yardi and OneSite style headers (Effective Date, Next AR Due, 120-Day Notice …) and local headers such as 世帯, 前回申告日, 次回申告期限 are read.
 
 
 <!-- generated:start -->

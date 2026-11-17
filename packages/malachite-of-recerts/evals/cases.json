@@ -246,6 +246,75 @@
           "tracker"
         ]
       }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "malachite_draft_reminder",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "103"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "malachite_draft_reminder",
+      "approve": "Dana Example",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "103"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "malachite_draft_reminder",
+      "mode": "review",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "103"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "stale-due-date-moved-out-and-whole-word-programs",
+      "tool": "malachite_check",
+      "args": {
+        "tracker": "fixtures/recert-tracker-edge-cases.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "rent_roll": "fixtures/rent-roll-edge-cases.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "0 overdue",
+          "1 moved out and left alone",
+          "program_unknown",
+          "so 2027-03-01 is used",
+          "0 occupied unit(s) not in the tracker"
+        ],
+        "not_contains": [
+          "not_tracked",
+          "120-day recertification notice: Diaz"
+        ]
+      }
     }
   ]
 }
