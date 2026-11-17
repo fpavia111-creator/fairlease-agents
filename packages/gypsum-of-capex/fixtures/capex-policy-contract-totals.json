@@ -1,0 +1,5 @@
+{
+  "tolerance_pct": 5,
+  "committed_includes_spent": true,
+  "reserves": { "Replacement reserve": 100000 }
+}

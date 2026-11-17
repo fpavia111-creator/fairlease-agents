@@ -21,8 +21,10 @@ npx -y gypsum-of-capex mcp --root ./capex
 | `open_commitments_after_completion` | Marked complete with commitments still open |
 | `no_budget` | No approved budget |
 | `below_capitalization_threshold` (note) | Below your `capitalize_min`; the accountant decides |
+| `on_hold` (note) | Status is on hold, paused or deferred: not checked against its dates, but its remaining budget still counts against the reserve |
+| `budget_repeated` (note) | The same budget sits on several lines of one project and was added up; some exports repeat it on every line |
 
-With `reserves` (balance per funding source) in the policy, each reserve is compared with the remaining budgets of open projects it funds. Several rows per project (for example a job cost export by cost code) are added up. Status words are read in nine languages (Complete, Abgeschlossen, Terminé, 完了…).
+With `reserves` (balance per funding source) in the policy, each reserve is compared with the remaining budgets of open projects it funds. Several rows per project (for example a job cost export by cost code) are added up. Status words are read in nine languages (Complete, Abgeschlossen, Terminé, 完了…). A status that starts with a done word ("Complete - punch list", "Closed out") counts as complete; "Substantially complete" does not. If your Committed column is the whole contract value rather than what is still open, set `committed_includes_spent: true` in the policy so spending is not counted twice. Percentages are compared before rounding, so 5.004% over a 5% tolerance is over.
 
 
 <!-- generated:start -->

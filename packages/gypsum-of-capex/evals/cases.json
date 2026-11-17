@@ -224,6 +224,94 @@
           "projects"
         ]
       }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "gypsum_draft_request",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15",
+        "project": "P-01"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "gypsum_draft_request",
+      "approve": "Dana Example",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15",
+        "project": "P-01"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "gypsum_draft_request",
+      "mode": "review",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15",
+        "project": "P-01"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "on-hold-is-not-late-and-done-with-punch-list-is-done",
+      "tool": "gypsum_check",
+      "args": {
+        "projects": "fixtures/capex-edge-cases.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "on_hold",
+          "budget_repeated",
+          "120000 appears on 2 lines and was added up to 240000",
+          "forecast_over"
+        ],
+        "not_contains": [
+          "past_finish"
+        ],
+        "equals": {
+          "result.items.length": 4
+        }
+      }
+    },
+    {
+      "id": "committed-as-contract-total-is-not-double-counted",
+      "tool": "gypsum_explain",
+      "args": {
+        "projects": "fixtures/capex-edge-cases.csv",
+        "policy": "fixtures/capex-policy-contract-totals.json",
+        "as_of": "2026-11-15",
+        "project": "E-04"
+      },
+      "expect": {
+        "status": "executed",
+        "not_contains": [
+          "forecast_over"
+        ],
+        "equals": {
+          "result.item.forecast": 95000
+        }
+      }
     }
   ]
 }
