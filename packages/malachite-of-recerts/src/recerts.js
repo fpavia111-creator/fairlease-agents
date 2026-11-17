@@ -1,6 +1,6 @@
 // Affordable housing recertification dates against the schedule in the user's policy file. Pure functions.
 // Malachite tracks dates and notices only: it never reads income, decides eligibility or works out rent.
-import { str, isoDate, addDays, addMonths, daysBetween, foldText, sameUnit, sameParty } from 'keystone-core';
+import { str, isoDate, addDays, addMonths, daysBetween, foldText, unitKey, sameParty } from 'keystone-core';
 
 export const RECERT_POLICY_SCHEMA = Object.freeze({
   type: 'object', additionalProperties: false, required: ['programs'],
@@ -21,7 +21,8 @@ export const RECERT_POLICY_SCHEMA = Object.freeze({
 const fold = (s) => foldText(str(s)).toLowerCase();
 const IN_PROGRESS = /(progress|pending|scheduled|started|in bearbeitung|en cours|en curso|em andamento|in corso|受付中|進行中|处理中|진행)/;
 const STOP = new Set(['household', 'family', 'fictional', 'ficticio', 'ficticia', 'fiktiv', 'the', 'and', 'des', 'del', 'de', 'la', 'le', 'haushalt', 'hogar', 'famille', '世帯', '架空']);
-const tokens = (s) => fold(s).split(/[^\p{L}\p{N}]+/u).filter((t) => t.length >= 2 && !STOP.has(t));
+const TOK = new Map();
+const tokens = (s) => { const k = str(s); let t = TOK.get(k); if (!t) { t = fold(k).split(/[^\p{L}\p{N}]+/u).filter((x) => x.length >= 2 && !STOP.has(x)); if (TOK.size > 50000) TOK.clear(); TOK.set(k, t); } return t; };
 const samePerson = (a, b) => sameParty(a, b) || tokens(a).some((t) => t.length >= 3 && tokens(b).includes(t));
 
 export function programFor(name, policy) {
@@ -35,6 +36,10 @@ export function programFor(name, policy) {
 
 export function checkRecerts({ households, rentRoll = null, policy, asOf }) {
   const soon = policy.due_soon_days ?? 30; const items = []; const events = [];
+  // Rent roll rows and tracked households by unit, built once (large files).
+  const isOcc = (r) => str(r.tenant) && !/vacant|leer|vacante|vago|sfitto|空室|空置|공실/.test(fold(r.tenant)) && !/vacant/.test(fold(r.status));
+  const rrByUnit = new Map(); for (const r of rentRoll || []) { const k = unitKey(r.unit); if (!k || !isOcc(r)) continue; if (!rrByUnit.has(k)) rrByUnit.set(k, []); rrByUnit.get(k).push(r); }
+  const trackedUnits = new Set(households.map((h) => unitKey(h.unit)).filter(Boolean));
   for (const h of households) {
     const findings = []; const add = (code, detail, extra = {}) => findings.push({ code, detail, ...extra });
     const program = programFor(h.program, policy); const cfg = program ? policy.programs[program] : null;
@@ -68,10 +73,9 @@ export function checkRecerts({ households, rentRoll = null, policy, asOf }) {
       else if (cfg.start_days_before !== undefined && left <= cfg.start_days_before) add('in_window', `Due ${due}; your policy starts ${cfg.start_days_before} days before.`);
     }
     if (rentRoll) {
-      const rr = rentRoll.filter((r) => sameUnit(r.unit, h.unit));
-      const occ = rr.filter((r) => str(r.tenant) && !/vacant|leer|vacante|vago|sfitto|空室|空置|공실/.test(fold(r.tenant)) && !/vacant/.test(fold(r.status)));
+      const occ = rrByUnit.get(unitKey(h.unit)) || [];
       if (h.unit && !occ.length) add('not_in_rent_roll', `Unit ${str(h.unit)} is vacant or missing in the rent roll; the household may have moved out.`);
-      else if (h.unit && occ.length && !occ.some((r) => samePerson(r.tenant, h.household))) add('name_differs', `Rent roll shows ${occ.map((r) => str(r.tenant)).join(', ')} in unit ${str(h.unit)}.`);
+      else if (h.unit && occ.length && !occ.some((r) => samePerson(r.tenant, h.household))) { const names = [...new Set(occ.map((r) => str(r.tenant)))]; add('name_differs', `Rent roll shows ${names.slice(0, 5).join(', ')}${names.length > 5 ? ` and ${names.length - 5} more` : ''} in unit ${str(h.unit)}.`); }
     }
     const codes = findings.map((f) => f.code);
     const status = codes.includes('overdue') ? 'overdue' : codes.some((c) => ['notice_missing', 'not_in_rent_roll', 'due_unknown', 'program_unknown', 'due_date_differs', 'last_cert_missing'].includes(c)) ? 'review' : codes.includes('due_soon') ? 'due_soon' : codes.includes('in_window') ? 'in_window' : 'ok';
@@ -82,7 +86,7 @@ export function checkRecerts({ households, rentRoll = null, policy, asOf }) {
     for (const r of rentRoll) {
       if (!str(r.unit) || skip.has(fold(r.unit))) continue;
       if (!str(r.tenant) || /vacant|leer|vacante|vago|sfitto|空室|空置|공실/.test(fold(r.tenant)) || /vacant/.test(fold(r.status))) continue;
-      if (households.some((h) => sameUnit(h.unit, r.unit))) continue;
+      if (trackedUnits.has(unitKey(r.unit))) continue;
       items.push({ kind: 'untracked', id: `${str(r.unit)} ${str(r.tenant)}`, household: str(r.tenant), unit: str(r.unit), property: str(r.property) || null, program: null, last_cert: null, next_due: null, days_left: null, tracker_status: null, status: 'review', findings: [{ code: 'not_tracked', detail: `Occupied in the rent roll but not in the recertification tracker. If it is a market-rate unit, add it to market_units.` }] });
     }
   }

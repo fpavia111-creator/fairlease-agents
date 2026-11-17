@@ -67,8 +67,15 @@ export function prorateMonth(monthly, month, from, to) {
 // --------------------------------------------------------------- matching ----
 
 /** Key for a unit or suite: "Suite 100", "Ste. 100", "#100" and "100" give "100"; "Bldg A Unit 2" gives "a-2". */
+const UNIT_KEYS = new Map();
 export function unitKey(v) {
-  let t = str(v).toLowerCase().normalize('NFKC');
+  const raw = str(v); const hit = UNIT_KEYS.get(raw); if (hit !== undefined) return hit;
+  const k = unitKeyOf(raw);
+  if (UNIT_KEYS.size >= 100000) UNIT_KEYS.clear(); // a bounded memo: agents compare the same few thousand units many times
+  UNIT_KEYS.set(raw, k); return k;
+}
+function unitKeyOf(raw) {
+  let t = raw.toLowerCase().normalize('NFKC');
   t = t.replace(/\b(suite|ste|unit|apt|apartment|space|spc|shop|store|rm|room|no|nr|number|#|bldg|building|bld|floor|fl|lot)\b\.?/g, ' ').replace(/[#.,]/g, ' ');
   t = t.replace(/号室|号|室|호|房/g, ' ');
   const parts = t.split(/[\s\-/]+/).filter(Boolean).map((p) => p.replace(/^0+(?=\d)/, ''));
@@ -77,8 +84,12 @@ export function unitKey(v) {
 export const sameUnit = (a, b) => !!unitKey(a) && unitKey(a) === unitKey(b);
 
 /** Key for a tenant or owner name, without legal forms ("Acme Bagels, LLC" and "ACME BAGELS" match). */
-export const partyKey = (v) => normalizeName(stripLegalTail(str(v)));
-export const sameParty = (a, b) => !!partyKey(a) && partyKey(a) === partyKey(b);
+const PARTY_KEYS = new Map();
+export const partyKey = (v) => {
+  const raw = str(v); const hit = PARTY_KEYS.get(raw); if (hit !== undefined) return hit;
+  const k = normalizeName(stripLegalTail(raw)); if (PARTY_KEYS.size >= 100000) PARTY_KEYS.clear(); PARTY_KEYS.set(raw, k); return k;
+};
+export const sameParty = (a, b) => { const k = partyKey(a); return !!k && k === partyKey(b); };
 
 /** Group rows by a key function into a Map, keeping order. */
 export function groupBy(rows, key) {
