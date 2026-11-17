@@ -18,7 +18,9 @@ export const TRUST_POLICY_SCHEMA = Object.freeze({
 });
 
 const amountOf = (r, debitIn = false) => { const a = num(r.amount); if (a !== null) return a; const d = num(r.debit) || 0; const c = num(r.credit) || 0; return debitIn ? r2(d - c) : r2(c - d); };
-const refKey = (s) => foldText(str(s)).toLowerCase().replace(/^(chk|check|cheque|ck|no|nr|#)\s*/i, '').replace(/[^a-z0-9]/g, '');
+// "Check No. 001042", "CHK #1042" and "1042" are one reference: label words and leading zeros are dropped.
+const refKey = (s) => { let t = foldText(str(s)).toLowerCase().trim(); let prev; do { prev = t; t = t.replace(/^(chk|check|cheque|scheck|ck|no|nr|num|number|#)[\s.:#-]*/i, ''); } while (t !== prev); t = t.replace(/[^a-z0-9]/g, ''); return /^\d+$/.test(t) ? t.replace(/^0+(?=\d)/, '') : t; };
+const numeric = (k) => /^\d+$/.test(k);
 
 export function reconcileTrust({ bankRows, bookRows, ledgerRows = null, policy }) {
   const end = policy.statement_end; const win = policy.match_days ?? 10; const tol = policy.tolerance ?? 0.01;
@@ -48,14 +50,24 @@ export function reconcileTrust({ bankRows, bookRows, ledgerRows = null, policy }
     }
     return out.sort((p, q) => p.i - q.i);
   };
-  const pass = (refPass) => { for (const b of book) { if (matched.has(b.i) || (refPass && !b.key)) continue;
-    const c = candidates(b, refPass).filter((x) => !used.has(x.i) && Math.abs(x.amount - b.amount) < 0.005 && (refPass ? x.key === b.key : (!b.key || !x.key || x.key === b.key) && daysBetween(b.date, x.date) >= -3 && daysBetween(b.date, x.date) <= win))
+  // Third pass (loose): same amount and date window with references that differ, because a bank's trace number is not the
+  // book's receipt number. Two check numbers that differ are two checks, so that pair is never matched.
+  const refsFit = (b, x, loose) => !b.key || !x.key || x.key === b.key || (loose && !(numeric(b.key) && numeric(x.key) && b.amount < 0));
+  const pass = (refPass, loose = false) => { for (const b of book) { if (matched.has(b.i) || (refPass && !b.key)) continue;
+    const c = candidates(b, refPass).filter((x) => !used.has(x.i) && Math.abs(x.amount - b.amount) < 0.005 && (refPass ? x.key === b.key : refsFit(b, x, loose) && daysBetween(b.date, x.date) >= -3 && daysBetween(b.date, x.date) <= win))
       .sort((p, q) => Math.abs(daysBetween(b.date, p.date)) - Math.abs(daysBetween(b.date, q.date)))[0];
     if (c) { used.add(c.i); matched.set(b.i, c); } } };
-  pass(true); pass(false);
+  pass(true); pass(false); pass(false, true);
   const items = []; const push = (o) => items.push(o);
   // Book items not cleared by the statement end: outstanding checks and deposits in transit.
   const bookByKey = new Map(); for (const o of book) if (o.key) { if (!bookByKey.has(o.key)) bookByKey.set(o.key, []); bookByKey.get(o.key).push(o); }
+  // Same reference, same direction, different amount: the item cleared, for another amount than the book has.
+  // The book entry counts as cleared and only the difference is carried as a bank item the book lacks.
+  for (const x of bankIn.filter((y) => y.amount && y.key && !used.has(y.i) && (!opening || y.date > opening))) {
+    const other = (bookByKey.get(x.key) || []).find((o) => !matched.has(o.i) && Math.sign(o.amount) === Math.sign(x.amount) && Math.abs(o.amount - x.amount) >= 0.005);
+    if (!other) continue; used.add(x.i); matched.set(other.i, x);
+    push({ type: 'bank_not_in_book', date: x.date, reference: x.ref, description: x.desc, amount: r2(x.amount - other.amount), age_days: daysBetween(x.date, end), status: 'issue', findings: [{ code: 'cleared_for_different_amount', detail: `Reference ${x.ref} cleared for ${x.amount}; the book has ${other.amount} on ${other.date}. Correct the book entry or take it up with the bank.`, amount: r2(x.amount - other.amount) }] });
+  }
   for (const b of book) {
     const c = matched.get(b.i); if (c && c.date <= end) continue;
     const age = daysBetween(b.date, end); const findings = []; const kind = b.amount < 0 ? 'outstanding_check' : 'deposit_in_transit';
@@ -69,10 +81,13 @@ export function reconcileTrust({ bankRows, bookRows, ledgerRows = null, policy }
   // Bank items the book does not have: fees, interest, returned items.
   for (const x of bankIn.filter((y) => y.amount && !used.has(y.i) && (!opening || y.date > opening))) {
     const nsf = /nsf|returned|return item|rückbuchung|rücklastschrift|impayé|rejet|devuelto|devolvido|insoluto|不渡|退票|부도/i.test(x.desc);
-    push({ type: 'bank_not_in_book', date: x.date, reference: x.ref, description: x.desc, amount: x.amount, age_days: daysBetween(x.date, end), status: 'issue', findings: [{ code: nsf ? 'returned_item_not_in_book' : 'bank_item_not_in_book', detail: nsf ? `Returned payment ${x.amount} on ${x.date} is not in the book; reverse the receipt on the tenant's ledger.` : `${x.desc || 'Bank item'} ${x.amount} on ${x.date} is not in the book; record it (bank fees should not be paid from other people's money).` }] });
+    push({ type: 'bank_not_in_book', date: x.date, reference: x.ref, description: x.desc, amount: x.amount, age_days: daysBetween(x.date, end), status: 'issue', findings: [{ code: nsf ? 'returned_item_not_in_book' : 'bank_item_not_in_book', detail: nsf ? `Returned payment ${x.amount} on ${x.date} is not in the book; reverse the receipt on the tenant's ledger.` : `${x.desc || 'Bank item'} ${x.amount} on ${x.date} is not in the book; record it${x.amount < 0 ? " (bank fees should not be paid from other people's money)" : ''}.` }] });
   }
   // Balances.
-  const lastBal = [...bankIn].reverse().find((x) => x.balance !== null);
+  // The closing balance is the balance on the latest day, whichever way the statement is sorted.
+  const withBal = bankIn.filter((x) => x.balance !== null); const newestFirst = withBal.length > 1 && withBal[0].date > withBal.at(-1).date;
+  const maxDate = withBal.reduce((m, x) => (x.date > m ? x.date : m), ''); const lastDay = withBal.filter((x) => x.date === maxDate);
+  const lastBal = lastDay.length ? (newestFirst ? lastDay[0] : lastDay.at(-1)) : null;
   const bankEnd = policy.bank_ending_balance ?? (lastBal ? lastBal.balance : policy.bank_opening_balance !== undefined ? r2(policy.bank_opening_balance + bankIn.reduce((s, x) => s + x.amount, 0)) : null);
   const dit = r2(items.filter((i) => i.type === 'deposit_in_transit').reduce((s, i) => s + i.amount, 0));
   const os = r2(items.filter((i) => i.type === 'outstanding_check').reduce((s, i) => s + i.amount, 0));
@@ -87,6 +102,9 @@ export function reconcileTrust({ bankRows, bookRows, ledgerRows = null, policy }
   if (bankEnd === null) top.push({ code: 'bank_balance_unknown', detail: 'No ending balance: the statement has no balance column and the policy gives none.' });
   else if (Math.abs(three.bank_minus_book) > tol) top.push({ code: 'bank_book_difference', detail: `Adjusted bank ${adjusted} against book ${bookBal}: ${three.bank_minus_book}${Math.abs(three.unexplained_bank_book) > tol ? `, of which ${three.unexplained_bank_book} is not explained by bank items missing from the book` : ', all of it bank items missing from the book'}.`, amount: three.bank_minus_book });
   if (ledgerTotal !== null && Math.abs(three.book_minus_ledgers) > tol) top.push({ code: 'book_ledger_difference', detail: `Book ${bookBal} against owner and tenant ledgers ${ledgerTotal}: ${three.book_minus_ledgers}.`, amount: three.book_minus_ledgers });
+  const neg = (ledgers || []).filter((l) => l.balance < -tol);
+  if (neg.length) top.push({ code: 'negative_ledgers', detail: `${neg.length} ledger(s) are negative (${r2(neg.reduce((s2, l) => s2 + l.balance, 0))} in all); the totals can agree only because other people's money covers them.`, amount: r2(neg.reduce((s2, l) => s2 + l.balance, 0)) });
+  if (policy.bank_opening_balance !== undefined && bankEnd !== null) { const moved = r2(bankIn.filter((x) => !opening || x.date > opening).reduce((s2, x) => s2 + x.amount, 0)); const want = r2(policy.bank_opening_balance + moved); if (Math.abs(want - bankEnd) > tol) top.push({ code: 'statement_does_not_add_up', detail: `Opening balance ${policy.bank_opening_balance} plus the lines (${moved}) is ${want}, but the statement ends at ${bankEnd}: lines may be missing from the export (${r2(bankEnd - want)}).`, amount: r2(bankEnd - want) }); }
   if (ledgerTotal === null) top.push({ code: 'ledgers_missing', detail: 'No owner and tenant ledger balances given; this is a two-way reconciliation only.', severity: 'note' });
   const balanced = top.filter((f) => !f.severity).length === 0;
   items.unshift({ type: 'three_way', date: end, reference: 'three-way', description: 'Bank, book and ledgers', amount: three.bank_minus_book, age_days: null, status: balanced ? 'ok' : 'issue', findings: top });

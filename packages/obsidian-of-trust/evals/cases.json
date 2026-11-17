@@ -200,6 +200,51 @@
           "bank"
         ]
       }
+    },
+    {
+      "id": "check-number-spelling-trace-number-and-newest-first",
+      "tool": "obsidian_check",
+      "args": {
+        "bank": "fixtures/bank-statement-edge-cases.csv",
+        "book": "fixtures/trust-register-edge-cases.csv",
+        "ledgers": "fixtures/trust-ledgers-edge-cases.csv",
+        "policy": "fixtures/trust-policy-edge-cases.json"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "cleared_for_different_amount",
+          "negative_ledgers",
+          "Not reconciled"
+        ],
+        "not_contains": [
+          "All three agree",
+          "statement_does_not_add_up"
+        ],
+        "equals": {
+          "result.three_way.bank_statement_balance": 11200,
+          "result.three_way.bank_minus_book": -50,
+          "result.balanced": false,
+          "result.three_way.outstanding_checks": 0
+        }
+      }
+    },
+    {
+      "id": "explain-differently-cleared-check",
+      "tool": "obsidian_explain",
+      "args": {
+        "bank": "fixtures/bank-statement-edge-cases.csv",
+        "book": "fixtures/trust-register-edge-cases.csv",
+        "ledgers": "fixtures/trust-ledgers-edge-cases.csv",
+        "policy": "fixtures/trust-policy-edge-cases.json",
+        "reference": "3001"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "cleared for -1150; the book has -1100"
+        ]
+      }
     }
   ]
 }

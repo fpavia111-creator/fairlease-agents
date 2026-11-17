@@ -20,9 +20,12 @@ npx -y obsidian-of-trust mcp --root ./trust
 | `old_deposit_in_transit` | Recorded more than `transit_days` (default 5) before the end and not banked |
 | `possible_duplicate` | Same reference and amount as an entry that cleared |
 | `negative_ledger` | An owner or tenant ledger below zero |
+| `negative_ledgers` | On the three-way line: the account is not reconciled while any ledger is negative, even when the totals agree |
+| `cleared_for_different_amount` | A check or deposit cleared for another amount than the book has; only the difference is carried |
+| `statement_does_not_add_up` | With `bank_opening_balance`: opening plus the lines does not reach the closing balance, so lines may be missing from the export |
 | `cleared_after_end` (note), `ledgers_missing` (note) | Cleared after the statement end; no ledgers, so two-way only |
 
-Matching: same amount, same check number or reference when both have one, otherwise the nearest bank date within `match_days` (default 10). Registers use deposit/payment columns; set `book_debit_is_deposit` for a cash ledger in debit/credit form.
+Matching: same amount, same check number or reference when both have one, otherwise the nearest bank date within `match_days` (default 10). "Check No. 001042", "CHK #1042" and "1042" are one reference. A deposit still matches when the bank's trace number is not the book's receipt number; two different check numbers are never matched to each other. The closing balance is read from the latest day, whichever way the statement is sorted. Registers use deposit/payment columns; set `book_debit_is_deposit` for a cash ledger in debit/credit form.
 
 
 <!-- generated:start -->
