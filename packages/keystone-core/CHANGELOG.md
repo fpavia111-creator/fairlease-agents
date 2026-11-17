@@ -1,5 +1,13 @@
 # Changelog
 
+## Ver 2 review (unreleased)
+
+Found through the agents' hand-written domain tests:
+
+- The rent roll reader keeps units of different properties apart, skips "Total", "Subtotal" and "Grand Total" rows, and `sharesParty` reads roommates listed together as one household.
+- New `test/layouts.test.js`: each of the 25 named property export layouts is built from its own column names, put under a title block with the columns reordered, and must be recognised as itself with every column mapped.
+- The header row under a title block was only found when two headings were known words, so a report with one known heading and a column per month (a T-12, a budget) was read from the wrong row. Month headings now count.
+
 ## 0.1.0 (2026-11-17)
 
 First Keystone release. The core is the same engine used by the two earlier agent families built in this project (manifest, policy, approvals, audit log, MCP server, file readers in nine languages), carried over with its full history below, plus what property management needs:

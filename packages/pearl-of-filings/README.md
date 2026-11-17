@@ -40,7 +40,7 @@ Pearl of Filings demo (fictional payees) in <demo folder>
 ▶ Total 2026 payments per payee against a 2000 threshold given by the tax preparer
   status: executed  decision: allow
   10 payee(s) paid in 2026. 8 at or above your 2000 threshold (40450): 1 ready, 5 to fix, 2 to confirm with your tax preparer. 1 below the threshold, 1 paid only by excluded methods. 1 payment(s) had no readable date and were skipped. 1 payment(s) outside 2026 ignored.
-    Maple Court Holdings LLC     12000 1099-MISC  fix              address_missing
+    Maple Court Holdings LLC     12000 1099-MISC  fix              address_missing, owner_rents_basis
     FlowRight Plumbing LLC        4850 1099-NEC   fix              shared_tin
     Volt Electric                 3200 1099-NEC   fix              tin_missing, w9_missing, excluded_methods
     Sparkle Cleaning              2600 1099-NEC   fix              tin_invalid
@@ -57,7 +57,7 @@ Pearl of Filings demo (fictional payees) in <demo folder>
 
 ▶ Read a Spanish payment file and directory (Beneficiario, Importe, Forma de pago)
   status: executed  decision: allow
-  3 payee(s) paid in 2026. 2 at or above your 2000 threshold (9250): 2 ready, 0 to fix, 0 to confirm with your tax preparer. 1 below the threshold.
+  3 payee(s) paid in 2026. 2 at or above your 2000 threshold (9250): 1 ready, 0 to fix, 1 to confirm with your tax preparer. 1 below the threshold.
 
 ▶ Write the worklist
   status: executed  decision: allow

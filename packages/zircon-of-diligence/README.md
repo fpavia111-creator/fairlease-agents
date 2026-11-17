@@ -137,8 +137,8 @@ Where a layout says "checked", its column names were compared with the vendor's 
 | Column | Type | Also read as | For example, in other languages |
 |---|---|---|---|
 | `property` | text | Property, Property Name, Property Code, Prop, Prop Code, Building | Objekt, Immeuble, 物件, 物业 |
-| `account` (required) | text | GL Account, Account, Account Number, Account Code, Acct, GL Code | Konto, Compte, 勘定科目, 科目代码 |
-| `account_name` | text | Account Name, Account Description, GL Account Name, Description of Account, Acct Name | Kontobezeichnung, Libellé du compte, 勘定科目名, 科目名称 |
+| `account` | text | GL Account, Account, Account Number, Account Code, Acct, GL Code | Konto, Compte, 勘定科目, 科目代码 |
+| `account_name` | text | Account Name, Account Description, GL Account Name, Description of Account, Acct Name, Description | Kontobezeichnung, Libellé du compte, 勘定科目名, 科目名称 |
 | `period` | text | Period, Post Month, Month, Fiscal Period, Accounting Period | Zeitraum, Période, 期間, 期间 |
 | `date` | date | Date, Post Date, Posting Date, Transaction Date, Trans Date | Datum, Date, 日付, 日期 |
 | `amount` | amount | Amount, Net, Net Amount, Total | Betrag, Montant, 金額, 金额 |

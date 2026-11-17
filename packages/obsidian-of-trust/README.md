@@ -39,8 +39,8 @@ Obsidian of Trust demo (fictional trust account) in <demo folder>
 
 ▶ Three-way reconciliation at 2026-10-31
   status: executed  decision: allow
-  Trust account at 2026-10-31: bank 58846 + deposits in transit 1850 − outstanding checks 3405 = 57291; book 58666; ledgers 58666. Not reconciled. Adjusted bank 57291 against book 58666: -1375, all of it bank items missing from the book. 2 bank item(s) not in the book, 1 stale check(s), 1 negative ledger(s).
-    three_way           three-way                              -1375  bank_book_difference
+  Trust account at 2026-10-31: bank 58846 + deposits in transit 1850 − outstanding checks 3405 = 57291; book 58666; ledgers 58666. Not reconciled. Adjusted bank 57291 against book 58666: -1375, all of it bank items missing from the book. 1 ledger(s) are negative (-350 in all); the totals can agree only because other people's money covers them. 2 bank item(s) not in the book, 1 stale check(s), 1 negative ledger(s).
+    three_way           three-way                              -1375  bank_book_difference, negative_ledgers
     bank_not_in_book                                           -1350  returned_item_not_in_book
     bank_not_in_book                                             -25  bank_item_not_in_book
     ledger              Pine Street Partners (fictional)        -350  negative_ledger
@@ -59,7 +59,7 @@ Obsidian of Trust demo (fictional trust account) in <demo folder>
 
 ▶ Write the reconciliation
   status: executed  decision: allow
-  Worklist written (en): Trust account at 2026-10-31: bank 58846 + deposits in transit 1850 − outstanding checks 3405 = 57291; book 58666; ledgers 58666. Not reconciled. Adjusted bank 57291 against book 58666: -1375, all of it bank items missing from the book. 2 bank item(s) not in the book, 1 stale check(s), 1 negative ledger(s).
+  Worklist written (en): Trust account at 2026-10-31: bank 58846 + deposits in transit 1850 − outstanding checks 3405 = 57291; book 58666; ledgers 58666. Not reconciled. Adjusted bank 57291 against book 58666: -1375, all of it bank items missing from the book. 1 ledger(s) are negative (-350 in all); the totals can agree only because other people's money covers them. 2 bank item(s) not in the book, 1 stale check(s), 1 negative ledger(s).
 
 ▶ Agent tries to move money to cover the negative owner ledger
   status: blocked  decision: block

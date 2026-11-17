@@ -52,7 +52,7 @@ Malachite of Recerts demo (fictional households) in <demo folder>
 
 ▶ Read a Japanese public housing income report list (世帯, 前回申告日, 次回申告期限)
   status: executed  decision: allow
-  3 household(s) tracked: 0 overdue, 1 to review, 0 due within 30 days, 0 in the window your policy starts work. 1 notice(s) not recorded. 5 upcoming date(s).
+  3 household(s) tracked: 0 overdue, 1 to review, 0 due within 30 days, 0 in the window your policy starts work. 1 notice(s) not recorded. 4 upcoming date(s).
 
 ▶ Write the worklist
   status: executed  decision: allow
