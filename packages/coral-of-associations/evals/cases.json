@@ -253,6 +253,54 @@
           "policy"
         ]
       }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "coral_draft_notice",
+      "args": {
+        "policy": "fixtures/association-policy.json",
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "violations": "fixtures/violations-2026.csv",
+        "as_of": "2026-11-15",
+        "id": "A-102"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "coral_draft_notice",
+      "approve": "Dana Example",
+      "args": {
+        "policy": "fixtures/association-policy.json",
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "violations": "fixtures/violations-2026.csv",
+        "as_of": "2026-11-15",
+        "id": "A-102"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "coral_draft_notice",
+      "mode": "review",
+      "args": {
+        "policy": "fixtures/association-policy.json",
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "violations": "fixtures/violations-2026.csv",
+        "as_of": "2026-11-15",
+        "id": "A-102"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

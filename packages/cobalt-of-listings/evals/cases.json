@@ -253,6 +253,54 @@
           "listings"
         ]
       }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "cobalt_draft_correction",
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "policy": "fixtures/listing-policy.json",
+        "as_of": "2026-11-15",
+        "unit": "103"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "cobalt_draft_correction",
+      "approve": "Dana Example",
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "policy": "fixtures/listing-policy.json",
+        "as_of": "2026-11-15",
+        "unit": "103"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "cobalt_draft_correction",
+      "mode": "review",
+      "args": {
+        "listings": "fixtures/listings-2026-11.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "policy": "fixtures/listing-policy.json",
+        "as_of": "2026-11-15",
+        "unit": "103"
+      },
+      "expect": {
+        "status": "blocked"
+      }
     }
   ]
 }

@@ -22,6 +22,8 @@ npx -y chert-of-taxes mcp --root ./taxes
 Deadlines in `policy.appeal_deadlines` (per parcel) win over the file. Several rows per parcel and year are read as installments.
 
 
+Also reported: `due_date_missing` (an unpaid amount with no due date cannot be tracked) and, in `unmatched_policy_parcels`, any appeal deadline in your policy whose parcel number matches no parcel in the file. Parcel numbers are compared without punctuation, and tax years written `FY2026` or `2026/2027` are read as 2026.
+
 <!-- generated:start -->
 
 ## A demo run

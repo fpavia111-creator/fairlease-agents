@@ -1,4 +1,4 @@
-import { defineManifest, MODEL_PIN, LISTING_FIELDS, RENT_ROLL_FIELDS, RENT_ROLL_PROFILES, standardTools, draftPair, refusedTools, isoDate } from 'keystone-core';
+import { defineManifest, MODEL_PIN, LISTING_FIELDS, RENT_ROLL_FIELDS, RENT_ROLL_PROFILES, standardTools, draftPair, refusedTools, isoDate, unitKey } from 'keystone-core';
 import { readFileSync } from 'node:fs';
 import { checkListings, correctionText, LISTING_POLICY_SCHEMA } from './listings.js';
 
@@ -33,7 +33,7 @@ const pair = draftPair({
   args: { ...props, unit: { type: 'string', description: 'Unit from cobalt_check' }, to: { type: 'string', description: 'Leasing, marketing or vendor contact' }, by: { type: 'string', description: 'Date the corrections are needed by' }, from: { type: 'string', description: 'Your name and contact' } },
   build: (a, ctx) => {
     const r = run(a, ctx); const q = String(a.unit).trim().toLowerCase();
-    const it = r.items.find((i) => String(i.unit).toLowerCase() === q);
+    const it = r.items.find((i) => String(i.unit).toLowerCase() === q) || r.items.find((i) => unitKey(i.unit) && unitKey(i.unit) === unitKey(a.unit));
     if (!it) throw new Error(`unit "${a.unit}" has nothing listed and nothing to list`);
     if (it.status === 'ok') throw new Error(`unit ${it.unit} has nothing to correct`);
     return { id: it.unit, to: a.to || undefined, text: correctionText(it, a) };

@@ -26,6 +26,8 @@ Payments are applied oldest charge first. Assessment and late fee lines are reco
 Violations (from the violations log): `first_notice_late`, `second_notice_due` (cure period over with no follow-up), `fine_without_hearing` (when your policy holds a hearing before a fine), `stale`, `repeat` (same rule at the same unit within `repeat_days`), `dates_out_of_order`.
 
 
+A special assessment (`Special Assessment`, `Sonderumlage`, `derrama`, `cuota extraordinaria`) is added to the balance but never compared with the regular amount. An account whose first ledger line is later than `periods_from` is checked from that month (`account_starts_late`, a note). Units are matched across spellings ("Unit 12" is unit 12), for per-unit amounts and for repeat violations.
+
 <!-- generated:start -->
 
 ## A demo run

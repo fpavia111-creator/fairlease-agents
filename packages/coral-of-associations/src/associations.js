@@ -1,6 +1,6 @@
 // HOA and condo association checks: owner accounts against the assessment and collection policy, and violations against
 // the notice, cure and hearing steps. Pure functions. Coral echoes the steps the policy names; it decides nothing.
-import { r2, num, str, isoDate, addDays, daysBetween, foldText, partyKey } from 'keystone-core';
+import { r2, num, str, isoDate, addDays, daysBetween, foldText, partyKey, unitKey } from 'keystone-core';
 
 const YM = { type: 'string', pattern: '^\\d{4}-\\d{2}$' };
 export const ASSOCIATION_POLICY_SCHEMA = Object.freeze({
@@ -34,6 +34,7 @@ export const ASSOCIATION_POLICY_SCHEMA = Object.freeze({
 
 const DUES_WORDS = ['assessment', 'assessments', 'dues', 'hoa', 'hoa dues', 'condo fee', 'common charges', 'maintenance fee', 'hausgeld', 'wohngeld', 'charges de copropriete', 'appel de fonds', 'cuota', 'cuotas', 'cuota de comunidad', 'condominio', 'taxa condominial', 'spese condominiali', 'rata condominiale', '管理費', '修繕積立金', '物业费', '管理费', '관리비'];
 const LATE_WORDS = ['late', 'late fee', 'late charge', 'mahngebuhr', 'saumniszuschlag', 'penalite de retard', 'penalidad', 'recargo', 'multa por atraso', 'mora', 'penale', '延滞金', '滞纳金', '연체료'];
+const SPECIAL_WORDS = ['special', 'special assessment', 'sonderumlage', 'appel exceptionnel', 'derrama', 'cuota extraordinaria', 'extraordinaria', 'taxa extra', 'straordinaria', '一時金', '特别', '특별'];
 const fold = (s) => foldText(str(s)).toLowerCase();
 const hasWord = (text, words) => { const t = ` ${fold(text).replace(/[^\p{L}\p{N}]+/gu, ' ')} `; return words.some((w) => { const f = fold(w); return /[぀-鿿가-힯]/.test(f) ? t.includes(f) : t.includes(` ${f} `); }); };
 
@@ -69,24 +70,30 @@ function checkAccount(acct, policy, asOf, fromYm) {
   for (const r of acct.rows) {
     const d = isoDate(r.date); if (!d) continue;
     const c = num(r.charge); const p = num(r.payment); const type = str(r.type);
-    const kind = hasWord(type, lateWords) ? 'late_fee' : hasWord(type, dues) ? 'assessment' : 'other';
+    // A special assessment is its own charge: it is added to the balance but never compared with the regular amount.
+    const kind = hasWord(type, lateWords) ? 'late_fee' : hasWord(type, SPECIAL_WORDS) ? 'special' : hasWord(type, dues) ? 'assessment' : 'other';
     if (c !== null && Math.abs(c) > 0.004) { if (c > 0) charges.push({ date: d, amount: c, type, kind }); else payments.push({ date: d, amount: -c }); }
     if (p !== null && Math.abs(p) > 0.004) { if (p > 0) payments.push({ date: d, amount: p }); else charges.push({ date: d, amount: -p, type: type || 'returned payment', kind: 'other' }); }
     if (num(r.balance) !== null) lastBalance = num(r.balance);
   }
-  const expected = a.per_unit && acct.unit && a.per_unit[acct.unit] !== undefined ? a.per_unit[acct.unit] : a.amount;
+  const perUnit = new Map(Object.entries(a.per_unit || {}).map(([u, v]) => [unitKey(u), v])); const uk = unitKey(acct.unit);
+  const hasOwn = !!uk && perUnit.has(uk); const expected = hasOwn ? perUnit.get(uk) : a.amount;
   const freq = a.frequency || 'monthly'; const span = { monthly: 7, quarterly: 4, annual: 4 }[freq];
   const periodOf = (d) => (freq === 'monthly' ? d.slice(0, 7) : freq === 'annual' ? d.slice(0, 4) : `${d.slice(0, 4)}-Q${Math.floor((Number(d.slice(5, 7)) - 1) / 3) + 1}`);
   const applied = applyPayments(charges, payments);
   const lateFeeFor = (base) => r2((policy.late_fee?.flat || 0) + (base * (policy.late_fee?.pct || 0)) / 100);
   const periods = [];
-  const dues_ = dueDates(fromYm, asOf, freq, a.due_day || 1);
+  // An account whose first line is later than the first period started then (a sale, a new unit): the months before are not missing.
+  const firstRow = acct.rows.map((r) => isoDate(r.date)).filter(Boolean).sort()[0];
+  const startYm = firstRow && firstRow.slice(0, 7) > fromYm ? firstRow.slice(0, 7) : fromYm;
+  if (startYm !== fromYm) add('account_starts_late', `The first ledger line is ${firstRow}; periods before ${startYm} are not checked for this account.`, { severity: 'note' });
+  const dues_ = dueDates(startYm, asOf, freq, a.due_day || 1);
   for (const [idx, due] of dues_.entries()) {
     const pk = periodOf(due);
     const got = applied.charges.filter((c) => c.kind === 'assessment' && periodOf(c.date) === pk && c.date >= addDays(due, -span - 25));
     const amount = r2(got.reduce((s, c) => s + c.amount, 0));
     if (!got.length) { add('missing_assessment', `No assessment charged for ${pk} (expected ${expected}, due ${due}).`, { amount: expected }); periods.push({ period: pk, due, charged: 0, expected }); continue; }
-    if (Math.abs(amount - expected) > tol) add('wrong_amount', `${pk} assessment charged ${amount}; your policy sets ${expected}${a.per_unit && a.per_unit[acct.unit] !== undefined ? ` for unit ${acct.unit}` : ''}.`, { amount: r2(amount - expected) });
+    if (Math.abs(amount - expected) > tol) add('wrong_amount', `${pk} assessment charged ${amount}; your policy sets ${expected}${hasOwn ? ` for unit ${acct.unit}` : ''}.`, { amount: r2(amount - expected) });
     const lateDay = addDays(due, grace);
     const paidOn = got.every((c) => c.paid_on) ? got.map((c) => c.paid_on).sort().at(-1) : null;
     const late = paidOn ? paidOn > lateDay : asOf > lateDay;
@@ -125,10 +132,11 @@ function checkViolation(v, priorOf, policy, asOf) {
   const opened = isoDate(v.opened); const n1 = isoDate(v.notice_1); const n2 = isoDate(v.notice_2); const hearing = isoDate(v.hearing); const closedOn = isoDate(v.closed);
   const fine = num(v.fine) || 0; const st = fold(v.status);
   const closed = !!closedOn || /^(closed|cured|resolved|complete|completed|cerrado|resuelto|geschlossen|erledigt|clos|ferme|fechado|chiuso|完了|已关闭|종결)/.test(st);
-  const end = closedOn || asOf; const age = opened ? daysBetween(opened, end) : null;
+  const end = closedOn || asOf; const age = opened ? Math.max(0, daysBetween(opened, end)) : null;
   if (!opened) add('opened_unknown', 'No date the violation was opened or observed.');
   if (opened && !n1 && !closed && vp.notice_within_days !== undefined && daysBetween(opened, asOf) > vp.notice_within_days) add('first_notice_late', `Opened ${opened}; no first notice recorded and your policy sends one within ${vp.notice_within_days} days.`);
   if (n1 && n2 && n2 < n1) add('dates_out_of_order', `Second notice ${n2} is before the first notice ${n1}.`);
+  if (opened && closedOn && closedOn < opened) add('dates_out_of_order', `Closed ${closedOn}, before it was opened on ${opened}.`);
   if (n1 && !n2 && !closed && !hearing && vp.cure_days && addDays(n1, vp.cure_days) < asOf) add('second_notice_due', `First notice ${n1}; the ${vp.cure_days}-day cure period ended ${addDays(n1, vp.cure_days)} with no second notice, hearing or closure recorded.`);
   if (fine > 0 && vp.hearing_before_fine && (!hearing || hearing > asOf)) add('fine_without_hearing', `Fine of ${fine} recorded ${hearing ? `before the hearing on ${hearing}` : 'with no hearing date'}; your policy holds a hearing before a fine.`, { amount: fine });
   if (!closed && age !== null && vp.stale_days && age > vp.stale_days) add('stale', `Open ${age} days (your policy flags after ${vp.stale_days}).`);
@@ -147,7 +155,7 @@ export function checkAssociation({ ledger = null, violations = null, policy, asO
   if (ledger) {
     const accts = new Map();
     for (const r of ledger) {
-      const k = str(r.account) || (str(r.unit) ? `unit:${fold(r.unit)}` : `owner:${partyKey(r.owner)}`);
+      const k = str(r.account) || (unitKey(r.unit) ? `unit:${unitKey(r.unit)}` : `owner:${partyKey(r.owner)}`);
       if (!accts.has(k)) accts.set(k, { account: str(r.account), unit: str(r.unit), owner: str(r.owner), rows: [] });
       const a = accts.get(k); a.rows.push(r); if (!a.unit && str(r.unit)) a.unit = str(r.unit); if (!a.owner && str(r.owner)) a.owner = str(r.owner);
     }
@@ -157,7 +165,7 @@ export function checkAssociation({ ledger = null, violations = null, policy, asO
   }
   if (violations) {
     // Repeats are looked for among violations at the same unit for the same rule, grouped once (large logs).
-    const key = (v) => `${fold(v.unit)}\u0000${fold(v.type)}`; const groups = new Map();
+    const key = (v) => `${unitKey(v.unit) || fold(v.unit)}\u0000${fold(v.type)}`; const groups = new Map();
     for (const v of violations) { const k = key(v); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(v); }
     // Each group sorted by the date opened once; the earlier ones within repeat_days are a window, not a scan.
     const days = (policy.violations || {}).repeat_days; const opened = new Map(violations.map((v) => [v, isoDate(v.opened)]));

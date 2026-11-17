@@ -18,7 +18,13 @@ export const LISTING_POLICY_SCHEMA = Object.freeze({
 export const DEFAULT_REVIEW_WORDS = Object.freeze(['no children', 'no kids', 'adults only', 'adult only', 'singles only', 'perfect for singles', 'ideal for a single', 'perfect for a couple', 'no section 8', 'no vouchers', 'no housing assistance', 'english only', 'english speakers', 'christian', 'mature', 'no wheelchairs', 'able-bodied', 'must be employed', 'keine kinder', 'nur für paare', 'pas d’enfants', 'pas d\'enfants', 'sans enfants', 'sin niños', 'solo adultos', 'sem crianças', 'niente bambini', '子供不可', '外国人不可', '不接受儿童', '아이 불가']);
 const fold = (s) => foldText(str(s)).toLowerCase();
 const INACTIVE = /(inactive|off market|off-market|leased|rented|expired|draft|removed|archived|deleted|paused|unlisted|desactiv|inactiv|vermietet|loue|alquilad|alugad|affittat|成約|掲載終了|已下架|已出租|거래완료|비활성)/;
-const VACANT = /(vacant|leer|vacante|vago|sfitto|libre|空室|空置|공실)/;
+const VACANT = /(^| )(vacant|leer|leerstand|vacante|vago|sfitto|libre)( |$)|空室|空置|공실/;
+// A tenant cell is a vacancy marker only when that is all it says: "Joe Vacanti" is a resident.
+const VACANT_NAME = /^(vacant|vacant unit|vacancy|leer|leerstand|vacante|vago|sfitto|libre|空室|空置|공실)$/;
+const LEASED = /(^| )(rented|leased|pre ?leased|vermietet|loue|alquilado|alugado|affittato)( |$)|成約|已出租|계약완료/;
+const NOT_LEASED = /(^| )(unrented|unleased|not (rented|leased))( |$)/;
+const ON_NOTICE = /(^| )(notice|ntv|gekundigt|kundigung|preavis|preaviso|disdetta)( |$)|解約予告|退去予定|退租通知|퇴거 예정/;
+const NOT_RENTABLE = /(^| )(model|down|admin|employee|office|offline|off line|storage|musterwohnung)( |$)/;
 
 /** Bedrooms and bathrooms from "2/1", "2 BD / 1.5 BA", "2x1" or a plain number. */
 export function bedBath(v) {
@@ -36,7 +42,15 @@ export function checkListings({ listings, rentRoll, policy = {}, asOf }) {
   const words = [...new Map(raw.map((w) => [fold(w).replace(/[^\p{L}\p{N}'’ -]+/gu, ' '), w])).entries()];
   const ignore = new Set((policy.ignore_units || []).map(unitKey));
   const units = new Map();
-  const unit = (u, property) => { const k = unitKey(u); if (!units.has(k)) units.set(k, { key: k, unit: str(u), property: str(property), rr: [], ls: [] }); return units.get(k); };
+  // The property name only tells units apart when the rent roll has the same unit number under more than one property;
+  // otherwise names that differ a little between systems would stop every listing from matching.
+  const propsOf = new Map(); for (const r of rentRoll) { const k = unitKey(r.unit); if (!k) continue; if (!propsOf.has(k)) propsOf.set(k, new Set()); propsOf.get(k).add(fold(r.property)); }
+  const sameProp = (a, b) => a === b || (a && b && (a.includes(b) || b.includes(a)));
+  const unit = (u, property) => {
+    const uk = unitKey(u); const props = propsOf.get(uk); const fp = fold(property);
+    const k = props && props.size > 1 ? `${uk}\u0000${[...props].find((x) => sameProp(x, fp)) ?? fp}` : uk;
+    if (!units.has(k)) units.set(k, { key: k, unit: str(u), property: str(property), rr: [], ls: [] }); return units.get(k);
+  };
   for (const r of rentRoll) if (str(r.unit) && !ignore.has(unitKey(r.unit))) unit(r.unit, r.property).rr.push(r);
   for (const l of listings) if (str(l.unit) && !ignore.has(unitKey(l.unit))) unit(l.unit, l.property).ls.push(l);
   const items = [];
@@ -44,23 +58,30 @@ export function checkListings({ listings, rentRoll, policy = {}, asOf }) {
     const findings = []; const add = (code, detail, extra = {}) => findings.push({ code, detail, ...extra });
     const rr = u.rr.find((r) => str(r.tenant) || str(r.status)) || u.rr[0] || null;
     const moveOut = rr ? isoDate(rr.move_out) : null;
-    const vacant = rr && (!str(rr.tenant) || VACANT.test(fold(rr.tenant)) || VACANT.test(fold(rr.status)));
-    const occupancy = !rr ? 'unknown' : vacant ? 'vacant' : moveOut && moveOut >= asOf && moveOut <= addDays(asOf, noticeDays) ? 'notice' : moveOut && moveOut < asOf ? 'vacant' : 'occupied';
+    const st = rr ? fold(rr.status) : '';
+    const vacant = rr && (!str(rr.tenant) || VACANT_NAME.test(fold(rr.tenant)) || VACANT.test(st));
+    const leased = LEASED.test(st) && !NOT_LEASED.test(st);
+    const notRentable = !!rr && NOT_RENTABLE.test(st);
+    const open = !rr ? 'unknown' : vacant ? 'vacant' : moveOut && moveOut >= asOf && moveOut <= addDays(asOf, noticeDays) ? 'notice' : moveOut && moveOut < asOf ? 'vacant' : ON_NOTICE.test(st) && !moveOut ? 'notice' : 'occupied';
+    // Vacant or on notice with the next lease already signed ("Vacant Rented", "Notice Leased"): nothing to advertise.
+    const occupancy = notRentable ? 'not_rentable' : (open === 'vacant' || open === 'notice') && leased ? 'leased' : open;
     const active = u.ls.filter((l) => !INACTIVE.test(fold(l.status)));
-    if (occupancy === 'occupied' && !active.length) continue;
+    if ((occupancy === 'occupied' || occupancy === 'not_rentable') && !active.length) continue;
     const market = rr ? num(rr.market_rent) : null; const bb = rr ? bedBath(rr.bedrooms) : { beds: null, baths: null }; const sqft = rr ? num(rr.sqft) : null;
     const chans = active.map((l) => str(l.channel) || 'unnamed site');
     if (occupancy === 'vacant' || occupancy === 'notice') {
-      if (!active.length) add('not_listed', `${occupancy === 'vacant' ? 'Vacant' : `On notice (move-out ${moveOut})`} and not listed on any site.`);
+      if (!active.length) add('not_listed', `${occupancy === 'vacant' ? 'Vacant' : `On notice (move-out ${moveOut || 'date not given'})`} and not listed on any site.`);
       else { const miss = required.filter((c) => !chans.some((x) => fold(x).includes(c.f))).map((c) => c.name); if (miss.length) add('missing_on_channel', `Not listed on ${miss.join(', ')}.`); }
     }
+    if (occupancy === 'leased' && active.length) add('listed_but_leased', `Already leased (rent roll status "${str(rr.status)}") but still listed on ${chans.join(', ')}.`);
+    if (occupancy === 'not_rentable' && active.length) add('listed_not_rentable', `Rent roll status is "${str(rr.status)}", but the unit is listed on ${chans.join(', ')}.`);
     if (occupancy === 'occupied' && active.length) add('listed_while_occupied', `Occupied with no move-out in the next ${noticeDays} days, but listed on ${chans.join(', ')}.`);
     if (occupancy === 'unknown' && active.length) add('not_in_rent_roll', `Listed on ${chans.join(', ')} but the unit is not in the rent roll.`);
     const seen = new Map();
     for (const l of active) { const k = fold(l.channel); seen.set(k, (seen.get(k) || 0) + 1); }
     for (const [k, n] of seen) if (n > 1) add('duplicate_listing', `${n} active listings on ${active.find((l) => fold(l.channel) === k).channel || 'one site'}.`);
-    const rents = active.map((l) => ({ ch: str(l.channel) || 'unnamed site', v: num(l.rent) })).filter((x) => x.v !== null);
-    if (market) for (const x of rents) { const gap = r2(((x.v - market) / market) * 100); if (Math.abs(gap) > tol) add('rent_differs', `${x.ch} asks ${x.v}; the rent roll's market rent is ${market} (${gap > 0 ? '+' : ''}${gap}%).`, { amount: r2(x.v - market) }); }
+    const rents = active.map((l) => ({ ch: str(l.channel) || 'unnamed site', v: num(l.rent) })).filter((x) => x.v !== null && x.v > 0);
+    if (market) for (const x of rents) { const rawGap = ((x.v - market) / market) * 100; const gap = r2(rawGap); if (Math.abs(rawGap) > tol + 1e-9) add('rent_differs', `${x.ch} asks ${x.v}; the rent roll's market rent is ${market} (${gap > 0 ? '+' : ''}${gap}%).`, { amount: r2(x.v - market) }); }
     if (new Set(rents.map((x) => x.v)).size > 1) add('rent_inconsistent', `Asking rent differs between sites: ${rents.map((x) => `${x.ch} ${x.v}`).join(', ')}.`);
     const deps = active.map((l) => ({ ch: str(l.channel), v: num(l.deposit) })).filter((x) => x.v !== null);
     if (new Set(deps.map((x) => x.v)).size > 1) add('deposit_inconsistent', `Deposit differs between sites: ${deps.map((x) => `${x.ch} ${x.v}`).join(', ')}.`);
@@ -102,7 +123,7 @@ export function correctionText(it, a = {}) {
 
 # Listing corrections: unit ${it.unit}${it.property ? `, ${it.property}` : ''}
 
-${it.occupancy === 'vacant' ? 'Unit is vacant.' : it.occupancy === 'notice' ? `Current resident moves out ${it.move_out}.` : it.occupancy === 'occupied' ? 'Unit is occupied.' : 'Unit is not in the rent roll.'}${it.market_rent ? ` Market rent in the rent roll: ${it.market_rent}.` : ''}
+${it.occupancy === 'vacant' ? 'Unit is vacant.' : it.occupancy === 'notice' ? `Current resident ${it.move_out ? `moves out ${it.move_out}` : 'has given notice'}.` : it.occupancy === 'occupied' ? 'Unit is occupied.' : it.occupancy === 'leased' ? 'Unit is already leased.' : it.occupancy === 'not_rentable' ? 'Unit is not for rent (model, down or staff unit).' : 'Unit is not in the rent roll.'}${it.market_rent ? ` Market rent in the rent roll: ${it.market_rent}.` : ''}
 
 Please check and correct:
 

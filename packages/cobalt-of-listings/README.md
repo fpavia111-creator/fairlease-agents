@@ -24,6 +24,8 @@ npx -y cobalt-of-listings mcp --root ./listings
 Listings marked leased, rented, expired, inactive or similar (in nine languages) are not counted as active. The review list holds phrases that fair housing guidance often asks people to look at again (for example "adults only", "no section 8", "sin niños"); set `review_words` to use your own list. **Cobalt only points to wording; it does not judge whether an advertisement is lawful.**
 
 
+Rent roll statuses are read the way the systems write them: `Vacant Rented` or `Notice Leased` means the next lease is signed, so no listing is expected and one still running is `listed_but_leased`; `Notice` with no move-out date still expects a listing; `Model`, `Down`, `Admin` and `Employee` units are left out unless they are advertised (`listed_not_rentable`). A resident named "Vacanti" is a resident. A listing with no price or a zero price is not compared with the market rent. When the rent roll has the same unit number under two properties, the property name tells them apart.
+
 <!-- generated:start -->
 
 ## A demo run
