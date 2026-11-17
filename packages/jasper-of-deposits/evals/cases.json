@@ -289,6 +289,45 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "unnamed-deduction-goes-to-latest-move-out-and-late-payment-counts",
+      "tool": "jasper_explain",
+      "args": {
+        "move_outs": "fixtures/move-outs-edge-cases.json",
+        "deductions": "fixtures/deductions-edge-cases.csv",
+        "ledger": "fixtures/final-ledger-edge-cases.csv",
+        "as_of": "2026-11-15",
+        "unit": "112"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "deduction_tenant_assumed"
+        ]
+      }
+    },
+    {
+      "id": "two-move-outs-one-unit-not-double-charged",
+      "tool": "jasper_check",
+      "args": {
+        "move_outs": "fixtures/move-outs-edge-cases.json",
+        "deductions": "fixtures/deductions-edge-cases.csv",
+        "ledger": "fixtures/final-ledger-edge-cases.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "duplicate_deduction",
+          "credit_balance",
+          "deduction_tenant_assumed"
+        ],
+        "equals": {
+          "result.items.length": 3,
+          "result.unmatched_deductions.length": 0
+        }
+      }
     }
   ]
 }

@@ -1,0 +1,8 @@
+{
+  "rules": { "return_days": 30, "deduct_unpaid_balance": true, "require_evidence": true },
+  "move_outs": [
+    { "unit": "112", "tenant": "Ann Example", "move_out": "2026-03-31", "deposit_held": 1500, "returned_on": "2026-04-15", "returned_amount": 1500 },
+    { "unit": "112", "tenant": "Bo Sample", "move_out": "2026-10-31", "deposit_held": 1600, "move_in": "2026-04-15", "forwarding_address": "5 Elm Court, Riverton (fictional)" },
+    { "unit": "118", "tenant": "Cy Placeholder", "move_out": "2026-10-31", "deposit_held": 1400, "move_in": "2025-11-01", "forwarding_address": "9 Oak Road, Riverton (fictional)" }
+  ]
+}

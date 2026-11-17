@@ -20,13 +20,17 @@ npx -y jasper-of-deposits mcp --root ./move-outs
 | `useful_life_proration` | A replacement charged at its age: amount × (1 − age ÷ useful life) |
 | `unpaid_balance`, `tenant_owes` | From the final ledger; deductions above the deposit |
 | `deposit_mismatch`, `deposit_unknown`, `no_forwarding_address` | Data to fix before a statement can go |
+| `credit_balance` | The ledger shows the tenant paid more than was charged; the credit is added to the refund |
+| `duplicate_deduction` | The same item and amount entered more than once |
+| `deduction_tenant_assumed` | A deduction names no tenant and the unit has several move-outs; it is put on the latest one for you to confirm |
+| `dates_out_of_order` | Move-in after move-out, or returned before move-out; no interest is worked out on such dates |
 
 
 ## Files it reads
 
 - **Move-outs** (`move_outs` schema): `rules.return_days` is required and has no default, because the deadline is set by your law or policy. Optional `interest_pct`, `deduct_unpaid_balance`, `require_evidence`, `due_soon_days`, `wear_words`. Each move-out: unit, date, deposit held, move-in, forwarding address, and `returned_on` / `returned_amount` once sent.
 - **Deductions**: unit, item, category, amount, optional age and useful life in years, and a support reference. Local headers are read (Einheit, Position, Betrag, Belege; Unidad, Concepto, Importe; 項目, 金額 …).
-- **Leases** and a **final ledger** are optional.
+- **Leases** and a **final ledger** are optional. From the ledger, charges count up to the move-out date and payments up to `as_of`, so a late payment lowers the balance while move-out charges posted to the ledger are not counted a second time next to the deductions file.
 
 <!-- generated:start -->
 

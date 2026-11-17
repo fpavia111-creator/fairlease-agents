@@ -1,0 +1,6 @@
+Unit,Tenant,Date,Charge Code,Description,Charges,Payments
+112,Bo Sample,2026-10-01,RENT,Rent,1600.00,
+112,Bo Sample,2026-11-03,PMT,Payment,,1000.00
+112,Bo Sample,2026-11-05,DMG,Cleaning charge,250.00,
+118,Cy Placeholder,2026-10-01,RENT,Rent,1400.00,
+118,Cy Placeholder,2026-10-02,PMT,Payment,,1500.00
