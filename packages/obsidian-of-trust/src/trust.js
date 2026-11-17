@@ -29,11 +29,27 @@ export function reconcileTrust({ bankRows, bookRows, ledgerRows = null, policy }
   const bankIn = bank.filter((x) => x.date <= end);
   // Match: same amount; same reference when both have one, else nearest date within the window (bank on or after the book date, less 3 days).
   const used = new Set(); const matched = new Map();
-  // Bank lines by amount in cents (the cent either side too), so each book line only looks at lines of the same amount.
-  const byCents = new Map(); for (const x of bank) { const c = Math.round(x.amount * 100); if (!byCents.has(c)) byCents.set(c, []); byCents.get(c).push(x); }
-  const sameAmount = (amt) => { const c = Math.round(amt * 100); return [c - 1, c, c + 1].flatMap((k) => byCents.get(k) || []).sort((p, q) => p.i - q.i); };
-  const pass = (byRef) => { for (const b of book) { if (matched.has(b.i)) continue;
-    const c = sameAmount(b.amount).filter((x) => !used.has(x.i) && Math.abs(x.amount - b.amount) < 0.005 && (byRef ? b.key && x.key === b.key : (!b.key || !x.key || x.key === b.key) && daysBetween(b.date, x.date) >= -3 && daysBetween(b.date, x.date) <= win))
+  // Bank lines by amount in cents (the cent either side too), by reference and by date, so each
+  // book line only looks at lines that could match it. Ties still go to the earliest bank line.
+  const cents = (amt) => Math.round(amt * 100);
+  const byRef = new Map(); const byCents = new Map();
+  for (const x of bank) {
+    const c = cents(x.amount); if (!byCents.has(c)) byCents.set(c, []); byCents.get(c).push(x);
+    if (x.key) { const k = `${c}|${x.key}`; if (!byRef.has(k)) byRef.set(k, []); byRef.get(k).push(x); }
+  }
+  for (const list of byCents.values()) list.sort((p, q) => p.date.localeCompare(q.date) || p.i - q.i);
+  const firstOnOrAfter = (list, d) => { let lo = 0, hi = list.length; while (lo < hi) { const m = (lo + hi) >> 1; if (list[m].date < d) lo = m + 1; else hi = m; } return lo; };
+  const candidates = (b, refPass) => {
+    const c = cents(b.amount); const out = [];
+    for (const k of [c - 1, c, c + 1]) {
+      if (refPass) { out.push(...(byRef.get(`${k}|${b.key}`) || [])); continue; }
+      const list = byCents.get(k) || []; const from = addDays(b.date, -3); const to = addDays(b.date, win);
+      for (let j = firstOnOrAfter(list, from); j < list.length && list[j].date <= to; j++) out.push(list[j]);
+    }
+    return out.sort((p, q) => p.i - q.i);
+  };
+  const pass = (refPass) => { for (const b of book) { if (matched.has(b.i) || (refPass && !b.key)) continue;
+    const c = candidates(b, refPass).filter((x) => !used.has(x.i) && Math.abs(x.amount - b.amount) < 0.005 && (refPass ? x.key === b.key : (!b.key || !x.key || x.key === b.key) && daysBetween(b.date, x.date) >= -3 && daysBetween(b.date, x.date) <= win))
       .sort((p, q) => Math.abs(daysBetween(b.date, p.date)) - Math.abs(daysBetween(b.date, q.date)))[0];
     if (c) { used.add(c.i); matched.set(b.i, c); } } };
   pass(true); pass(false);
