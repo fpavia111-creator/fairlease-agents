@@ -1,6 +1,6 @@
 # Agents Keystone pour la gestion immobilière
 
-Trente petits agents MCP pour la gestion immobilière, pensés pour les gestionnaires d'immobilier commercial et de parcs résidentiels de taille moyenne. Chacun a **une seule tâche**, par exemple contrôler l'état locatif face aux baux, rapprocher un compte de gestion pour compte de tiers, recalculer les charges (CAM) ou relancer les attestations d'assurance des locataires, et ne peut rien faire en dehors. Ils lisent les fichiers que vous exportez déjà d'AppFolio, Yardi, Buildium, Rent Manager et d'autres systèmes, écrivent leurs rapports sur votre machine et attendent une personne nommée avant tout ce qui déplace de l'argent, envoie un message ou modifie un système en production.
+Trente petits agents MCP pour la gestion immobilière, pensés pour les gestionnaires d'immobilier commercial et de parcs résidentiels de taille moyenne. Chacun a **une seule tâche**, par exemple contrôler l'état locatif face aux baux, rapprocher un compte de gestion pour compte de tiers, recalculer les charges (CAM) ou relancer les attestations d'assurance des locataires, et ne peut rien faire en dehors. Ils lisent les fichiers que vous exportez déjà d'AppFolio, Yardi, Buildium, Rent Manager et d'autres systèmes, écrivent leurs rapports sur votre machine, ne déplacent jamais d'argent et ne modifient jamais un système en production, et attendent une personne nommée avant qu'une lettre ou un avis ne parte.
 
 Licence MIT · Node 20 ou plus récent · fichiers locaux uniquement · aucun identifiant · aucune dépendance
 
@@ -16,7 +16,7 @@ node packages/granite-of-rentrolls/bin/granite-of-rentrolls.js demo     # état 
 node packages/obsidian-of-trust/bin/obsidian-of-trust.js demo           # rapprochement à trois voies d'un compte mandant, données fictives
 ```
 
-Une fois les paquets publiés sur npm, la même chose fonctionne avec `npx -y granite-of-rentrolls demo`. Chaque agent a un `demo` sur des fichiers fictifs, un `eval` qui le vérifie sur ses propres cas de test, un `inspect <fichier>` qui montre comment les colonnes ont été lues, et un serveur MCP (`<agent> mcp --root <dossier>`) pour Claude Desktop, Claude Code, Cursor et d'autres hôtes MCP. Avec `--lang fr`, les rapports sortent en français (neuf langues disponibles). Le README de chaque agent liste ses outils.
+Une fois les paquets publiés sur npm, la même chose fonctionne avec `npx -y granite-of-rentrolls demo`. Chaque agent a un `demo` sur des fichiers fictifs, un `eval` qui le vérifie sur ses propres cas de test, un `inspect <fichier>` qui montre comment les colonnes ont été lues, et un serveur MCP (`<agent> mcp --root <dossier>`) pour Claude Desktop, Claude Code, Cursor et d'autres hôtes MCP. Avec `--lang fr`, les titres, intertitres et noms de colonnes des rapports ainsi que la page d'approbation sortent en français (neuf langues disponibles) ; les phrases des constats et les résultats des outils restent en anglais. Le README de chaque agent liste ses outils.
 
 ## Les agents
 

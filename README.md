@@ -1,6 +1,6 @@
 # Keystone property management agents
 
-Thirty small MCP agents for property management, aimed at commercial and mid-size residential operators. Each one owns **one job**, such as checking a rent roll against the leases, reconciling a trust account, recomputing CAM or chasing tenant insurance certificates, and cannot act outside it. They read the files you already export from AppFolio, Yardi, Buildium, Rent Manager and other systems, write reports on your machine, and wait for a named person before anything that moves money, sends a message or changes a live system.
+Thirty small MCP agents for property management, aimed at commercial and mid-size residential operators. Each one owns **one job**, such as checking a rent roll against the leases, reconciling a trust account, recomputing CAM or chasing tenant insurance certificates, and cannot act outside it. They read the files you already export from AppFolio, Yardi, Buildium, Rent Manager and other systems, write reports on your machine, never move money or change a live system, and wait for a named person before any letter or notice goes out.
 
 MIT licence · Node 20 or newer · local files only · no credentials · no dependencies
 
@@ -16,7 +16,7 @@ node packages/granite-of-rentrolls/bin/granite-of-rentrolls.js demo     # rent r
 node packages/obsidian-of-trust/bin/obsidian-of-trust.js demo           # trust account three-way reconciliation, fictional data
 ```
 
-Once the packages are on npm, the same works as `npx -y granite-of-rentrolls demo`. Every agent has a `demo` that runs on fictional files, an `eval` that checks it against its own test cases, an `inspect <file>` that shows how a file's columns were read, and an MCP server (`<agent> mcp --root <folder>`) for Claude Desktop, Claude Code, Cursor and other MCP hosts. Reports come out in nine languages with `--lang` (en, de, fr, es, pt-BR, it, ja, zh-Hans, ko). Each agent's README lists its tools.
+Once the packages are on npm, the same works as `npx -y granite-of-rentrolls demo`. Every agent has a `demo` that runs on fictional files, an `eval` that checks it against its own test cases, an `inspect <file>` that shows how a file's columns were read, and an MCP server (`<agent> mcp --root <folder>`) for Claude Desktop, Claude Code, Cursor and other MCP hosts. With `--lang` (en, de, fr, es, pt-BR, it, ja, zh-Hans, ko) the report titles, headings and column labels and the approvals page come out in that language; the finding sentences and tool results stay in English. Each agent's README lists its tools.
 
 ## The agents
 

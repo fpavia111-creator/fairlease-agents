@@ -1,6 +1,6 @@
 # Keystone 부동산 관리 에이전트
 
-부동산 관리를 위한 작은 MCP 에이전트 30개입니다. 상업용 부동산과 중간 규모 주거용 부동산을 관리하는 회사를 위해 만들었습니다. 각 에이전트는 **한 가지 일만** 맡습니다. 예를 들어 렌트롤을 임대차 계약과 대조하기, 예치금 계좌 대사, 공용 관리비(CAM) 재계산, 임차인 보험 증명서 독촉 같은 일입니다. 맡은 일 밖의 일은 할 수 없습니다. AppFolio, Yardi, Buildium, Rent Manager 등에서 이미 내보내는 파일을 읽고, 보고서를 사용자 컴퓨터에 저장하며, 돈을 움직이거나 메시지를 보내거나 운영 시스템을 바꾸는 일 앞에서는 이름이 확인된 담당자를 기다립니다.
+부동산 관리를 위한 작은 MCP 에이전트 30개입니다. 상업용 부동산과 중간 규모 주거용 부동산을 관리하는 회사를 위해 만들었습니다. 각 에이전트는 **한 가지 일만** 맡습니다. 예를 들어 렌트롤을 임대차 계약과 대조하기, 예치금 계좌 대사, 공용 관리비(CAM) 재계산, 임차인 보험 증명서 독촉 같은 일입니다. 맡은 일 밖의 일은 할 수 없습니다. AppFolio, Yardi, Buildium, Rent Manager 등에서 이미 내보내는 파일을 읽고, 보고서를 사용자 컴퓨터에 저장합니다. 돈을 움직이거나 운영 시스템을 바꾸는 일은 절대 하지 않으며, 서신이나 통지를 보내기 전에는 이름이 확인된 담당자를 기다립니다.
 
 MIT 라이선스 · Node 20 이상 · 로컬 파일만 사용 · 인증 정보 불필요 · 의존성 없음
 
@@ -16,7 +16,7 @@ node packages/granite-of-rentrolls/bin/granite-of-rentrolls.js demo     # 렌트
 node packages/obsidian-of-trust/bin/obsidian-of-trust.js demo           # 예치금 계좌 3자 대사, 가상 데이터
 ```
 
-패키지가 npm에 올라간 뒤에는 `npx -y granite-of-rentrolls demo`로도 됩니다. 모든 에이전트에는 가상 파일로 실행하는 `demo`, 자체 테스트 케이스로 확인하는 `eval`, 파일의 열을 어떻게 읽었는지 보여 주는 `inspect <파일>`, 그리고 Claude Desktop, Claude Code, Cursor 등 MCP 호스트용 MCP 서버(`<agent> mcp --root <폴더>`)가 있습니다. `--lang ko`를 주면 보고서가 한국어로 나옵니다(9개 언어 지원). 각 에이전트의 README에 도구 목록이 있습니다.
+패키지가 npm에 올라간 뒤에는 `npx -y granite-of-rentrolls demo`로도 됩니다. 모든 에이전트에는 가상 파일로 실행하는 `demo`, 자체 테스트 케이스로 확인하는 `eval`, 파일의 열을 어떻게 읽었는지 보여 주는 `inspect <파일>`, 그리고 Claude Desktop, Claude Code, Cursor 등 MCP 호스트용 MCP 서버(`<agent> mcp --root <폴더>`)가 있습니다. `--lang ko`를 주면 보고서의 제목, 소제목, 열 이름과 승인 페이지가 한국어로 나옵니다(9개 언어 지원). 지적 사항 문장과 도구 결과는 영어로 남습니다. 각 에이전트의 README에 도구 목록이 있습니다.
 
 ## 에이전트
 

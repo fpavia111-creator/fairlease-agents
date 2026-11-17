@@ -1,6 +1,6 @@
 # Keystone 物业管理智能体
 
-三十个用于物业管理的小型 MCP 智能体，面向商业物业和中等规模住宅的管理方。每个智能体 **只负责一项工作**，例如把租金清单（rent roll）与租约核对、对账托管账户、重算公共区域费用（CAM）或催收租户的保险证明，且不能越出这项工作。它们读取您已经从 AppFolio、Yardi、Buildium、Rent Manager 等系统导出的文件，在您的电脑上生成报告，在任何动用资金、发送消息或修改线上系统的操作之前，都会等待一位具名的人员。
+三十个用于物业管理的小型 MCP 智能体，面向商业物业和中等规模住宅的管理方。每个智能体 **只负责一项工作**，例如把租金清单（rent roll）与租约核对、对账托管账户、重算公共区域费用（CAM）或催收租户的保险证明，且不能越出这项工作。它们读取您已经从 AppFolio、Yardi、Buildium、Rent Manager 等系统导出的文件，在您的电脑上生成报告。它们从不动用资金、从不修改线上系统，任何信函或通知发出之前都会等待一位具名的人员。
 
 MIT 许可证 · Node 20 或更高版本 · 只用本地文件 · 无需凭据 · 无依赖
 
@@ -16,7 +16,7 @@ node packages/granite-of-rentrolls/bin/granite-of-rentrolls.js demo     # 租金
 node packages/obsidian-of-trust/bin/obsidian-of-trust.js demo           # 托管账户三方对账，虚构数据
 ```
 
-包发布到 npm 后，也可以用 `npx -y granite-of-rentrolls demo`。每个智能体都有在虚构文件上运行的 `demo`、用自身测试用例检查的 `eval`、显示文件各列如何被读取的 `inspect <文件>`，以及供 Claude Desktop、Claude Code、Cursor 等 MCP 主机使用的 MCP 服务器（`<agent> mcp --root <文件夹>`）。加上 `--lang zh-Hans` 即输出中文报告（支持九种语言）。每个智能体的 README 列出了它的工具。
+包发布到 npm 后，也可以用 `npx -y granite-of-rentrolls demo`。每个智能体都有在虚构文件上运行的 `demo`、用自身测试用例检查的 `eval`、显示文件各列如何被读取的 `inspect <文件>`，以及供 Claude Desktop、Claude Code、Cursor 等 MCP 主机使用的 MCP 服务器（`<agent> mcp --root <文件夹>`）。加上 `--lang zh-Hans` 后，报告的标题、小标题、列名以及审批页面为中文（支持九种语言）；发现事项的句子和工具结果仍为英文。每个智能体的 README 列出了它的工具。
 
 ## 智能体
 
