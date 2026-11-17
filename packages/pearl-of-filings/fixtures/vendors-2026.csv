@@ -1,0 +1,11 @@
+Company Name,Vendor ID,Vendor Trades,Tax ID,Send 1099?,W-9 On File,Entity Type,Address,Email
+FlowRight Plumbing LLC,V-101,Plumbing,12-3456781,Yes,Yes,LLC,"410 Pipe St, Springfield, IL 62701",ap@flowright.example
+FlowRight LLC,V-118,Plumbing,12-3456781,Yes,Yes,LLC,"410 Pipe St, Springfield, IL 62701",ap@flowright.example
+QuickFix Handyman,V-102,General repairs,98-7654321,Yes,Yes,Sole proprietor,"77 Elm Ave, Springfield, IL 62702",quickfix@example.com
+Volt Electric,V-103,Electrical,,Yes,No,LLC,"9 Spark Rd, Springfield, IL 62703",billing@volt.example
+Sparkle Cleaning,V-104,Cleaning,123-45-678,Yes,Yes,Sole proprietor,"5 Shine Ct, Springfield, IL 62704",sparkle@example.com
+Example Flooring Inc,V-105,Flooring,45-6789012,No,Yes,C Corporation,"200 Plank Blvd, Springfield, IL 62705",ar@exampleflooring.example
+Smith & Lee Law PC,V-106,Legal,36-1122334,Yes,Yes,C Corporation,"1 Court Sq, Springfield, IL 62701",billing@smithlee.example
+Maple Court Holdings LLC,O-201,Owner,27-5566778,MISC,Yes,LLC,,owner@maplecourt.example
+Greenleaf Landscaping,V-107,Landscaping,55-4433221,Yes,Yes,LLC,"88 Lawn Ln, Springfield, IL 62706",greenleaf@example.com
+Ace Supply Co,V-108,Supplies,61-2223334,Yes,Yes,LLC,"3 Depot Rd, Springfield, IL 62707",orders@acesupply.example

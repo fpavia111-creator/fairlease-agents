@@ -1,0 +1,22 @@
+Payee,Payment Date,Amount,Method,GL Account,Check Number
+FlowRight Plumbing LLC,01/14/2026,1200.00,Check,6510 Repairs - Plumbing,1001
+FlowRight Plumbing LLC,04/02/2026,1650.00,ACH,6510 Repairs - Plumbing,ACH-2201
+FlowRight LLC,08/19/2026,2000.00,Check,6510 Repairs - Plumbing,1077
+QuickFix Handyman,02/10/2026,650.00,Check,6500 Repairs - General,1012
+QuickFix Handyman,06/22/2026,800.00,Check,6500 Repairs - General,1050
+Volt Electric,03/05/2026,3200.00,ACH,6520 Repairs - Electrical,ACH-2215
+Volt Electric,09/12/2026,800.00,Credit Card,6520 Repairs - Electrical,VISA-4410
+Sparkle Cleaning,monthly,0,Check,6600 Cleaning,
+Sparkle Cleaning,05/31/2026,1300.00,Check,6600 Cleaning,1040
+Sparkle Cleaning,10/31/2026,1300.00,Check,6600 Cleaning,1101
+Example Flooring Inc,07/15/2026,9800.00,Check,6700 Turnover - Flooring,1066
+Smith & Lee Law PC,03/28/2026,3500.00,Check,6900 Legal fees,1033
+Maple Court Holdings LLC,01/31/2026,4000.00,ACH,4990 Owner rent distribution,ACH-2190
+Maple Court Holdings LLC,02/28/2026,4000.00,ACH,4990 Owner rent distribution,ACH-2199
+Maple Court Holdings LLC,03/31/2026,4000.00,ACH,4990 Owner rent distribution,ACH-2214
+Joe's Handyman,10/03/2026,1900.00,Check,6500 Repairs - General,1090
+Joe's Handyman,10/24/2026,400.00,Check,6500 Repairs - General,1098
+Greenleaf Landscaping,04/30/2026,1100.00,Check,6800 Landscaping,1039
+Greenleaf Landscaping,05/31/2026,1100.00,Check,6800 Landscaping,1041
+Ace Supply Co,06/03/2026,2600.00,Credit Card,6400 Supplies,AMEX-3301
+Greenleaf Landscaping,12/15/2025,1100.00,Check,6800 Landscaping,0988

@@ -1,0 +1,4 @@
+Proveedor,Código de proveedor,Categoría,Número de identificación fiscal,Enviar 1099,Tipo de entidad,Dirección,Correo electrónico
+Plomería Río Grande,P-01,Plomería,74-1234567,Sí,LLC,"12 Calle Real, San Antonio, TX 78205",pagos@riogrande.example
+Jardines Sol,P-02,Jardinería,,Sí,Persona física,"4 Av. Flores, San Antonio, TX 78207",sol@example.com
+Inversiones Casa Azul LLC,P-03,Propietario,81-7654320,MISC,LLC,"9 Plaza Azul, San Antonio, TX 78210",casa.azul@example.com
