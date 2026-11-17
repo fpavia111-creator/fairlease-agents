@@ -317,6 +317,46 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "duplicate-payment-rent-and-services-no-payee",
+      "tool": "pearl_check",
+      "args": {
+        "vendors": "fixtures/vendors-2026.csv",
+        "payments": "fixtures/payments-edge-cases.csv",
+        "tax_year": 2026,
+        "threshold": 600
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "possible_duplicate_payments",
+          "rent_and_services",
+          "900 of rent and 800 of other payments",
+          "1 payment(s) had no payee and were skipped"
+        ],
+        "equals": {
+          "result.items.length": 2
+        }
+      }
+    },
+    {
+      "id": "owner-figure-is-distributions-not-rents",
+      "tool": "pearl_explain",
+      "args": {
+        "vendors": "fixtures/vendors-2026.csv",
+        "payments": "fixtures/payments-2026.csv",
+        "tax_year": 2026,
+        "threshold": 600,
+        "payee": "Maple Court Holdings LLC"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "owner_rents_basis",
+          "rents collected"
+        ]
+      }
     }
   ]
 }

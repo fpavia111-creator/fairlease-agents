@@ -1,0 +1,6 @@
+Payee,Payment Date,Amount,Method,GL Account,Check Number
+QuickFix Handyman,03/02/2026,400.00,Check,6510 Repairs,2001
+QuickFix Handyman,03/02/2026,400.00,Check,6510 Repairs,2001
+Greenleaf Landscaping,04/10/2026,900.00,Check,6100 Rent - storage yard,2010
+Greenleaf Landscaping,05/10/2026,800.00,ACH,6520 Landscaping,ACH-3001
+,06/01/2026,75.00,Check,6510 Repairs,2020

@@ -4,6 +4,7 @@ import { r2, num, str, isoDate, maskId as maskRaw, partyKey, foldText } from 'ke
 
 export const DEFAULT_EXCLUDE_METHODS = Object.freeze(['card', 'credit card', 'debit card', 'paypal', 'venmo', 'tarjeta', 'karte', 'carte', 'cartão', 'carta']);
 const RENT_WORDS = ['rent', 'rents', 'lease', 'owner distribution', 'owner draw', 'miete', 'loyer', 'alquiler', 'renta', 'aluguel', 'affitto', '家賃', '賃料', '租金', '임대료', '임차료'];
+const NOT_RENT_WORDS = ['commission', 'commissions', 'broker', 'brokerage', 'provision', 'comision', 'comissao', 'provvigione', '手数料', '佣金', '수수료'];
 const LAW_WORDS = ['attorney', 'attorneys', 'law', 'legal', 'esq', 'lawyer', 'abogado', 'abogados', 'bufete', 'rechtsanwalt', 'kanzlei', 'avocat', 'advogado', 'avvocato', '弁護士', '律师', '변호사'];
 const CORP_WORDS = ['corporation', 'corp', 'inc', 'incorporated', 'c corp', 's corp', 'c corporation', 's corporation', 'sociedad anonima', 'corporacion'];
 const OWNER_WORDS = ['owner', 'landlord', 'propietario', 'eigentumer', 'proprietaire', 'proprietario', 'オーナー', '业主', '소유주'];
@@ -46,9 +47,11 @@ export function checkFilings({ vendors = [], payments, taxYear, threshold, exclu
   for (const r of records) { const pk = partyKey(r.name); if (pk && !byParty.has(pk)) byParty.set(pk, r); const fid = r.id ? fold(r.id) : ''; if (r.id && !byId.has(fid)) byId.set(fid, r); }
   // The first directory record that matches by name or by vendor id, as a scan in file order would find it.
   const findRecord = (payee) => { const pk = partyKey(payee); const a = pk ? byParty.get(pk) : undefined; const b = byId.get(fold(payee)); return a && b ? (a.i <= b.i ? a : b) : a || b; };
-  const outside = new Map(); let otherYear = 0; let undated = 0; const methodsSeen = new Set();
+  const tinsByName = new Map(); for (const r of records) { const pk = partyKey(r.name); if (!pk || r.digits.length !== 9) continue; if (!tinsByName.has(pk)) tinsByName.set(pk, new Set()); tinsByName.get(pk).add(r.digits); }
+  const outside = new Map(); let otherYear = 0; let undated = 0; let noPayee = 0; const methodsSeen = new Set();
   for (const p of payments) {
     const amount = num(p.amount); if (amount === null) continue;
+    if (!str(p.payee)) { noPayee += 1; continue; }
     const d = isoDate(p.date);
     if (!d) { undated += 1; continue; }
     if (d.slice(0, 4) !== year) { otherYear += 1; continue; }
@@ -76,7 +79,7 @@ export function checkFilings({ vendors = [], payments, taxYear, threshold, exclu
     const text = `${name} ${trade}`;
     const law = hasWord(text, LAW_WORDS);
     const corp = hasWord(entity, CORP_WORDS) || hasWord(name.replace(/[.,]/g, ' '), ['inc', 'corp', 'corporation', 'incorporated']);
-    const rentPaid = r2(g.payments.filter((x) => hasWord(x.account, RENT_WORDS)).reduce((s, x) => s + x.amount, 0));
+    const rentPaid = r2(g.payments.filter((x) => hasWord(x.account, RENT_WORDS) && !hasWord(x.account, NOT_RENT_WORDS)).reduce((s, x) => s + x.amount, 0));
     const owner = hasWord(trade, OWNER_WORDS) || (rentPaid > 0 && rentPaid >= total / 2);
     const form = flags.includes('MISC') || owner ? 'MISC' : 'NEC';
     const directorySaysNo = flags.length > 0 && flags.every((f) => f === false);
@@ -88,17 +91,26 @@ export function checkFilings({ vendors = [], payments, taxYear, threshold, exclu
     if (directorySaysNo && over) add('directory_says_no_1099', `The directory marks this payee as not receiving a 1099, but ${total} was paid${corp ? ' (entity looks like a corporation)' : ''}. Confirm with your tax preparer.`);
     if (law && over) add('attorney', 'Looks like a law firm: attorney fees are often reported even when the firm is a corporation. Confirm with your tax preparer.');
     else if (corp && over && !directorySaysNo) add('corporation', 'Looks like a corporation: payments to corporations are often not reported. Confirm with your tax preparer.');
+    const sameName = main ? tinsByName.get(partyKey(main.name)) : null;
+    if (sameName && sameName.size > 1) add('same_name_different_tin', `${sameName.size} directory records are named "${main.name}" with different tax IDs; payments by name all went to the first one. Confirm which record each payment belongs to.`);
+    const seenPay = new Map(); for (const x of g.payments) { if (!x.reference) continue; const k = `${x.date}|${x.amount}|${fold(x.reference)}`; seenPay.set(k, (seenPay.get(k) || 0) + 1); }
+    const dups = [...seenPay].filter(([, n]) => n > 1);
+    if (dups.length) add('possible_duplicate_payments', `${dups.length} payment(s) appear more than once with the same date, amount and reference (${dups.map(([k]) => k.split('|').slice(0, 2).join(' ')).join('; ')}); remove the repeats before relying on the total.`, { amount: r2(dups.reduce((t, [k, n]) => t + Number(k.split('|')[1]) * (n - 1), 0)) });
+    const other = r2(total - rentPaid);
+    if (rentPaid > 0 && other > 0 && over) add('rent_and_services', `${rentPaid} of rent and ${other} of other payments: these are usually reported in different places. Confirm with your tax preparer.`);
+    if (owner && over && hasWord(trade, OWNER_WORDS)) add('owner_rents_basis', `${total} is what was paid out to this owner. A 1099 for rents usually reports the rents collected for the owner, not the distributions; take that figure from the owner statements and confirm with your tax preparer.`);
     if (excluded) add('excluded_methods', `${excluded} paid by ${[...new Set(g.excluded.map((x) => x.method))].join(', ')} left out of the total (excluded payment methods).`);
-    const blocking = ['payee_not_in_directory', 'shared_tin', 'tin_missing', 'tin_invalid', 'address_missing', 'w9_missing'];
-    const status = !over ? (total === 0 ? 'excluded_only' : 'below_threshold') : directorySaysNo && !law ? 'confirm' : findings.some((f) => blocking.includes(f.code)) ? 'fix' : law || corp ? 'confirm' : 'ready';
+    const blocking = ['payee_not_in_directory', 'shared_tin', 'tin_missing', 'tin_invalid', 'address_missing', 'w9_missing', 'same_name_different_tin', 'possible_duplicate_payments'];
+    const ask = findings.some((f) => ['owner_rents_basis', 'rent_and_services'].includes(f.code));
+    const status = !over ? (total === 0 ? 'excluded_only' : 'below_threshold') : directorySaysNo && !law ? 'confirm' : findings.some((f) => blocking.includes(f.code)) ? 'fix' : law || corp || ask ? 'confirm' : 'ready';
     items.push({ payee: name, vendor_id: main ? main.id || null : null, records: recs.map((r) => r.name), tin: tin ? maskId(tin) : '', address: address || null, email: email || null, trade, total, excluded, payments: g.payments.length, rent: rentPaid, form: over ? form : null, status, findings });
   }
   const order = { fix: 0, confirm: 1, ready: 2, below_threshold: 3, excluded_only: 4 };
   items.sort((a, b) => order[a.status] - order[b.status] || b.total - a.total || a.payee.localeCompare(b.payee));
   const n = (s) => items.filter((i) => i.status === s).length;
   const reportable = items.filter((i) => ['fix', 'confirm', 'ready'].includes(i.status));
-  const summary = `${items.length} payee(s) paid in ${year}. ${reportable.length} at or above your ${threshold} threshold (${r2(reportable.reduce((s, i) => s + i.total, 0))}): ${n('ready')} ready, ${n('fix')} to fix, ${n('confirm')} to confirm with your tax preparer. ${n('below_threshold')} below the threshold${n('excluded_only') ? `, ${n('excluded_only')} paid only by excluded methods` : ''}.${undated ? ` ${undated} payment(s) had no readable date and were skipped.` : ''}${otherYear ? ` ${otherYear} payment(s) outside ${year} ignored.` : ''}`;
-  return { summary, tax_year: Number(year), threshold, exclude_methods: [...excludeMethods], methods_seen: [...methodsSeen], skipped_undated: undated, other_year_payments: otherYear, items };
+  const summary = `${items.length} payee(s) paid in ${year}. ${reportable.length} at or above your ${threshold} threshold (${r2(reportable.reduce((s, i) => s + i.total, 0))}): ${n('ready')} ready, ${n('fix')} to fix, ${n('confirm')} to confirm with your tax preparer. ${n('below_threshold')} below the threshold${n('excluded_only') ? `, ${n('excluded_only')} paid only by excluded methods` : ''}.${undated ? ` ${undated} payment(s) had no readable date and were skipped.` : ''}${noPayee ? ` ${noPayee} payment(s) had no payee and were skipped.` : ''}${otherYear ? ` ${otherYear} payment(s) outside ${year} ignored.` : ''}`;
+  return { summary, tax_year: Number(year), threshold, exclude_methods: [...excludeMethods], methods_seen: [...methodsSeen], skipped_undated: undated, skipped_no_payee: noPayee, other_year_payments: otherYear, items };
 }
 
 /** W-9 request for a payee. Never contains a tax ID. */

@@ -56,7 +56,7 @@ test('rents to an owner suggest MISC; law firms and corporations go to confirm',
   ];
   const r = checkFilings({ ...base, vendors, payments: [pay('Owner One LLC', 9000, '2026-02-01', { account: 'Owner rent distribution' }), pay('Doe Law PC', 3000), pay('Widget Corp', 3000), pay('Floors Inc', 3000)] });
   const by = Object.fromEntries(r.items.map((i) => [i.payee, i]));
-  assert.equal(by['Owner One LLC'].form, 'MISC'); assert.equal(by['Owner One LLC'].status, 'ready');
+  assert.equal(by['Owner One LLC'].form, 'MISC'); assert.equal(by['Owner One LLC'].status, 'confirm'); // the figure is distributions, not rents collected
   assert.equal(by['Doe Law PC'].status, 'confirm'); assert.equal(by['Doe Law PC'].findings[0].code, 'attorney');
   assert.equal(by['Widget Corp'].status, 'confirm'); assert.equal(by['Widget Corp'].findings[0].code, 'corporation');
   assert.equal(by['Floors Inc'].status, 'confirm'); assert.equal(by['Floors Inc'].findings[0].code, 'directory_says_no_1099');

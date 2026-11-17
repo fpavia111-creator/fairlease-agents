@@ -20,6 +20,10 @@ npx -y pearl-of-filings mcp --root ./year-end
 | `directory_says_no_1099` | The directory says no 1099, but the payee is over your threshold |
 | `attorney`, `corporation` | Looks like a law firm or a corporation; confirm with your tax preparer |
 | `excluded_methods` | Payments by an excluded method, shown and left out of the total |
+| `possible_duplicate_payments` | The same date, amount and reference more than once in the payments file |
+| `same_name_different_tin` | Two directory records share a name but not a tax ID; payments by name all went to the first |
+| `rent_and_services` | Rent and other payments to one payee, with both amounts |
+| `owner_rents_basis` | For an owner the total is what was paid out; a 1099 for rents usually reports rents collected, so take that figure from the owner statements and confirm it |
 
 Status is `fix`, `confirm`, `ready`, `below_threshold` or `excluded_only`. The suggested form is 1099-MISC for rents paid to owners (owner trade or rent accounts) and 1099-NEC otherwise; it is a suggestion for your preparer, not a determination.
 
