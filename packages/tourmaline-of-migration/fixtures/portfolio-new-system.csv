@@ -1,0 +1,9 @@
+Property,Unit,Tenant,Status,Sqft,Market Rent,Rent,Deposit,Lease Start,Lease End,Move-in,Past Due
+Oak Row Townhomes (fictional),101,Tomas Novak (fictional),Current,700,1600,1580,800,02/01/2026,01/31/2027,02/01/2024,0
+Oak Row Townhomes (fictional),102,,Vacant-Unrented,700,1600,,,,,,
+The Maple Court Apartments (fictional),101,Ana Rivera (fictional),Current,640,1495,1450,1450,03/01/2026,02/28/2027,03/01/2019,0
+The Maple Court Apartments (fictional),102,Wei Chen (fictional),Current,640,1495,1475,1000,01/01/2026,12/31/2026,01/01/2021,0
+The Maple Court Apartments (fictional),B201,Grace Okafor (fictional),Current,880,1875,1810,1000,11/01/2025,10/31/2026,11/01/2022,0
+The Maple Court Apartments (fictional),B201,Grace Okafor (fictional),Current,880,1875,1810,1000,11/01/2025,10/31/2026,11/01/2022,0
+The Maple Court Apartments (fictional),B202,Sofia Marin (fictional),Future,880,1875,1900,1200,12/01/2026,11/30/2027,,0
+The Maple Court Apartments (fictional),B202,Raj Patel (fictional),Notice,880,1875,1850,1000,06/01/2026,05/31/2027,06/01/2023,0

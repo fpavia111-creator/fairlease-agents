@@ -245,6 +245,92 @@
           "before"
         ]
       }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "tourmaline_draft_punchlist",
+      "args": {
+        "before": "fixtures/portfolio-old-system.csv",
+        "after": "fixtures/portfolio-new-system.csv"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "tourmaline_draft_punchlist",
+      "approve": "Dana Example",
+      "args": {
+        "before": "fixtures/portfolio-old-system.csv",
+        "after": "fixtures/portfolio-new-system.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "tourmaline_draft_punchlist",
+      "mode": "review",
+      "args": {
+        "before": "fixtures/portfolio-old-system.csv",
+        "after": "fixtures/portfolio-new-system.csv"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "two-buildings-renamed-and-resorted",
+      "tool": "tourmaline_check",
+      "args": {
+        "before": "fixtures/portfolio-old-system.csv",
+        "after": "fixtures/portfolio-new-system.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "listed_twice_in_new",
+          "One name carried over; the other did not"
+        ],
+        "not_contains": [
+          "missing_in_new",
+          "extra_in_new",
+          "matched_by_number",
+          "rent_differs"
+        ],
+        "equals": {
+          "result.items.length": 6,
+          "result.items.0.unit": "102",
+          "result.items.1.new_unit": "B201"
+        }
+      }
+    },
+    {
+      "id": "name-order-is-not-a-difference",
+      "tool": "tourmaline_explain",
+      "args": {
+        "before": "fixtures/portfolio-old-system.csv",
+        "after": "fixtures/portfolio-new-system.csv",
+        "unit": "B-202"
+      },
+      "expect": {
+        "contains": [
+          "Raj Patel"
+        ],
+        "not_contains": [
+          "tenant_differs",
+          "Sofia"
+        ],
+        "equals": {
+          "result.item.status": "ok"
+        }
+      }
     }
   ]
 }

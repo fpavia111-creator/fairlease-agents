@@ -24,6 +24,9 @@ npx -y tourmaline-of-migration mcp --root ./cutover
 | `rent_differs`, `deposit_differs`, `balance_differs`, `market_rent_differs`, `sqft_differs` | Amount changed by more than `tolerance` (default 0.01; area by more than 0.5) |
 | `lease_dates_differ`, `move_in_differs` | Lease start, lease end or move-in changed |
 | `matched_by_number` | Paired by trailing number only; confirm and teach the alias |
+| `listed_twice_in_new`, `listed_twice_in_old` | The unit has more current records on one side than the other (a duplicate keyed during conversion) |
+
+Two systems rarely write things the same way, so Tourmaline reads past the differences that are not differences: `Rivera, Ana` is Ana Rivera, `B-201` is `B201`, "Maple Court" is "The Maple Court Apartments" (units with the same number in two buildings pair by building, whatever order the files are in), a blank deposit is a zero deposit, and a future resident's row never stands in for the current resident's. A respelled name (`Jon` to `John`) or a co-tenant who did not carry over is still reported.
 
 The report adds a **Totals** table, old against new. Rent rolls with one row per charge (Yardi with lease charges and similar) are grouped per unit first. Set `fields` in the policy to compare fewer fields.
 
