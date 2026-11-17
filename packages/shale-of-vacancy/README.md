@@ -26,7 +26,11 @@ npx -y shale-of-vacancy mcp --root ./rent-rolls
 | `long_vacant` | Vacant longer than `long_vacant_days` (default 30) |
 | `below_market`, `above_market` | Rent more than `off_market_pct` (default 10%) under or over market |
 | `market_rent_missing`, `rent_missing`, `vacant_since_unknown` | Data the measures need |
+| `rent_zero`, `move_out_passed` | Occupied with a rent of zero; still on notice after the move-out date |
 | `notice_unrented`, `vacant_rented`, `month_to_month`, `concession` | Notes |
+| `non_revenue_unit` (note) | A model, down, office, employee or courtesy unit: left out of occupancy, market rent and vacancy loss, and counted on its own |
+
+A unit on notice that is already re-leased ("Notice-Rented") is not exposure and counts as leased.
 
 
 <!-- generated:start -->

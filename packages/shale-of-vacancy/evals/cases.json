@@ -222,6 +222,49 @@
           "rent_roll"
         ]
       }
+    },
+    {
+      "id": "model-and-staff-units-notice-rented-and-zero-rent",
+      "tool": "shale_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-edge-cases.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "non_revenue_unit",
+          "move_out_passed",
+          "rent_zero",
+          "notice_rented",
+          "2 more not for rent"
+        ],
+        "equals": {
+          "result.totals.rentable_units": 5,
+          "result.totals.exposure_units": 2,
+          "result.totals.physical_occupancy_pct": 80,
+          "result.totals.leased_pct": 60,
+          "result.totals.gross_potential_rent": 5000
+        }
+      }
+    },
+    {
+      "id": "explain-zero-rent-unit",
+      "tool": "shale_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-edge-cases.csv",
+        "as_of": "2026-11-15",
+        "unit": "207"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "rent of zero"
+        ],
+        "not_contains": [
+          "below_market"
+        ]
+      }
     }
   ]
 }
