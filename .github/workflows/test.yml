@@ -25,6 +25,9 @@ jobs:
             (cd "$p" && node "bin/$n.js" eval) || exit 1; done
       - name: Plugin files match the packages
         run: npm run plugin:check
+      - name: Generated README sections are up to date
+        if: runner.os == 'Linux'
+        run: npm run readme:check
       - name: Every eval again on German, French, Spanish, Portuguese, Italian, Japanese, Chinese and Korean files
         run: npm run intl
       - name: Hostile inputs (planted formulas, HTML, path tricks and AI-directed text in every agent's data)

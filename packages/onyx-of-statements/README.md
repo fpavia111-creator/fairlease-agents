@@ -22,15 +22,159 @@ npx -y onyx-of-statements mcp --root ./statements
 
 Periods are read in any common spelling ("Oct 2026", "10/2026", "2026年10月"). The reserve comes from `policy.reserves` by property name, then `default_reserve`, then the statement's own reserve column.
 
+
+<!-- generated:start -->
+
+## A demo run
+
+`npx -y onyx-of-statements demo` runs the agent on the fictional files in [`fixtures/`](fixtures) in a temporary folder. Captured output:
+
+```text
+Onyx of Statements demo (fictional owners) in <demo folder>
+
+▶ Check three owners' statements, August to October
+  status: executed  decision: allow
+  3 statement(s) for 2026-10, 9 in all: 3 to fix before sending (1 math, 1 beginning balance, 1 negative, 1 not matching the ledger). Earlier periods: 1 with issues.
+    2026-10 Harbor Point Plaza       issue  math_error, no_ledger_detail
+    2026-10 Maple Court Apartments   issue  cash_not_distributed, expenses_differ
+    2026-10 Pine Street Duplex       issue  beginning_differs, negative_balance, no_ledger_detail
+    2026-09 Maple Court Apartments   issue  distribution_below_reserve
+
+▶ Explain the Harbor Point statement
+  status: executed  decision: allow
+  Harbor Point Owner LLC (fictional), Harbor Point Plaza, 2026-10: issue. Beginning 60725 + income 121000 − expenses 44100 − fee 6050 − distribution 70000 → ending 61675 (reserve 25000). Beginning 60725 + income 121000 − expenses 44100 − fee 6050 − distribution 70000 = 61575, but the statement shows 61675 (100). No owner ledger lines for 2026-10; totals not checked.
+
+▶ Read Spanish owner statements (Saldo inicial, Honorarios de gestión, Saldo final)
+  status: executed  decision: allow
+  1 statement(s) for 2026-10, 2 in all: 1 to fix before sending (0 math, 0 beginning balance, 0 negative, 0 not matching the ledger). Earlier periods: 0 with issues.
+
+▶ Write the worklist
+  status: executed  decision: allow
+  Worklist written (en): 3 statement(s) for 2026-10, 9 in all: 3 to fix before sending (1 math, 1 beginning balance, 1 negative, 1 not matching the ledger). Earlier periods: 1 with issues.
+
+▶ Draft a contribution request to Pine Street Partners
+  status: executed  decision: allow  (auto)
+  request Pine Street Duplex drafted with 2 open marker(s) ([TO CONFIRM: owner email], [TO CONFIRM: payment instructions; confirm by phone before you share bank details]). Nothing was sent.
+
+▶ Auto: approve sending it, which stays one click
+  status: needs_approval  decision: ask
+  reason: binding_send stays one-click, even in Auto
+
+▶ Agent tries to pay Maple Court's October distribution itself
+  status: blocked  decision: block
+  reason: Onyx never pays or holds an owner distribution.
+```
+
 ## Tools
 
-| Tool | Kind | Policy |
+| Tool | What it does | Policy |
 |---|---|---|
-| `onyx_check`, `onyx_explain` | read | allow |
-| `onyx_write_report` | report: `onyx-statements.csv` and `.html` (in `--lang`) | allow |
-| `onyx_draft_request` | write: owner contribution request for a shortfall | ask |
-| `onyx_request_send` | one click (`binding_send`), tied to the draft's sha256 | ask, even in Auto |
-| `owner_distribution`, `statement_publish`, `gl_post`, `email_send` | refused | block |
+| `onyx_check` | Each owner statement before it goes out: the arithmetic, beginning against last period's ending, ending below the reserve or negative, distributions that left less than the reserve, cash above the reserve not distribu… | runs |
+| `onyx_explain` | Show one owner's latest statement line by line with findings. | runs |
+| `onyx_write_report` | Write the owner statement worklist as onyx-statements.csv (one row per item, blank decision columns) and onyx-statements.html into out_dir (default keystone-out/onyx). | runs |
+| `onyx_draft_request` | Write drafts/request-<property>.md: an owner contribution request for a negative balance or a reserve shortfall on the latest statement. | asks first (Auto can be opted in) |
+| `onyx_request_send` | After one named human click (even in Auto), record that the reviewed request draft is approved in request-requests.csv. | one named click, even in Auto (`binding_send`) |
+| `owner_distribution` | Onyx never pays or holds an owner distribution. | refused |
+| `statement_publish` | Onyx never publishes statements to the owner portal; a person does after review. | refused |
+| `gl_post` | Onyx never posts corrections to your books. | refused |
+| `email_send` | Onyx never sends requests; a person sends the approved draft. | refused |
+
+Any tool name not in this table is blocked, including names a model invents. `refused` tools are listed so a model can see they exist and are refused.
+
+## Columns it reads
+
+Table inputs can be CSV, TSV, semicolon- or pipe-separated text, Excel `.xlsx`, JSON or JSONL. Columns are matched by the agent's own name, then by the English names below, then by their names in German, French, Spanish, Portuguese, Italian, Japanese, Chinese and Korean. Dates become `YYYY-MM-DD`; amounts are read with either decimal mark; Every result lists under `sources` how each file was read.
+
+### Owner statements (`statements`)
+
+| Column | Type | Also read as | For example, in other languages |
+|---|---|---|---|
+| `owner` (required) | text | Owner, Owner Name, Owners, Investor | Verantwortlich, Responsable, 担当者, 负责人 |
+| `property` | text | Property, Property Name, Property Code, Prop, Prop Code, Building | Objekt, Immeuble, 物件, 物业 |
+| `period` | text | Period, Statement Period, Month, Statement Month | Zeitraum, Période, 期間, 期间 |
+| `beginning_balance` | amount | Beginning Balance, Beginning Cash, Opening Balance, Starting Balance, Anfangsbestand, Solde initial | - |
+| `income` | amount | Income, Total Income, Cash In, Receipts, Rent Collected, Einnahmen | - |
+| `expenses` | amount | Expenses, Total Expenses, Cash Out, Disbursements, Ausgaben, Dépenses | - |
+| `management_fee` | amount | Management Fee, Management Fees, Mgmt Fee, Property Management Fee, Verwaltungsgebühr, Verwaltervergütung | - |
+| `owner_draw` | amount | Owner Draw, Owner Distribution, Distribution, Owner Disbursement, Contributions/Distributions, Owner Payment | - |
+| `reserve` | amount | Reserve, Property Reserve, Operating Reserve, Held Reserve, Rücklage, Réserve | - |
+| `ending_balance` | amount | Ending Balance, Ending Cash, Closing Balance, Ending Cash Balance, Endbestand, Solde final | - |
+
+### Owner ledger (`ledger`)
+
+| Column | Type | Also read as | For example, in other languages |
+|---|---|---|---|
+| `owner` (required) | text | Owner, Owner Name, Owners, Payee, Investor | Verantwortlich, Responsable, 担当者, 负责人 |
+| `property` | text | Property, Property Name, Property Code, Prop, Prop Code, Building | Objekt, Immeuble, 物件, 物业 |
+| `date` | date | Date, Post Date, Transaction Date | Datum, Date, 日付, 日期 |
+| `type` | text | Type, Transaction Type, Category, Account Type | Typ, Type, 種類, 类型 |
+| `account` | text | GL Account, Account, Account Name | Konto, Compte, 勘定科目, 科目代码 |
+| `description` | text | Description, Memo, Notes | Beschreibung, Description, 摘要, 摘要 |
+| `amount` | amount | Amount, Net Amount, Total | Betrag, Montant, 金額, 金额 |
+| `income` | amount | Income, Cash In, Receipts, Deposits, Einnahmen, Recettes | - |
+| `expense` | amount | Expense, Expenses, Cash Out, Disbursements, Bills Paid, Ausgaben | - |
+| `reference` | text | Reference, Ref, Check #, Check Number | Referenz, Référence, 参照番号, 参考号 |
+
+### Files from other countries
+
+A German export in Windows-1252 with semicolons, `1.234,56` and `03.11.2026`, or a Japanese one in Shift_JIS with `2026/11/03`, is read the same way as the English file. The repository's `npm run intl` runs this agent's eval cases again on German, French, Spanish, Portuguese, Italian, Japanese, Chinese and Korean versions of the fixture files and requires the same results. Columns named differently? Run `npx onyx-of-statements inspect <file>` (names and shapes only, never values) and name them in `keystone-sources.json`:
+
+```json
+{ "files": { "exports/rent-roll.csv": { "columns": { "unit": "Einheit" }, "date_order": "dmy" } } }
+```
+
+## Install
+
+Node 20 or newer. No other dependencies.
+
+```bash
+npx -y onyx-of-statements demo
+npx -y onyx-of-statements mcp --root /path/to/your/files
+```
+
+Claude Desktop, Cursor and other MCP hosts:
+
+```json
+{
+  "mcpServers": {
+    "onyx-of-statements": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "onyx-of-statements",
+        "mcp",
+        "--root",
+        "/path/to/your/files"
+      ]
+    }
+  }
+}
+```
+
+Claude Code: `claude mcp add onyx-of-statements -- npx -y onyx-of-statements mcp --root .`, or install the `onyx-of-statements` plugin from this repository's marketplace.
+
+## Modes and approvals
+
+- **Review** (`--mode review`): reads and reports only.
+- **Assist** (default): the policy above. A tool that asks returns an `approval_id`; a person approves it once with `onyx-of-statements approve <id> --as "Your Name"` (or on the local approvals page, `onyx-of-statements approvals`), and the same call is repeated.
+- **Auto** (`--mode auto --auto <tool,...>`): opt-in per tool, with step caps and a kill switch (`onyx-of-statements kill`). Paying, sending, posting to a ledger or a live system and accepting a learned fact stay **one named click even in Auto**; an approval is tied to the sha256 of the reviewed draft, so a changed draft needs a new click.
+
+## CLI
+
+```bash
+onyx-of-statements tools                 # every tool, its policy and arguments
+onyx-of-statements sources               # the columns each input is read from
+onyx-of-statements inspect <file>        # how a file would be read (names and shapes, never values)
+onyx-of-statements call onyx_check '{"statements":"<statements>"}'
+onyx-of-statements eval                  # the private eval cases on the fictional fixtures
+onyx-of-statements demo
+```
+
+## Audit log and data
+
+Every call is written to `.keystone/audit.jsonl` under the root: hash-chained JSON lines, with arguments stored as a hash, signed with an Ed25519 key when you configure one. Everything runs on your machine on files you choose. No network calls, no telemetry, no credentials. The bundled fixtures are fictional.
+
+<!-- generated:end -->
 
 ## Limits
 

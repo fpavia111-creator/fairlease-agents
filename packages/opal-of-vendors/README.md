@@ -21,17 +21,173 @@ npx -y opal-of-vendors mcp --root ./vendors
 
 Requirements file: `default` applies to everyone (`gl`, `wc`, `auto`, `license`, `tax_id`, `w9`), `trades` adds by trade name (matched inside the vendor's trade text), `exempt` lists what a named vendor does not need (for example workers' comp for a sole proprietor with an exemption).
 
+
+<!-- generated:start -->
+
+## A demo run
+
+`npx -y opal-of-vendors demo` runs the agent on the fictional files in [`fixtures/`](fixtures) in a temporary folder. Captured output:
+
+```text
+Opal of Vendors demo (fictional vendors) in <demo folder>
+
+▶ Check eight vendors from an AppFolio vendor directory against your requirements
+  status: executed  decision: allow
+  8 vendor(s) as of 2026-11-15: 4 out of compliance, 2 with something expiring within 30 days. Paid 4405 to vendors while out of compliance.
+    ApplianceCare (fictional)        ••••••6783  issue     gl_expiring, wc_missing, paid_while_noncompliant
+    BrightWall Painting (fictional)  ••••••6786  issue     wc_missing, paid_while_noncompliant
+    QuickFix HVAC (fictional)        ••••••6782  issue     gl_expired, license_expiring, paid_while_noncompliant
+    Volt Electric (fictional)                    issue     license_expired, tax_id_missing, paid_while_noncompliant
+    FloorCo (fictional)              ••••••6788  ok        
+    FlowRight Plumbing (fictional)   ••••••6781  ok        
+    NoBugs Pest (fictional)          ••••••6785  ok        
+    Sparkle Cleaners (fictional)     ••••••6787  ok        
+
+▶ Explain QuickFix HVAC (paid after its liability insurance expired)
+  status: executed  decision: allow
+  QuickFix HVAC (fictional) (HVAC): issue. Liability insurance expired 2026-10-31 (15 days ago). Licence expires 2026-12-05 (20 days). Paid 480 while out of compliance: 2026-11-12 480 (ACH-886).
+
+▶ Read a Portuguese vendor list (Fornecedor, CNPJ, Licença vence)
+  status: executed  decision: allow
+  1 vendor(s) as of 2026-11-15: 1 out of compliance, 0 with something expiring within 30 days.
+
+▶ Write the worklist
+  status: executed  decision: allow
+  Worklist written (en): 8 vendor(s) as of 2026-11-15: 4 out of compliance, 2 with something expiring within 30 days. Paid 4405 to vendors while out of compliance.
+
+▶ Draft a certificate request to QuickFix HVAC
+  status: executed  decision: allow  (auto)
+  request QuickFix HVAC (fictional) drafted with 1 open marker(s) ([TO CONFIRM: certificate holder and additional insured wording from your requirements]). Nothing was sent.
+
+▶ Auto: approve sending it, which stays one click
+  status: needs_approval  decision: ask
+  reason: binding_send stays one-click, even in Auto
+
+▶ Agent tries to put a payment on hold itself
+  status: blocked  decision: block
+  reason: Opal never approves, holds or releases a vendor payment.
+```
+
 ## Tools
 
-| Tool | Kind | Policy |
+| Tool | What it does | Policy |
 |---|---|---|
-| `opal_check`, `opal_explain` | read | allow |
-| `opal_write_report` | report: `opal-vendors.csv` and `.html` (in `--lang`) | allow |
-| `opal_draft_request` | write: a request listing exactly what is expired or missing | ask |
-| `opal_request_send` | one click (`binding_send`), tied to the draft's sha256 | ask, even in Auto |
-| `approve_invoice`, `vendor_status_update`, `email_send` | refused | block |
+| `opal_check` | Every vendor against your requirements: liability, workers' comp and auto insurance and licence (expired, expiring within warn_days, or missing), tax ID and tax form. | runs |
+| `opal_explain` | Show one vendor's expiry dates and findings. | runs |
+| `opal_write_report` | Write the vendor compliance worklist as opal-vendors.csv (one row per item, blank decision columns) and opal-vendors.html into out_dir (default keystone-out/opal). | runs |
+| `opal_draft_request` | Write drafts/request-<vendor>.md: a request to the vendor for an updated certificate, licence or tax form, listing exactly what is expired or missing. | asks first (Auto can be opted in) |
+| `opal_request_send` | After one named human click (even in Auto), record that the reviewed request draft is approved in request-requests.csv. | one named click, even in Auto (`binding_send`) |
+| `approve_invoice` | Opal never approves, holds or releases a vendor payment. | refused |
+| `vendor_status_update` | Opal never activates, deactivates or edits vendors in your accounting or property management system. | refused |
+| `email_send` | Opal never sends requests; a person sends the approved draft. | refused |
 
-AppFolio vendor directory and Buildium vendor exports are recognised; local headers such as Fornecedor, CNPJ, Haftpflicht bis or 賠償責任保険期限 are read.
+Any tool name not in this table is blocked, including names a model invents. `refused` tools are listed so a model can see they exist and are refused.
+
+## Columns it reads
+
+Table inputs can be CSV, TSV, semicolon- or pipe-separated text, Excel `.xlsx`, JSON or JSONL. Columns are matched by the agent's own name, then by the English names below, then by their names in German, French, Spanish, Portuguese, Italian, Japanese, Chinese and Korean. Dates become `YYYY-MM-DD`; amounts are read with either decimal mark; Every result lists under `sources` how each file was read.
+
+### Vendor directory (`vendors`)
+
+| Column | Type | Also read as | For example, in other languages |
+|---|---|---|---|
+| `vendor` (required) | text | Vendor, Company Name, Vendor Name, Name, Payee, Company | Lieferant, Fournisseur, 仕入先, 供应商 |
+| `vendor_id` | text | Vendor ID, Vendor Code, Code, Vendor # | Lieferantennummer, Code fournisseur, 仕入先コード, 供应商编号 |
+| `trade` | text | Trade, Vendor Type, Category, Service, Services | Kategorie, Catégorie, 経費科目, 费用类别 |
+| `tax_id` | text | Tax ID, TIN, EIN, SSN/EIN, Federal ID, Tax Payer ID | Steuernummer, Numéro de TVA, 法人番号, 统一社会信用代码 |
+| `w9_on_file` | text | W-9 On File, W9 On File, W-9, W9, W-9 Received, W-9 recibido | - |
+| `type_1099` | text | 1099 Type, 1099, Send 1099, 1099 Eligible, 1099 Box, 1099 reporting | - |
+| `gl_expires` | date | Liability Ins. Expires, Liability Insurance Expires, GL Expiration, General Liability Expires, Insurance Expiration, COI Expires | - |
+| `wc_expires` | date | Workers Comp Expires, Workers Comp Expiration, Workers' Comp Expires, WC Expiration, WC Expires, Unfallversicherung bis | - |
+| `auto_expires` | date | Auto Insurance Expires, Auto Ins Expires, Auto Expiration | - |
+| `license_expires` | date | License Expires, License Expiration, State License Expires, Licence Expires, State Lic. Expires, Lizenz gültig bis | Ablaufdatum, Date d'expiration, 有効期限, 到期日 |
+| `license_number` | text | License Number, License #, State License, Licence Number | - |
+| `email` | text | Email, Email Address, Primary Email | E-Mail, E-mail, メールアドレス, 邮箱 |
+| `phone` | text | Phone, Phone Number, Primary Phone | Telefon, Téléphone, 電話番号, 电话 |
+| `address` | text | Address, Mailing Address, Remit To Address, Remit Address, Street, Address 1 | Adresse, Adresse, 住所, 地址 |
+| `entity_type` | text | Entity Type, Tax Classification, Federal Tax Classification, Business Type, Rechtsform, Forme juridique | - |
+
+Named exports recognised by their column names:
+
+| System | Export | Recognised by | Layout checked against vendor docs |
+|---|---|---|---|
+| AppFolio | Reports > Vendor Directory (CSV or Excel) | Company Name, Liability Ins. Expires or Workers Comp Expires or Send 1099? | no |
+| Buildium | Vendors > Export (CSV) | Company name, Taxpayer ID or 1099 reporting or Insurance expiration | no |
+
+Where a layout says "checked", its column names were compared with the vendor's documentation on that date. The other layouts were written from knowledge of the export and were not checked. None was tested against a live account.
+
+### Vendor payments (`payments`)
+
+| Column | Type | Also read as | For example, in other languages |
+|---|---|---|---|
+| `payee` (required) | text | Payee, Vendor, Paid To, Name, Owner, Payee Name | Lieferant, Fournisseur, 仕入先, 供应商 |
+| `date` | date | Date, Payment Date, Check Date, Paid Date, Post Date, Zahlungsdatum | Datum, Date, 日付, 日期 |
+| `amount` (required) | amount | Amount, Payment Amount, Paid, Check Amount, Total, Zahlbetrag | Betrag, Montant, 金額, 金额 |
+| `method` | text | Method, Payment Method, Payment Type, Type | Zahlungsart, Mode de paiement, 支払方法, 付款方式 |
+| `account` | text | GL Account, Account, Expense Account | Konto, Compte, 勘定科目, 科目代码 |
+| `reference` | text | Reference, Check Number, Check #, Ref | Referenz, Référence, 参照番号, 参考号 |
+| `property` | text | Property, Property Name, Property Code, Prop, Prop Code, Building | Objekt, Immeuble, 物件, 物业 |
+
+### Files from other countries
+
+A German export in Windows-1252 with semicolons, `1.234,56` and `03.11.2026`, or a Japanese one in Shift_JIS with `2026/11/03`, is read the same way as the English file. The repository's `npm run intl` runs this agent's eval cases again on German, French, Spanish, Portuguese, Italian, Japanese, Chinese and Korean versions of the fixture files and requires the same results. Columns named differently? Run `npx opal-of-vendors inspect <file>` (names and shapes only, never values) and name them in `keystone-sources.json`:
+
+```json
+{ "files": { "exports/rent-roll.csv": { "columns": { "unit": "Einheit" }, "date_order": "dmy" } } }
+```
+
+## Install
+
+Node 20 or newer. No other dependencies.
+
+```bash
+npx -y opal-of-vendors demo
+npx -y opal-of-vendors mcp --root /path/to/your/files
+```
+
+Claude Desktop, Cursor and other MCP hosts:
+
+```json
+{
+  "mcpServers": {
+    "opal-of-vendors": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "opal-of-vendors",
+        "mcp",
+        "--root",
+        "/path/to/your/files"
+      ]
+    }
+  }
+}
+```
+
+Claude Code: `claude mcp add opal-of-vendors -- npx -y opal-of-vendors mcp --root .`, or install the `opal-of-vendors` plugin from this repository's marketplace.
+
+## Modes and approvals
+
+- **Review** (`--mode review`): reads and reports only.
+- **Assist** (default): the policy above. A tool that asks returns an `approval_id`; a person approves it once with `opal-of-vendors approve <id> --as "Your Name"` (or on the local approvals page, `opal-of-vendors approvals`), and the same call is repeated.
+- **Auto** (`--mode auto --auto <tool,...>`): opt-in per tool, with step caps and a kill switch (`opal-of-vendors kill`). Paying, sending, posting to a ledger or a live system and accepting a learned fact stay **one named click even in Auto**; an approval is tied to the sha256 of the reviewed draft, so a changed draft needs a new click.
+
+## CLI
+
+```bash
+opal-of-vendors tools                 # every tool, its policy and arguments
+opal-of-vendors sources               # the columns each input is read from
+opal-of-vendors inspect <file>        # how a file would be read (names and shapes, never values)
+opal-of-vendors call opal_check '{"vendors":"<vendors>","requirements":"<requirements>"}'
+opal-of-vendors eval                  # the private eval cases on the fictional fixtures
+opal-of-vendors demo
+```
+
+## Audit log and data
+
+Every call is written to `.keystone/audit.jsonl` under the root: hash-chained JSON lines, with arguments stored as a hash, signed with an Ed25519 key when you configure one. Everything runs on your machine on files you choose. No network calls, no telemetry, no credentials. The bundled fixtures are fictional.
+
+<!-- generated:end -->
 
 ## Limits
 
