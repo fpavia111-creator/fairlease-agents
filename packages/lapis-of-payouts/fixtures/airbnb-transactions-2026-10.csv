@@ -1,0 +1,13 @@
+Date,Type,Confirmation Code,Start date,Nights,Guest,Listing,Currency,Amount,Paid out,Service fee,Cleaning fee,Gross earnings,Occupancy taxes
+10/03/2026,Reservation,HMA1QX7Z,10/02/2026,3,Riley Park (fictional),Lakeview Cabin - Hot Tub & Dock,USD,727.50,,22.50,150.00,750.00,
+10/03/2026,Payout,,,,,,USD,,727.50,,,,
+10/10/2026,Reservation,HMB2RT4K,10/09/2026,2,Sam Ortega (fictional),Pine Loft,USD,383.15,,11.85,95.00,395.00,
+10/10/2026,Payout,,,,,,USD,,383.15,,,,
+10/17/2026,Reservation,HMC3WE9P,10/16/2026,3,Jo Kim (fictional),Harbor Studio,USD,425.00,,75.00,80.00,500.00,
+10/17/2026,Payout,,,,,,USD,,425.00,,,,
+10/24/2026,Reservation,HMD4YU2L,10/23/2026,2,Alex Moreau (fictional),Lakeview Cabin - Hot Tub & Dock,USD,533.50,,16.50,150.00,550.00,
+10/24/2026,Payout,,,,,,USD,,533.50,,,,
+10/31/2026,Reservation,HME5IO8N,10/30/2026,2,Pat Liu (fictional),Pine Loft,USD,383.15,,11.85,95.00,395.00,
+10/31/2026,Payout,,,,,,USD,,383.15,,,,
+11/01/2026,Reservation,HME5IO8N,10/30/2026,2,Pat Liu (fictional),Pine Loft,USD,383.15,,11.85,95.00,395.00,
+11/01/2026,Payout,,,,,,USD,,383.15,,,,

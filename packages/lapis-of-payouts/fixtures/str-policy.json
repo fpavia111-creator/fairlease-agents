@@ -1,0 +1,13 @@
+{
+  "channels": {
+    "airbnb": { "fee_pct": 3, "fee_base": "gross_plus_cleaning", "payout_lag_days": 2 },
+    "vrbo": { "fee_pct": 8, "fee_base": "gross_plus_cleaning", "payout_lag_days": 10 }
+  },
+  "listings": {
+    "Lakeview Cabin": { "cleaning_fee": 150, "aliases": ["Lakeview Cabin - Hot Tub & Dock"] },
+    "Pine Loft": { "cleaning_fee": 95 },
+    "Harbor Studio": { "cleaning_fee": 80 }
+  },
+  "bank_lag_days": 5,
+  "tolerance": 1
+}

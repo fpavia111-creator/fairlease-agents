@@ -1,0 +1,1 @@
+{ "channels": { "vrbo": { "fee_pct": 8, "payout_lag_days": 10 } }, "listings": { "Ferienwohnung Seeblick": { "cleaning_fee": 60 } } }

@@ -1,0 +1,4 @@
+Reservation ID,Property,Traveler,Check-in,Check-out,Booking Amount,Cleaning Fee,Commission,Payout Amount,Payout Date,Currency
+HA-501,Lakeview Cabin,Morgan Hale (fictional),10/12/2026,10/15/2026,600.00,150.00,60.00,690.00,10/22/2026,USD
+HA-502,Pine Loft,Casey Brandt (fictional),10/17/2026,10/19/2026,300.00,120.00,33.60,386.40,10/27/2026,USD
+HA-503,Harbor Studio,Drew Novak (fictional),10/27/2026,10/29/2026,280.00,80.00,28.80,331.20,11/06/2026,USD

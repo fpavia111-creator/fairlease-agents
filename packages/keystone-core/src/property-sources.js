@@ -307,7 +307,8 @@ export const LEAD_FIELDS = Object.freeze({
 });
 
 export const BOOKING_FIELDS = Object.freeze({
-  booking_id: text(['Confirmation Code', 'Reservation ID', 'Booking ID', 'Reservation', 'Reservation Number', 'Confirmation', 'Booking Reference'], 'reference', { required: true }),
+  booking_id: text(['Confirmation Code', 'Reservation ID', 'Booking ID', 'Reservation', 'Reservation Number', 'Confirmation', 'Booking Reference', 'Buchungsnummer', 'Numéro de réservation', 'Número de reserva', 'Código de reserva', 'Número da reserva', 'Numero prenotazione', '予約番号', '预订号', '订单号', '예약번호'], 'reference', { required: true }),
+  channel: text(['Channel', 'Booking Source', 'Source', 'OTA', 'Booking Channel', 'Canal', 'Kanal', 'Canale', 'チャネル', '渠道', '채널'], 'lead_source'),
   type: text(['Type', 'Transaction Type', 'Line Type'], 'type'),
   listing: text(['Listing', 'Property', 'Listing Name', 'Rental', 'Unit', 'Property Name'], 'property'),
   guest: text(['Guest', 'Guest Name', 'Traveler', 'Traveller'], 'guest'),
@@ -315,13 +316,14 @@ export const BOOKING_FIELDS = Object.freeze({
   check_out: date(['End date', 'Check-out', 'Check Out', 'Departure', 'Departure Date', 'End Date'], 'check_out'),
   nights: num(['Nights', 'Night', 'Length of Stay', 'LOS'], 'nights'),
   currency: text(['Currency', 'Currency Code'], 'currency'),
-  gross: money(['Gross earnings', 'Gross Earnings', 'Gross', 'Booking Amount', 'Rental Amount', 'Total Booking', 'Accommodation', 'Gross Booking Value']),
-  cleaning_fee: money(['Cleaning fee', 'Cleaning Fee', 'Cleaning']),
-  service_fee: money(['Service fee', 'Service Fee', 'Host Fee', 'Commission', 'Channel Fee', 'Host service fee']),
+  gross: money(['Gross earnings', 'Gross Earnings', 'Gross', 'Booking Amount', 'Rental Amount', 'Total Booking', 'Accommodation', 'Gross Booking Value', 'Importe de la reserva', 'Preis', 'Montant de la réservation', 'Valor da reserva', 'Importo prenotazione', '宿泊料金', '房费', '숙박요금']),
+  cleaning_fee: money(['Cleaning fee', 'Cleaning Fee', 'Cleaning', 'Tarifa de limpieza', 'Limpieza', 'Reinigungsgebühr', 'Endreinigung', 'Frais de ménage', 'Taxa de limpeza', 'Pulizie', 'Costo pulizie', '清掃料金', '清洁费', '청소비']),
+  service_fee: money(['Service fee', 'Service Fee', 'Host Fee', 'Commission', 'Channel Fee', 'Host service fee', 'Comisión', 'Provision', 'Commission de la plateforme', 'Comissão', 'Commissione', 'サービス料', '服务费', '平台佣金', '서비스 수수료']),
   taxes: money(['Occupancy taxes', 'Occupancy Taxes', 'Taxes', 'Lodging Tax', 'Tax']),
   amount: money(['Amount', 'Net', 'Net Amount', 'Expected Payout', 'Payout Amount'], 'payout'),
   paid_out: money(['Paid out', 'Paid Out', 'Payout', 'Payout Sent', 'Actual Payout']),
-  payout_date: date(['Date', 'Payout Date', 'Paid Date', 'Transfer Date']),
+  status: text(['Status', 'Reservation Status', 'Booking Status'], 'status'),
+  payout_date: date(['Date', 'Payout Date', 'Paid Date', 'Transfer Date', 'Fecha de pago', 'Fecha del pago', 'Auszahlungsdatum', 'Date du versement', 'Data do repasse', 'Data accredito', '支払日', '打款日期', '지급일']),
 });
 
 export const LISTING_FIELDS = Object.freeze({
