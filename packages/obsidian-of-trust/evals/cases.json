@@ -1,0 +1,15 @@
+{
+  "suite": "obsidian-of-trust",
+  "root": "..",
+  "data_note": "Fictional trust bank statement, check register and ledgers in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {"id": "three-way", "tool": "obsidian_check", "args": {"bank": "fixtures/bank-statement-2026.csv", "book": "fixtures/trust-register-2026.csv", "ledgers": "fixtures/trust-ledgers-2026-10.csv", "policy": "fixtures/trust-policy.json"}, "expect": {"status": "executed", "equals": {"result.balanced": false, "result.three_way.adjusted_bank_balance": 57291, "result.three_way.book_balance": 58666, "result.three_way.ledger_total": 58666, "result.three_way.unexplained_bank_book": 0}, "contains": ["all of it bank items missing from the book"]}},
+    {"id": "returned-payment", "tool": "obsidian_check", "args": {"bank": "fixtures/bank-statement-2026.csv", "book": "fixtures/trust-register-2026.csv", "policy": "fixtures/trust-policy.json"}, "expect": {"contains": ["returned_item_not_in_book", "reverse the receipt"]}},
+    {"id": "duplicate", "tool": "obsidian_explain", "args": {"bank": "fixtures/bank-statement-2026.csv", "book": "fixtures/trust-register-2026.csv", "policy": "fixtures/trust-policy.json", "reference": "2202"}, "expect": {"contains": ["possible_duplicate", "entered twice"]}},
+    {"id": "stale", "tool": "obsidian_explain", "args": {"bank": "fixtures/bank-statement-2026.csv", "book": "fixtures/trust-register-2026.csv", "policy": "fixtures/trust-policy.json", "reference": "2150"}, "expect": {"contains": ["Outstanding 111 days", "unclaimed property"]}},
+    {"id": "negative-ledger", "tool": "obsidian_explain", "args": {"bank": "fixtures/bank-statement-2026.csv", "book": "fixtures/trust-register-2026.csv", "ledgers": "fixtures/trust-ledgers-2026-10.csv", "policy": "fixtures/trust-policy.json", "reference": "Pine Street Partners (fictional)"}, "expect": {"contains": ["negative balance of -350"]}},
+    {"id": "german-bank", "tool": "obsidian_check", "args": {"bank": "fixtures/exports/kontoauszug-de.csv", "book": "fixtures/trust-register-2026.csv", "policy": "fixtures/trust-policy.json"}, "expect": {"equals": {"result.three_way.bank_statement_balance": 58846, "result.three_way.adjusted_bank_balance": 57291}}},
+    {"id": "never-moves-money", "tool": "transfer_funds", "mode": "auto", "args": {}, "expect": {"status": "blocked"}},
+    {"id": "never-voids", "tool": "void_check", "mode": "auto", "args": {}, "expect": {"status": "blocked"}}
+  ]
+}

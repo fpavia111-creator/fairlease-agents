@@ -272,13 +272,20 @@ export const OWNER_STATEMENT_FIELDS = Object.freeze({
 });
 
 export const BANK_FIELDS = Object.freeze({
-  date: date(['Date', 'Posting Date', 'Post Date', 'Transaction Date', 'Value Date'], 'date', { required: true }),
+  date: date(['Date', 'Posting Date', 'Post Date', 'Transaction Date', 'Value Date', 'Buchungstag', 'Buchungsdatum', 'Valuta', 'Date d’opération', 'Date de valeur', 'Fecha operación', 'Fecha valor', 'Data do movimento', 'Data operazione', 'Data valuta', '取引日', '交易日期', '거래일'], 'date', { required: true }),
   description: text(['Description', 'Details', 'Memo', 'Payee', 'Transaction Description'], 'description'),
   amount: money(['Amount', 'Transaction Amount', 'Net Amount'], 'amount'),
-  debit: money(['Debit', 'Withdrawal', 'Withdrawals', 'Money Out', 'Payments'], 'debit'),
+  debit: money(['Debit', 'Withdrawal', 'Withdrawals', 'Money Out', 'Payment', 'Payments', 'Check Amount'], 'debit'),
   credit: money(['Credit', 'Deposit', 'Deposits', 'Money In', 'Receipts'], 'credit'),
-  reference: text(['Reference', 'Check Number', 'Check #', 'Ref', 'Bank Reference'], 'reference'),
+  reference: text(['Reference', 'Check Number', 'Check #', 'Ref', 'Bank Reference', 'Check No', 'Schecknummer', 'N° de chèque', 'Número de cheque', 'Número do cheque', 'Numero assegno', '小切手番号', '支票号', '수표번호'], 'reference'),
   balance: money(['Balance', 'Running Balance', 'Running Bal.'], 'balance'),
+});
+
+export const TRUST_LEDGER_FIELDS = Object.freeze({
+  party: text(['Owner', 'Owner Name', 'Tenant', 'Resident', 'Name', 'Party', 'Payee', 'Ledger', 'Account Holder', 'Eigentümer', 'Mieter', 'Propriétaire', 'Locataire', 'Propietario', 'Inquilino', 'Proprietário', 'Inquilino', 'Proprietario', 'Conduttore', 'オーナー', '入居者', '业主', '租户', '소유주', '임차인'], false, { required: true }),
+  type: text(['Type', 'Ledger Type', 'Fund', 'Category', 'Account Type', 'Art', 'Fonds', 'Tipo', 'Fondo', '区分', '类型', '구분'], 'type'),
+  property: PROPERTY,
+  balance: money(['Balance', 'Ending Balance', 'Cash Balance', 'Funds Held', 'Deposits Held', 'Owner Funds', 'Amount Held', 'Saldo', 'Solde', 'Guthaben', '残高', '余额', '잔액'], 'balance', { required: true }),
 });
 
 export const LEAD_FIELDS = Object.freeze({

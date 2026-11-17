@@ -1,0 +1,31 @@
+Date,Check #,Payee,Deposit,Payment
+2026-07-01,DEP-0701,Rent deposit batch,18500.00,
+2026-07-03,DEP-0702,Rent deposit batch,16200.00,
+2026-07-10,2100,Maple Court Holdings LLC (fictional) - owner distribution,,25000.00
+2026-07-12,2101,Example PM Co (fictional) - management fee,,2256.00
+2026-07-12,2150,Sparkle Cleaning (fictional),,95.00
+2026-07-15,DEP-0703,Rent deposit batch,2900.00,
+2026-07-20,2102,Payroll transfer,,5200.00
+2026-08-01,DEP-0801,Rent deposit batch,18500.00,
+2026-08-03,DEP-0802,Rent deposit batch,16200.00,
+2026-08-10,2103,Maple Court Holdings LLC (fictional) - owner distribution,,25000.00
+2026-08-12,2104,Example PM Co (fictional) - management fee,,2256.00
+2026-08-15,DEP-0803,Rent deposit batch,2900.00,
+2026-08-20,2105,Payroll transfer,,5200.00
+2026-09-01,DEP-0901,Rent deposit batch,18500.00,
+2026-09-03,DEP-0902,Rent deposit batch,16200.00,
+2026-09-10,2106,Maple Court Holdings LLC (fictional) - owner distribution,,25000.00
+2026-09-12,2107,Example PM Co (fictional) - management fee,,2256.00
+2026-09-15,DEP-0903,Rent deposit batch,2900.00,
+2026-09-20,2108,Payroll transfer,,5200.00
+2026-10-01,DEP-1001,Rent deposit batch,18500.00,
+2026-10-03,DEP-1002,Rent deposit batch,16200.00,
+2026-10-05,2201,FlowRight Plumbing (fictional),,145.00
+2026-10-06,2202,Volt Electric (fictional),,210.00
+2026-10-07,2202,Volt Electric (fictional),,210.00
+2026-10-10,2109,Maple Court Holdings LLC (fictional) - owner distribution,,25000.00
+2026-10-12,2110,Example PM Co (fictional) - management fee,,2256.00
+2026-10-15,DEP-1003,Rent deposit batch,2900.00,
+2026-10-20,2111,Payroll transfer,,5200.00
+2026-10-20,2204,Example Flooring (fictional),,3100.00
+2026-10-30,DEP-1004,Rent deposit,1850.00,

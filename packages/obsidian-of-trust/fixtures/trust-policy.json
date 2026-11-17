@@ -1,0 +1,9 @@
+{
+  "statement_end": "2026-10-31",
+  "book_opening_balance": 40000.0,
+  "book_opening_date": "2026-06-30",
+  "match_days": 10,
+  "stale_check_days": 90,
+  "transit_days": 5,
+  "tolerance": 0.01
+}

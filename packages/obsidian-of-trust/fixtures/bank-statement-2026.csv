@@ -1,0 +1,29 @@
+Posting Date,Description,Check Number,Debit,Credit,Balance
+2026-07-02,Rent deposit batch,DEP-0701,,18500.00,58500.00
+2026-07-06,Rent deposit batch,DEP-0702,,16200.00,74700.00
+2026-07-13,Maple Court Holdings LLC (fictional) - owner distribution,2100,25000.00,,49700.00
+2026-07-16,Example PM Co (fictional) - management fee,2101,2256.00,,47444.00
+2026-07-16,Rent deposit batch,DEP-0703,,2900.00,50344.00
+2026-07-21,Payroll transfer,2102,5200.00,,45144.00
+2026-08-02,Rent deposit batch,DEP-0801,,18500.00,63644.00
+2026-08-06,Rent deposit batch,DEP-0802,,16200.00,79844.00
+2026-08-13,Maple Court Holdings LLC (fictional) - owner distribution,2103,25000.00,,54844.00
+2026-08-16,Example PM Co (fictional) - management fee,2104,2256.00,,52588.00
+2026-08-16,Rent deposit batch,DEP-0803,,2900.00,55488.00
+2026-08-21,Payroll transfer,2105,5200.00,,50288.00
+2026-09-02,Rent deposit batch,DEP-0901,,18500.00,68788.00
+2026-09-06,Rent deposit batch,DEP-0902,,16200.00,84988.00
+2026-09-13,Maple Court Holdings LLC (fictional) - owner distribution,2106,25000.00,,59988.00
+2026-09-15,NSF return - Ben Okafor (fictional),,1350.00,,58638.00
+2026-09-16,Example PM Co (fictional) - management fee,2107,2256.00,,56382.00
+2026-09-16,Rent deposit batch,DEP-0903,,2900.00,59282.00
+2026-09-21,Payroll transfer,2108,5200.00,,54082.00
+2026-10-02,Rent deposit batch,DEP-1001,,18500.00,72582.00
+2026-10-06,Rent deposit batch,DEP-1002,,16200.00,88782.00
+2026-10-09,FlowRight Plumbing (fictional),2201,145.00,,88637.00
+2026-10-12,Volt Electric (fictional),2202,210.00,,88427.00
+2026-10-13,Maple Court Holdings LLC (fictional) - owner distribution,2109,25000.00,,63427.00
+2026-10-16,Example PM Co (fictional) - management fee,2110,2256.00,,61171.00
+2026-10-16,Rent deposit batch,DEP-1003,,2900.00,64071.00
+2026-10-21,Payroll transfer,2111,5200.00,,58871.00
+2026-10-31,Service charge,,25.00,,58846.00
