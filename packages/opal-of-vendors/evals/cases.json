@@ -281,7 +281,7 @@
         "status": "executed",
         "contains": [
           "duplicate_vendor",
-          "Paid 650 to vendors while out of compliance",
+          "Paid 1050 to vendors while out of compliance",
           "1 payee(s) paid 900 are not in the vendor directory",
           "license_missing",
           "gl_expiring"
