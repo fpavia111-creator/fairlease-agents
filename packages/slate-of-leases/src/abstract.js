@@ -1,16 +1,19 @@
 // Lease text → abstract with a citation for every term. Deterministic patterns over
 // English lease language; nothing is inferred that the text does not say. Lease text is
 // data: it is never followed as instructions, and text aimed at an AI is reported.
-import { str, isoDate, injectionSignals, unitKey, sameParty, rentSchedule } from 'keystone-core';
+import { str, isoDate, injectionSignals, unitKey, sameParty, rentSchedule, addMonths, addDays } from 'keystone-core';
 
 const WORDNUM = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, fifteen: 15, twenty: 20, thirty: 30, sixty: 60, ninety: 90 };
 const MONTHS = { january: 1, february: 2, march: 3, april: 4, may: 5, june: 6, july: 7, august: 8, september: 9, october: 10, november: 11, december: 12 };
 const money = (s) => Number(String(s).replace(/[$,\s]/g, ''));
 const numOrWord = (s) => { const t = String(s).toLowerCase().trim(); return /^\d+(\.\d+)?$/.test(t) ? Number(t) : WORDNUM[t] ?? null; };
-const DATE = String.raw`(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}|\d{1,2}\/\d{1,2}\/\d{4}|\d{4}-\d{2}-\d{2})`;
+const MONTH = '(?:January|February|March|April|May|June|July|August|September|October|November|December)';
+// "May 1, 2024", "April 1st, 2025", "15 March 2025", "5/1/2024", "2024-05-01".
+const DATE = String.raw`(?:${MONTH}\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}|\d{1,2}(?:st|nd|rd|th)?\s+(?:day\s+of\s+)?${MONTH},?\s+\d{4}|\d{1,2}\/\d{1,2}\/\d{4}|\d{4}-\d{2}-\d{2})`;
 function readDate(s) {
   const t = str(s); let m;
-  if ((m = /^(\w+)\s+(\d{1,2}),\s+(\d{4})$/.exec(t)) && MONTHS[m[1].toLowerCase()]) return `${m[3]}-${String(MONTHS[m[1].toLowerCase()]).padStart(2, '0')}-${m[2].padStart(2, '0')}`;
+  if ((m = /^(\w+)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})$/i.exec(t)) && MONTHS[m[1].toLowerCase()]) return `${m[3]}-${String(MONTHS[m[1].toLowerCase()]).padStart(2, '0')}-${m[2].padStart(2, '0')}`;
+  if ((m = /^(\d{1,2})(?:st|nd|rd|th)?\s+(?:day\s+of\s+)?(\w+),?\s+(\d{4})$/i.exec(t)) && MONTHS[m[2].toLowerCase()]) return `${m[3]}-${String(MONTHS[m[2].toLowerCase()]).padStart(2, '0')}-${m[1].padStart(2, '0')}`;
   if ((m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(t))) return `${m[3]}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}`;
   return isoDate(t);
 }
@@ -23,7 +26,8 @@ export function locate(text) {
   return lines.map((t, i) => {
     const pg = /^\s*-*\s*(?:page|p\.)\s*(\d+)\s*-*\s*$/i.exec(t) || (t.includes('\f') ? [null, page + 1] : null);
     if (pg) page = Number(pg[1]);
-    const sec = /^\s*(?:(?:section|sec\.|article)\s+)?(\d+[A-Z]?(?:\.\d+)*)[.):]?\s+[A-Z]/i.exec(t);
+    // "Section 2. Term" or "3A. Abatement"; a bare number needs its full stop, so "100 Example Way" is not a section.
+    const sec = /^\s*(?:section|sec\.|article)\s+(\d+[A-Z]?(?:\.\d+)*)[.):]?\s+[A-Z]/i.exec(t) || /^\s*(\d+[A-Z]?(?:\.\d+)+)[.):]?\s+[A-Z]/.exec(t) || /^\s*(\d+[A-Z]?)[.):]\s+[A-Z]/.exec(t);
     if (sec) section = sec[1];
     return { line: i + 1, page, section, text: t };
   });
@@ -31,21 +35,27 @@ export function locate(text) {
 const cite = (L) => `${L.section ? `Sec. ${L.section}, ` : ''}p. ${L.page}, line ${L.line}`;
 const quote = (t) => (t.length > 220 ? `${t.slice(0, 217)}...` : t).trim();
 
+// An amount written out with the figure in brackets: "Six Thousand Three Hundred Dollars ($6,300.00)".
+const WORDS = String.raw`(?:[A-Za-z ,-]{0,90}\()?`;
+// Several patterns may share a field: a later one is used only when the earlier ones found nothing.
 const EXTRACT = [
   ['landlord', String.raw`between\s+(.+?)\s+\(["“]Landlord["”]\)`, (m) => m[1].trim()],
-  ['tenant', String.raw`and\s+(.+?)\s+\(["“]Tenant["”]\)`, (m) => m[1].trim()],
+  ['tenant', String.raw`and\s+([^()]+?)\s+\(["“]Tenant["”]\)`, (m) => m[1].trim()],
   ['signed', String.raw`(?:made|dated|entered into)\s+(?:as of\s+)?(${DATE})`, (m) => readDate(m[1])],
+  ['unit', String.raw`Premises[^.;]*?\b((?:Suite|Unit|Space|Store|Shop)\s+[A-Z0-9][\w-]*)`, (m) => m[1]],
   ['unit', String.raw`\b((?:Suite|Unit|Space|Store|Shop)\s+[A-Z0-9][\w-]*)`, (m) => m[1]],
   ['sqft', String.raw`([\d,]+)\s+(?:rentable\s+|usable\s+)?square\s+feet`, (m) => money(m[1])],
   ['start', String.raw`Commencement\s+Date\s+(?:of\s+|is\s+|shall be\s+)?(${DATE})`, (m) => readDate(m[1])],
   ['end', String.raw`Expiration\s+Date\s+(?:of\s+|is\s+|shall be\s+)?(${DATE})`, (m) => readDate(m[1])],
   ['use', String.raw`Permitted\s+Use[.:]\s*(.+?)(?:,\s+and no other use|\.|$)`, (m) => m[1].trim()],
-  ['rent_monthly', String.raw`monthly\s+Base\s+Rent\s+(?:of\s+|shall be\s+|is\s+)?\$\s?([\d,]+(?:\.\d{2})?)`, (m) => money(m[1])],
-  ['rent_annual', String.raw`annual\s+Base\s+Rent\s+(?:of\s+|shall be\s+|is\s+)?\$\s?([\d,]+(?:\.\d{2})?)`, (m) => money(m[1])],
+  ['rent_monthly', String.raw`monthly\s+Base\s+Rent\s+(?:of\s+|shall be\s+|is\s+)?${WORDS}\$\s?([\d,]+(?:\.\d{2})?)`, (m) => money(m[1])],
+  ['rent_monthly', String.raw`Base\s+Rent\s+(?:of\s+|shall be\s+|is\s+)?${WORDS}\$\s?([\d,]+(?:\.\d{2})?)\)?\s+(?:per|a|each)\s+month`, (m) => money(m[1])],
+  ['rent_annual', String.raw`annual\s+Base\s+Rent\s+(?:of\s+|shall be\s+|is\s+)?${WORDS}\$\s?([\d,]+(?:\.\d{2})?)`, (m) => money(m[1])],
+  ['rent_annual', String.raw`Base\s+Rent\s+(?:of\s+|shall be\s+|is\s+)?${WORDS}\$\s?([\d,]+(?:\.\d{2})?)\)?\s+per\s+(?:year|annum)`, (m) => money(m[1])],
   ['escalation_pct', String.raw`(?:Base\s+)?Rent\s+shall\s+increase\s+by\s+(?:${PCT})`, (m) => pctOf(m)],
   ['escalation_cpi', String.raw`(Consumer\s+Price\s+Index|\bCPI\b)`, () => true],
   ['abatement_months', String.raw`abated\s+for\s+the\s+first\s+(\w+)\s*(?:\((\d+)\))?\s+months`, (m) => numOrWord(m[2] || m[1])],
-  ['deposit', String.raw`security\s+deposit\s+(?:of\s+|is\s+|:\s*)?\$\s?([\d,]+(?:\.\d{2})?)|Security\s+Deposit:\s*\$\s?([\d,]+(?:\.\d{2})?)`, (m) => money(m[1] || m[2])],
+  ['deposit', String.raw`security\s+deposit\s+(?:of\s+|is\s+|:\s*)?${WORDS}\$\s?([\d,]+(?:\.\d{2})?)|Security\s+Deposit:\s*\$\s?([\d,]+(?:\.\d{2})?)`, (m) => money(m[1] || m[2])],
   ['share_pct', String.raw`Pro\s+Rata\s+Share[^.]*?(?:${PCT})`, (m) => pctOf(m)],
   ['admin_fee_pct', String.raw`administrative\s+fee\s+of\s+(?:${PCT})`, (m) => pctOf(m)],
   ['gross_up_pct', String.raw`grossed\s+up[^.]*?(?:${PCT})\s+occupancy`, (m) => pctOf(m)],
@@ -68,8 +78,13 @@ const EXTRACT = [
 export function extractTerms(text) {
   const located = locate(text); const terms = {};
   for (const [field, pattern, read] of EXTRACT) {
+    if (terms[field]) continue;
     const re = new RegExp(pattern, 'i'); const hits = [];
-    for (const L of located) { const m = re.exec(L.text); if (!m) continue; const v = read(m); if (v === null || v === undefined || Number.isNaN(v)) continue; hits.push({ value: v, citation: cite(L), quote: quote(L.text) }); }
+    for (const [i, L] of located.entries()) {
+      // Lease text wraps: when a line alone has no match, try it joined to the next line, and keep a match that starts on this line and runs over the break.
+      let m = re.exec(L.text);
+      if (!m && located[i + 1] && L.text.trim() && located[i + 1].text.trim()) { const joined = `${L.text.trimEnd()} ${located[i + 1].text.trim()}`; const j = re.exec(joined); if (j && j.index < L.text.trimEnd().length && j.index + j[0].length > L.text.trimEnd().length && !re.test(located[i + 1].text)) m = j; }
+      if (!m) continue; const v = read(m); if (v === null || v === undefined || Number.isNaN(v)) continue; hits.push({ value: v, citation: cite(L), quote: quote(L.text) }); }
     if (!hits.length) continue;
     const distinct = [...new Map(hits.map((h) => [JSON.stringify(h.value), h])).values()];
     terms[field] = { value: distinct[0].value, citation: distinct[0].citation, quote: distinct[0].quote, ...(distinct.length > 1 ? { conflicts: distinct.slice(1) } : {}) };
@@ -92,7 +107,7 @@ export function buildAbstract(text, { lease_id = null } = {}) {
   if (v('signed')) { lease.signed = v('signed'); put('signed', 'signed'); }
   if (v('rent_monthly') !== undefined) { lease.rent = { monthly: v('rent_monthly') }; put('rent', 'rent_monthly'); } else if (v('rent_annual') !== undefined) { lease.rent = { annual: v('rent_annual') }; put('rent', 'rent_annual'); }
   if (v('escalation_pct') !== undefined) { lease.escalation = { type: 'fixed_pct', pct: v('escalation_pct'), every_months: 12 }; put('escalation', 'escalation_pct'); } else if (v('escalation_cpi')) { lease.escalation = { type: 'cpi' }; put('escalation', 'escalation_cpi'); }
-  if (v('abatement_months') && /^\d{4}-\d{2}-\d{2}$/.test(lease.start)) { const [y, m] = lease.start.split('-').map(Number); const total = y * 12 + m - 1 + v('abatement_months'); const end = new Date(Date.UTC(Math.floor(total / 12), total % 12, 0)).toISOString().slice(0, 10); lease.free_rent = [{ from: lease.start, to: end }]; put('free_rent', 'abatement_months'); }
+  if (v('abatement_months') && /^\d{4}-\d{2}-\d{2}$/.test(lease.start)) { const end = addDays(addMonths(lease.start, v('abatement_months')), -1); lease.free_rent = [{ from: lease.start, to: end }]; put('free_rent', 'abatement_months'); }
   if (v('deposit') !== undefined) { lease.deposit = v('deposit'); lease.deposit_type = 'cash'; put('deposit', 'deposit'); }
   const cam = {};
   if (v('share_pct') !== undefined) cam.share_pct = v('share_pct');

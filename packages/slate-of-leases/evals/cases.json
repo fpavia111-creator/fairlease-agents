@@ -228,6 +228,26 @@
           "text"
         ]
       }
+    },
+    {
+      "id": "wrapped-lines-day-first-dates-and-amounts-in-words",
+      "tool": "slate_abstract",
+      "args": {
+        "text": "fixtures/lease-wrapped-lines.txt"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.lease.start": "2025-04-01",
+          "result.lease.end": "2030-03-31",
+          "result.lease.signed": "2025-03-15",
+          "result.lease.sqft": 3150,
+          "result.lease.rent.monthly": 6300,
+          "result.lease.deposit": 12600,
+          "result.lease.unit": "Suite 210",
+          "result.lease.tenant": "Evergreen Design Studio, Inc."
+        }
+      }
     }
   ]
 }

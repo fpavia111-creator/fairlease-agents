@@ -15,6 +15,8 @@ Parties, signing date, premises and area, commencement and expiration dates, per
 
 Every value comes with where it was found. Nothing is inferred: a term the patterns do not find stays `[TO CONFIRM]`.
 
+Lease text wraps, so a term that runs over a line break is still found and cited at the line it starts on. Dates are read as "May 1, 2024", "April 1st, 2025", "15 March 2025", `5/1/2024` or `2024-05-01`. Amounts written out with the figure in brackets ("Six Thousand Three Hundred Dollars ($6,300.00) per month") are read from the figure. The premises are taken from the Premises clause before any other suite number in the text, such as the landlord's own address. Free rent runs from the start date to the day before the same day N months on.
+
 
 ## Files it reads
 
