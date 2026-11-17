@@ -27,6 +27,9 @@ export function checkWorkOrders({ rows, policy = {}, asOf }) {
   const wos = rows.map((r) => ({ id: str(r.work_order), property: str(r.property), unit: str(r.unit), category: str(r.category) || 'other', description: str(r.description), priority: PRI(r.priority), priority_text: str(r.priority), status_text: str(r.status), vendor: str(r.vendor), created: isoDate(r.created), completed: isoDate(r.completed), cost: num(r.cost) }))
     .filter((w) => w.id && !CANCEL.test(w.status_text));
   const byCat = {}; for (const w of wos) if (w.completed && w.cost) (byCat[w.category] = byCat[w.category] || []).push(w.cost);
+  const medByCat = Object.fromEntries(Object.entries(byCat).map(([c, xs]) => [c, xs.length >= 3 ? median(xs) : null]));
+  // Same unit and category, grouped once: comparing every order with every other order is slow on large files.
+  const byUnitCat = new Map(); for (const o of wos) { const k = `${unitKey(o.unit)}\u0000${o.category}`; if (!byUnitCat.has(k)) byUnitCat.set(k, []); byUnitCat.get(k).push(o); }
   const items = [];
   for (const w of wos) {
     const findings = []; const add = (code, detail, extra = {}) => findings.push({ code, detail, ...extra });
@@ -40,9 +43,9 @@ export function checkWorkOrders({ rows, policy = {}, asOf }) {
     if (!closed && age !== null && age > stale) add('stale', `Open for ${age} days.`);
     if (!closed && !w.vendor && age !== null && age > unassigned) add('unassigned', `No vendor or technician after ${age} days.`);
     if (closed && w.cost === null) add('cost_missing', 'Completed with no cost recorded.', { severity: 'note' });
-    const med = median(byCat[w.category] || []);
-    if (w.cost && med && (byCat[w.category] || []).length >= 3 && w.cost > med * factor) add('cost_outlier', `Cost ${w.cost} is ${r2(w.cost / med)}× the ${w.category} median of ${med}; check the invoice or whether it was a replacement.`);
-    const repeats = wos.filter((o) => o !== w && unitKey(o.unit) === unitKey(w.unit) && o.category === w.category && o.created && w.created && o.created < w.created && daysBetween(o.created, w.created) <= repeatDays);
+    const med = medByCat[w.category];
+    if (w.cost && med && w.cost > med * factor) add('cost_outlier', `Cost ${w.cost} is ${r2(w.cost / med)}× the ${w.category} median of ${med}; check the invoice or whether it was a replacement.`);
+    const repeats = byUnitCat.get(`${unitKey(w.unit)}\u0000${w.category}`).filter((o) => o !== w && o.created && w.created && o.created < w.created && daysBetween(o.created, w.created) <= repeatDays);
     if (repeats.length) add('repeat', `${repeats.length + 1} ${w.category} orders in unit ${w.unit} within ${repeatDays} days (${[...repeats.map((o) => o.id), w.id].join(', ')}); the first fix may not have held.`);
     const issue = findings.some((f) => f.severity !== 'note');
     items.push({ work_order: w.id, unit: w.unit, category: w.category, description: w.description, priority: w.priority, vendor: w.vendor, created: w.created, completed: w.completed, days_open: age, target_days: target, cost: w.cost, open: !closed, status: issue ? 'issue' : 'ok', findings });

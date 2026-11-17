@@ -1,24 +1,22 @@
-# MCP quality checklist for Mythos-style agent families
+# MCP quality checklist for Keystone-style agent families
 
-Written 2026-11-16 after running all 30 Mythos agents (308 tools) through the official
-MCP SDK client. Use it for any new agent family built on `mythos-agent-core`.
+The Keystone core carries the MCP fixes first made for the earlier agent families in this
+project. Keystone's own result, 17 Nov 2026, running all 30 agents through the official MCP
+SDK client over real stdio (`npm run mcp:check`):
 
-## What the check found on the 30 Mythos agents
+| Check | Result |
+|---|---|
+| Connects, lists and calls over real stdio with the official SDK client | 30 of 30 |
+| Tools listed | 314 |
+| Tool names valid under the 2025-11-25 spec | all |
+| Input schemas compile (JSON Schema 2020-12) | all |
+| Tool arguments with no description | 0 |
+| Every tool called with `{}` comes back as a tool result, not a protocol error | all |
+| Issues | 0 |
 
-| Check | Before | After |
-|---|---|---|
-| Connects, lists and calls over real stdio with the official SDK client | 30 of 30 | 30 of 30 |
-| Tool names valid under the 2025-11-25 spec | all | all |
-| Input schemas compile (JSON Schema 2020-12) | all | all |
-| Tool arguments with no description | **509** | **0** |
-| Tools with an output schema | 0 | 248 (every agent tool) |
-| Result text sent to the model (all tools called with `{}`) | 166k chars | 127k chars (-23%) |
-| JSON-RPC batch (protocol 2025-03-26) | dropped silently | answered |
-| Memory tools: `enum` with no `type` | 4 args | fixed |
-
-Context cost: all 30 agents' tool lists together are about 73k tokens as a model sees
-them (about 2.4k per agent). Fine for one or a few agents; installing all 30 at once
-in a client without tool search would use a large part of a context window.
+Context cost: like the earlier families, each agent's tool list is a few thousand tokens as
+a model sees it. Fine for one or a few agents; installing all 30 at once in a client
+without tool search would use a large part of a context window.
 
 ## Rules for a new family
 

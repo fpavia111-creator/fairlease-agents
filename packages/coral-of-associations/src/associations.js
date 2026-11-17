@@ -120,7 +120,7 @@ function checkAccount(acct, policy, asOf, fromYm) {
   return { kind: 'account', id: acct.account || acct.unit || acct.owner, account: acct.account || null, unit: acct.unit || null, owner: acct.owner, amount: balance, balance, past_due: pastDue, days, oldest_unpaid: oldest, expected_assessment: expected, charged, paid, step: current ? current.step : null, next_step: next ? next.step : null, status, findings, periods };
 }
 
-function checkViolation(v, all, policy, asOf) {
+function checkViolation(v, priorOf, policy, asOf) {
   const vp = policy.violations || {}; const findings = []; const add = (code, detail, extra = {}) => findings.push({ code, detail, ...extra });
   const opened = isoDate(v.opened); const n1 = isoDate(v.notice_1); const n2 = isoDate(v.notice_2); const hearing = isoDate(v.hearing); const closedOn = isoDate(v.closed);
   const fine = num(v.fine) || 0; const st = fold(v.status);
@@ -133,8 +133,8 @@ function checkViolation(v, all, policy, asOf) {
   if (fine > 0 && vp.hearing_before_fine && (!hearing || hearing > asOf)) add('fine_without_hearing', `Fine of ${fine} recorded ${hearing ? `before the hearing on ${hearing}` : 'with no hearing date'}; your policy holds a hearing before a fine.`, { amount: fine });
   if (!closed && age !== null && vp.stale_days && age > vp.stale_days) add('stale', `Open ${age} days (your policy flags after ${vp.stale_days}).`);
   if (opened && vp.repeat_days) {
-    const prior = all.filter((o) => o !== v && fold(o.unit) === fold(v.unit) && fold(o.type) && fold(o.type) === fold(v.type) && isoDate(o.opened) && isoDate(o.opened) < opened && daysBetween(isoDate(o.opened), opened) <= vp.repeat_days);
-    if (prior.length) add('repeat', `Same rule at this unit ${prior.length} time(s) in the ${vp.repeat_days} days before: ${prior.map((o) => `${o.violation_id} (${isoDate(o.opened)})`).join(', ')}.`);
+    const prior = priorOf(v);
+    if (prior.length) add('repeat', `Same rule at this unit ${prior.length} time(s) in the ${vp.repeat_days} days before: ${prior.slice(-5).map((o) => `${o.violation_id} (${isoDate(o.opened)})`).join(', ')}${prior.length > 5 ? ` and ${prior.length - 5} earlier` : ''}.`);
   }
   const action = ['first_notice_late', 'second_notice_due', 'fine_without_hearing', 'stale', 'dates_out_of_order', 'opened_unknown'];
   const status = findings.some((f) => action.includes(f.code)) ? 'action' : closed ? 'closed' : 'open';
@@ -155,7 +155,22 @@ export function checkAssociation({ ledger = null, violations = null, policy, asO
     const fromYm = policy.periods_from || (dates[0] || asOf).slice(0, 7);
     for (const a of accts.values()) items.push(checkAccount(a, policy, asOf, fromYm));
   }
-  if (violations) for (const v of violations) items.push(checkViolation(v, violations, policy, asOf));
+  if (violations) {
+    // Repeats are looked for among violations at the same unit for the same rule, grouped once (large logs).
+    const key = (v) => `${fold(v.unit)}\u0000${fold(v.type)}`; const groups = new Map();
+    for (const v of violations) { const k = key(v); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(v); }
+    // Each group sorted by the date opened once; the earlier ones within repeat_days are a window, not a scan.
+    const days = (policy.violations || {}).repeat_days; const opened = new Map(violations.map((v) => [v, isoDate(v.opened)]));
+    for (const g of groups.values()) g.sort((x, y) => String(opened.get(x) || '').localeCompare(String(opened.get(y) || '')));
+    const priorOf = (v) => {
+      const o = opened.get(v); if (!o || !days || !fold(v.type)) return [];
+      const g = groups.get(key(v)); const from = addDays(o, -days); const out = [];
+      let lo = 0, hi = g.length; while (lo < hi) { const m = (lo + hi) >> 1; if ((opened.get(g[m]) || '') < from) lo = m + 1; else hi = m; }
+      for (let i = lo; i < g.length && (opened.get(g[i]) || '') < o; i++) if (g[i] !== v && opened.get(g[i])) out.push(g[i]);
+      return out;
+    };
+    for (const v of violations) items.push(checkViolation(v, priorOf, policy, asOf));
+  }
   const order = { delinquent: 0, action: 1, issue: 2, open: 3, credit: 4, ok: 5, closed: 6 };
   items.sort((x, y) => order[x.status] - order[y.status] || (y.days ?? 0) - (x.days ?? 0) || String(x.unit).localeCompare(String(y.unit), undefined, { numeric: true }));
   const accounts = items.filter((i) => i.kind === 'account'); const vio = items.filter((i) => i.kind === 'violation');
