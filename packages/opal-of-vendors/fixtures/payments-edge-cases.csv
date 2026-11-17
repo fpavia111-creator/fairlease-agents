@@ -1,0 +1,6 @@
+Payee,Payment Date,Amount,Check Number,GL Account
+Summit Mechanical Inc (fictional),2026-10-31,400.00,ACH-901,6410
+Summit Mechanical Inc (fictional),2026-11-03,650.00,ACH-905,6410
+Clearview Windows (fictional),2026-11-10,200.00,ACH-910,6430
+Clearview Windows (fictional),2026-11-11,-200.00,VOID ACH-910,6430
+Cash Handyman (fictional),2026-11-06,900.00,CHK-3310,6400

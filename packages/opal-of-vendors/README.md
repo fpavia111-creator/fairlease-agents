@@ -17,7 +17,10 @@ npx -y opal-of-vendors mcp --root ./vendors
 | `…_expiring` | Expires within `warn_days` (default 30) |
 | `…_missing` | Required by your file, no date on record |
 | `tax_id_missing`, `w9_missing` | Tax details your file requires |
-| `paid_while_noncompliant` | Payments dated after something lapsed (or while it was missing) |
+| `paid_while_noncompliant` | Payments dated after something lapsed (or while it was missing); a payment on the last day of cover is fine, and a payment with its void nets out |
+| `duplicate_vendor` | The vendor is in the directory more than once; its payments are counted on the first row only |
+
+With a payments file the result also lists `unlisted_payees`: anyone who was paid but is not in the vendor directory at all, so nobody is tracking their insurance. A vendor with several trades ("Plumbing, HVAC") has to meet what each trade needs.
 
 Requirements file: `default` applies to everyone (`gl`, `wc`, `auto`, `license`, `tax_id`, `w9`), `trades` adds by trade name (matched inside the vendor's trade text), `exempt` lists what a named vendor does not need (for example workers' comp for a sole proprietor with an exemption).
 

@@ -222,6 +222,74 @@
           "vendors"
         ]
       }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "opal_draft_request",
+      "args": {
+        "vendors": "fixtures/vendor-directory-appfolio.csv",
+        "requirements": "fixtures/vendor-requirements.json",
+        "as_of": "2026-11-15",
+        "vendor": "QuickFix HVAC (fictional)"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "opal_draft_request",
+      "approve": "Dana Example",
+      "args": {
+        "vendors": "fixtures/vendor-directory-appfolio.csv",
+        "requirements": "fixtures/vendor-requirements.json",
+        "as_of": "2026-11-15",
+        "vendor": "QuickFix HVAC (fictional)"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "opal_draft_request",
+      "mode": "review",
+      "args": {
+        "vendors": "fixtures/vendor-directory-appfolio.csv",
+        "requirements": "fixtures/vendor-requirements.json",
+        "as_of": "2026-11-15",
+        "vendor": "QuickFix HVAC (fictional)"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "two-trades-duplicate-row-void-and-unlisted-payee",
+      "tool": "opal_check",
+      "args": {
+        "vendors": "fixtures/vendor-directory-edge-cases.csv",
+        "requirements": "fixtures/vendor-requirements.json",
+        "payments": "fixtures/payments-edge-cases.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "duplicate_vendor",
+          "Paid 650 to vendors while out of compliance",
+          "1 payee(s) paid 900 are not in the vendor directory",
+          "license_missing",
+          "gl_expiring"
+        ],
+        "equals": {
+          "result.unlisted_payees.0.payee": "Cash Handyman (fictional)"
+        }
+      }
     }
   ]
 }

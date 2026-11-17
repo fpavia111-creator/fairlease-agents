@@ -1,0 +1,4 @@
+Company Name,Vendor Trades,Tax ID,Send 1099?,Liability Ins. Expires,Workers Comp Expires,Auto Insurance Expires,State Lic. Expires,Email,Phone Numbers
+Summit Mechanical Inc (fictional),"Plumbing, HVAC",12-3456791,Yes,10/31/2026,03/31/2027,,,office@summit.example,555-0111
+"Summit Mechanical, Inc. (fictional)",Plumbing,12-3456791,Yes,10/31/2026,03/31/2027,,,office@summit.example,555-0111
+Clearview Windows (fictional),Window Cleaning,12-3456792,Yes,11/15/2026,06/30/2027,,,hello@clearview.example,555-0112
