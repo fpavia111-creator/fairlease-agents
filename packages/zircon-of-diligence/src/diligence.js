@@ -41,7 +41,7 @@ export function checkDiligence({ rentRoll, t12Rows, policy = {}, asOf }) {
   }
   const dupKeys = units.map((u) => str(u.unit).toLowerCase()); const dups = [...new Set(dupKeys.filter((k, i) => dupKeys.indexOf(k) !== i))];
   // T-12.
-  const accts = readT12(t12Rows); const months = [...new Set(accts.flatMap((a) => Object.keys(a.months)))].sort();
+  const accts = monthlyByAccount(t12Rows, { natural: (x) => (startsWithAny(x, expP) ? 'debit' : 'credit') }); const months = [...new Set(accts.flatMap((a) => Object.keys(a.months)))].sort();
   const last = months[months.length - 1] || null;
   const isInc = (a) => startsWithAny(a.account, incP); const isExp = (a) => startsWithAny(a.account, expP);
   const isRent = (a) => (policy.rent_accounts ? policy.rent_accounts.includes(a.account) : isInc(a) && RENT_NAME.test(foldText(a.name)) && !NOT_RENT.test(a.name));
