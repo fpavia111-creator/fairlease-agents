@@ -1,6 +1,6 @@
 // Leasing funnel from guest cards and lead exports: speed to respond, follow-ups, conversion and cost by source. Pure functions.
 // Mica never screens, approves or denies anyone; it reads dates and statuses only.
-import { r2, num, str, isoDate, addDays, daysBetween, foldText, sameParty } from 'keystone-core';
+import { r2, num, str, isoDate, addDays, daysBetween, foldText, partyKey } from 'keystone-core';
 
 const D = { type: 'string', pattern: '^\\d{4}-\\d{2}-\\d{2}$' };
 export const LEAD_POLICY_SCHEMA = Object.freeze({
@@ -34,6 +34,19 @@ export function checkLeads({ leads, policy = {}, asOf, learned = {} }) {
   const rows = leads.map((l) => ({ id: str(l.lead_id), name: str(l.name), email: str(l.email).trim().toLowerCase(), phone: normPhone(l.phone), property: str(l.property), source: sourceName(l.source, policy, learned), raw_source: str(l.source), unit_type: str(l.unit_type), created: isoDate(l.created), first_response: isoDate(l.first_response), toured: isoDate(l.toured), applied: isoDate(l.applied), approved: isoDate(l.approved), leased: isoDate(l.leased), status: str(l.status), lost_reason: str(l.lost_reason) }))
     .filter((l) => l.id && (!policy.from || !l.created || l.created >= policy.from) && (!policy.to || !l.created || l.created <= policy.to))
     .sort((a, b) => String(a.created).localeCompare(String(b.created)) || a.id.localeCompare(b.id));
+  // Earlier leads by email, phone and name, so a duplicate is found without comparing every pair (large exports).
+  const seen = { email: new Map(), phone: new Map(), name: new Map() };
+  const keysOf = (l) => [['email', l.email || null], ['phone', l.phone && l.phone.length >= 7 ? l.phone : null], ['name', l.name ? partyKey(l.name) || null : null]];
+  const priorOf = (l, i) => {
+    if (!l.created) return null; const from = addDays(l.created, -dupDays); let best = null;
+    for (const [kind, k] of keysOf(l)) {
+      const list = k && seen[kind].get(k); if (!list) continue;
+      let lo = 0, hi = list.length; while (lo < hi) { const m = (lo + hi) >> 1; if (list[m].row.created < from) lo = m + 1; else hi = m; }
+      if (lo < list.length && list[lo].i < i && (!best || list[lo].i < best.i)) best = list[lo];
+    }
+    return best ? best.row : null;
+  };
+  const remember = (l, i) => { if (!l.created) return; for (const [kind, k] of keysOf(l)) if (k) { if (!seen[kind].has(k)) seen[kind].set(k, []); seen[kind].get(k).push({ i, row: l }); } };
   const items = [];
   for (const [i, l] of rows.entries()) {
     const findings = []; const add = (code, detail) => findings.push({ code, detail });
@@ -47,7 +60,7 @@ export function checkLeads({ leads, policy = {}, asOf, learned = {} }) {
     if (l.created && l.first_response) { l.response_days = daysBetween(l.created, l.first_response); if (l.response_days > within) add('slow_response', `First response ${l.first_response}, ${l.response_days} day(s) after the lead came in (${l.created}); your target is ${within}.`); }
     else if (l.created && !l.first_response && open && addDays(l.created, within) < asOf) add('no_response', `Came in ${l.created} (${daysBetween(l.created, asOf)} days ago) and no response is recorded.`);
     // Duplicates: same email, phone or name within duplicate_days of an earlier lead.
-    const prior = rows.slice(0, i).find((p) => p.created && l.created && daysBetween(p.created, l.created) <= dupDays && ((l.email && p.email === l.email) || (l.phone && l.phone.length >= 7 && p.phone === l.phone) || (l.name && sameParty(p.name, l.name))));
+    const prior = priorOf(l, i); remember(l, i);
     if (prior) { l.duplicate_of = prior.id; add('duplicate', `Same person as lead ${prior.id} (${prior.source}, ${prior.created}); counted once in the source table.`); }
     const last = [l.created, l.first_response, l.toured, l.applied, l.approved].filter(Boolean).sort().at(-1);
     if (open && l.approved && !l.leased && addDays(l.approved, apprDays) < asOf) add('approved_not_leased', `Approved ${l.approved}, ${daysBetween(l.approved, asOf)} days ago, and no lease signed.`);
