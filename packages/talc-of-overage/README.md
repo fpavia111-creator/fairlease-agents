@@ -16,6 +16,7 @@ npx -y talc-of-overage mcp --root ./retail
 - **Fixed breakpoint**: the amount in the lease, prorated by days in a partial year unless `prorate_partial_year` is `false`.
 - **Net sales**: gross sales less the exclusions in your sales file. Percentage rent = rate × net sales over the breakpoint.
 - **Billed**: percentage rent charges in the optional ledger dated in the lease year (or up to `billed_through`, for a true-up billed in the spring).
+- **Forgiving matching**: a lease id typed `l101` or `L 101` still finds lease `L-101`; exclusions exported as negative numbers are taken off, not added; a revised report does not make a month late (lateness is judged on the first report); payment lines in the ledger never count as billed. With no `report_due_days`, a month is only expected once it has ended.
 
 | Finding | Meaning |
 |---|---|
@@ -28,6 +29,7 @@ npx -y talc-of-overage mcp --root ./retail
 | `below_so_far`, `near_breakpoint` | Sales sit just under the breakpoint, so the missing months or the exclusions decide |
 | `exclusions_high` | Exclusions over 10% of gross sales |
 | `sales_drop` | Net sales down 15% or more on the prior year (when both years are in the file) |
+| `exclusions_exceed_sales` | A month's exclusions are larger than its gross sales; **review** |
 
 
 ## Files it reads

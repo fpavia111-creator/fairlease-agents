@@ -8,7 +8,8 @@ export function leaseYear(lease, year) {
   return { from, to, months: monthsInRange(from, to) };
 }
 
-const matchLease = (leases, r, m) => (leases.leases || []).find((x) => (r.lease_id && str(r.lease_id) === x.lease_id) || (!r.lease_id && ((r.unit && sameUnit(x.unit, r.unit)) || (!r.unit && r.tenant)) && (!r.tenant || sameParty(x.tenant, r.tenant)) && (!m || overlapDays(x.start, x.end, `${m}-01`, monthEnd(`${m}-01`)))));
+const flat = (v) => str(v).toLowerCase().replace(/[^a-z0-9]/g, '');
+const matchLease = (leases, r, m) => (leases.leases || []).find((x) => (r.lease_id && flat(r.lease_id) === flat(x.lease_id)) || (!r.lease_id && ((r.unit && sameUnit(x.unit, r.unit)) || (!r.unit && r.tenant)) && (!r.tenant || sameParty(x.tenant, r.tenant)) && (!m || overlapDays(x.start, x.end, `${m}-01`, monthEnd(`${m}-01`)))));
 
 /** Sales reports by lease and month. Several reports for one month: the latest received wins (a revision). */
 export function salesByMonth(rows, leases) {
@@ -18,12 +19,15 @@ export function salesByMonth(rows, leases) {
     if (!m || gross === null) { unreadable.push({ row: r.__row ?? null, period: str(r.period), tenant: str(r.tenant || r.lease_id) }); continue; }
     const l = matchLease(leases, r, m);
     if (!l) { unmatched.push({ tenant: str(r.tenant), unit: str(r.unit), period: m, gross_sales: gross }); continue; }
-    const rec = { month: m, gross_sales: r2(gross), exclusions: r2(num(r.exclusions) || 0), reported_on: isoDate(r.reported_on) };
+    // Exclusions are deductions whichever sign the export gives them.
+    const rec = { month: m, gross_sales: r2(gross), exclusions: r2(Math.abs(num(r.exclusions) || 0)), reported_on: isoDate(r.reported_on), first_reported_on: isoDate(r.reported_on) };
     const k = `${l.lease_id}|${m}`; const was = out.get(k);
     if (!was) { out.set(k, { ...rec, versions: 1 }); continue; }
     const later = (rec.reported_on || '') >= (was.reported_on || '');
     const same = rec.gross_sales === was.gross_sales && rec.exclusions === was.exclusions;
-    out.set(k, { ...(later ? rec : was), versions: was.versions + 1, conflict: was.conflict || (!same && rec.reported_on === was.reported_on), revised_from: same ? was.revised_from : r2((later ? was : rec).gross_sales) });
+    // A revision is not a late report: lateness is judged on the first report received.
+    const first = !rec.reported_on || !was.first_reported_on ? null : (rec.reported_on < was.first_reported_on ? rec.reported_on : was.first_reported_on);
+    out.set(k, { ...(later ? rec : was), first_reported_on: first, versions: was.versions + 1, conflict: was.conflict || (!same && rec.reported_on === was.reported_on), revised_from: same ? was.revised_from : r2((later ? was : rec).gross_sales) });
   }
   return { sales: out, unmatched, unreadable };
 }
@@ -33,6 +37,7 @@ export function billedPercentageRent(rows, leases, from, to, aliases = {}) {
   const out = new Map();
   for (const r of rows || []) {
     if (chargeKind(r.charge_code || r.description, aliases) !== 'percentage_rent' && chargeKind(r.description, aliases) !== 'percentage_rent') continue;
+    if (num(r.charge) === null && num(r.payment) !== null) continue; // a payment line, not a charge
     const d = isoDate(r.date); if (!d || d < from || d > to) continue;
     const amt = num(r.charge) ?? num(r.amount); if (amt === null) continue;
     const l = matchLease(leases, r, null); if (!l) continue;
@@ -72,9 +77,13 @@ export function computeOverage({ leases, rows, year, billedRows = null, billedTh
     for (const m of inForce) {
       const s = sales.get(`${l.lease_id}|${m}`);
       const due = pr.report_due_days !== undefined ? addDays(monthEnd(`${m}-01`), pr.report_due_days) : null;
-      if (!s) { if (!due || due < today) missing.push(m); lines.push({ month: m, gross_sales: null, exclusions: null, net_sales: null, reported_on: null, due, status: due && due >= today ? 'not_due' : 'missing' }); continue; }
-      const isLate = !!(due && s.reported_on && s.reported_on > due);
-      if (isLate) late.push({ month: m, days: daysBetween(due, s.reported_on) });
+      // With no deadline in the lease, a month cannot be missing before it has ended.
+      const waitUntil = due || monthEnd(`${m}-01`);
+      if (!s) { if (waitUntil < today) missing.push(m); lines.push({ month: m, gross_sales: null, exclusions: null, net_sales: null, reported_on: null, due, status: waitUntil >= today ? 'not_due' : 'missing' }); continue; }
+      const firstOn = s.versions > 1 ? s.first_reported_on : s.reported_on;
+      const isLate = !!(due && firstOn && firstOn > due);
+      if (isLate) late.push({ month: m, days: daysBetween(due, firstOn) });
+      if (s.exclusions > s.gross_sales + 0.004 || s.gross_sales < 0) add('exclusions_exceed_sales', s.gross_sales < 0 ? `${m}: gross sales are negative (${s.gross_sales}); check the report.` : `${m}: exclusions ${s.exclusions} are more than gross sales ${s.gross_sales}; check the report.`, { month: m });
       if (s.conflict) add('conflicting_reports', `${m}: two different sales reports with the same date; the figures used may be wrong.`, { month: m });
       else if (s.versions > 1 && s.revised_from !== undefined) add('sales_revised', `${m}: report revised from ${s.revised_from} to ${s.gross_sales} (latest report used).`, { month: m, severity: 'note' });
       lines.push({ month: m, gross_sales: s.gross_sales, exclusions: s.exclusions, net_sales: r2(s.gross_sales - s.exclusions), reported_on: s.reported_on, due, status: isLate ? 'late' : 'ok' });
@@ -105,7 +114,7 @@ export function computeOverage({ leases, rows, year, billedRows = null, billedTh
     const blocking = findings.filter((f) => f.severity !== 'note');
     let status;
     if (owed === null) status = 'review';
-    else if (blocking.some((f) => ['conflicting_reports', 'base_rent_unknown'].includes(f.code))) status = 'review';
+    else if (blocking.some((f) => ['conflicting_reports', 'base_rent_unknown', 'exclusions_exceed_sales'].includes(f.code))) status = 'review';
     else if (balance !== null && balance > tolerance) status = 'owes';
     else if (balance !== null && balance < -tolerance) status = 'credit';
     else status = blocking.length ? 'issue' : 'ok';

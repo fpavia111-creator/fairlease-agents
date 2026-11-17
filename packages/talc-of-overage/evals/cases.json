@@ -325,6 +325,45 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "negative-exclusions-and-respelled-lease-ids",
+      "tool": "talc_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-edge-cases.csv",
+        "year": 2025,
+        "billed": "fixtures/billed-2025.csv",
+        "as_of": "2026-06-30"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.total_owed": 24367.5,
+          "result.total_balance_due": 6367.5,
+          "result.items.length": 3
+        }
+      }
+    },
+    {
+      "id": "revised-report-is-not-late",
+      "tool": "talc_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/sales-2025.csv",
+        "year": 2025,
+        "billed": "fixtures/billed-2025.csv",
+        "as_of": "2026-06-30",
+        "tenant": "Acme"
+      },
+      "expect": {
+        "contains": [
+          "sales_revised"
+        ],
+        "not_contains": [
+          "report_late"
+        ]
+      }
     }
   ]
 }
