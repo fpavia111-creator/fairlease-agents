@@ -1,0 +1,21 @@
+{
+  "name": "fairlease-cam-reconciliation",
+  "version": "0.1.0",
+  "description": "Reconciles common area maintenance and operating expenses for commercial leases: expense pools, pro-rata shares, gross-ups, caps, base years, admin fees and tenant estimates, with statement drafts.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-cam-reconciliation#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "cam",
+    "cam-reconciliation",
+    "operating-expenses",
+    "commercial-real-estate"
+  ]
+}

@@ -1,0 +1,6 @@
+Lease,Unit,Tenant,Insurer,Policy Number,Each Occurrence,General Aggregate,Additional Insured,Expiration Date
+L-101,Suite 100,Acme Bagels LLC,Example Mutual (fictional),GL-55001,"1,000,000","2,000,000",Yes,2027-03-01
+L-102,Suite 110,Brightside Dental PC,Example Mutual (fictional),GL-55002,"1,000,000","2,000,000",No,2026-12-01
+L-103,Suite 120,Cobalt Fitness Inc,Sample Casualty (fictional),SC-88120,"1,000,000","3,000,000",Yes,2027-01-01
+L-105,Suite 140,Fairstay Grocers Ltd,Sample Casualty (fictional),SC-88140,"5,000,000","10,000,000",Yes,2026-10-31
+L-104,Suite 130,Delta Phone Repair,Example Mutual (fictional),GL-55004,"1,000,000","2,000,000",Yes,2026-05-01

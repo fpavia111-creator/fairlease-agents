@@ -1,0 +1,299 @@
+{
+  "suite": "fairlease-owner-statements",
+  "root": "..",
+  "data_note": "Fictional owner statements, owner ledger and Spanish statements in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {
+      "id": "totals",
+      "tool": "statements_check",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "ledger": "fixtures/owner-ledger-2026-10.csv",
+        "policy": "fixtures/statement-policy.json"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.period": "2026-10",
+          "result.items.length": 9
+        },
+        "contains": [
+          "3 to fix before sending (1 math, 1 beginning balance, 1 negative, 1 not matching the ledger)"
+        ]
+      }
+    },
+    {
+      "id": "math",
+      "tool": "statements_explain",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "contains": [
+          "= 61575, but the statement shows 61675 (100)"
+        ]
+      }
+    },
+    {
+      "id": "continuity-and-negative",
+      "tool": "statements_explain",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "policy": "fixtures/statement-policy.json",
+        "owner": "Pine Street Duplex"
+      },
+      "expect": {
+        "contains": [
+          "Beginning 676 differs from 2026-09's ending 626 (50)",
+          "the owner owes 850"
+        ]
+      }
+    },
+    {
+      "id": "ledger-mismatch",
+      "tool": "statements_explain",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "ledger": "fixtures/owner-ledger-2026-10.csv",
+        "policy": "fixtures/statement-policy.json",
+        "owner": "Maple Court Apartments"
+      },
+      "expect": {
+        "contains": [
+          "expenses for 2026-10 are 11250; the statement shows 11450 (200)",
+          "23918 above the reserve"
+        ]
+      }
+    },
+    {
+      "id": "distribution-below-reserve",
+      "tool": "statements_check",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "policy": "fixtures/statement-policy.json"
+      },
+      "expect": {
+        "contains": [
+          "Distributed 25000 and left 2174, below the 5000 reserve"
+        ]
+      }
+    },
+    {
+      "id": "spanish",
+      "tool": "statements_check",
+      "args": {
+        "statements": "fixtures/exports/liquidaciones-es.csv"
+      },
+      "expect": {
+        "contains": [
+          "Distributed 10000 and left 1074, below the 1500 reserve"
+        ]
+      }
+    },
+    {
+      "id": "no-contribution-needed",
+      "tool": "statements_draft_request",
+      "mode": "auto",
+      "auto_actions": [
+        "statements_draft_request"
+      ],
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "policy": "fixtures/statement-policy.json",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "no contribution is needed"
+        ]
+      }
+    },
+    {
+      "id": "never-pays-owners",
+      "tool": "owner_distribution",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-publishes",
+      "tool": "statement_publish",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "statements_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "statements_write_report",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "ledger": "fixtures/owner-ledger-2026-10.csv",
+        "policy": "fixtures/statement-policy.json"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "statements_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "statements_check",
+      "args": {
+        "statements": "../../outside.csv",
+        "ledger": "fixtures/owner-ledger-2026-10.csv",
+        "policy": "fixtures/statement-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "statements_check",
+      "mode": "review",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "ledger": "fixtures/owner-ledger-2026-10.csv",
+        "policy": "fixtures/statement-policy.json"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.period": "2026-10",
+          "result.items.length": 9
+        },
+        "contains": [
+          "3 to fix before sending (1 math, 1 beginning balance, 1 negative, 1 not matching the ledger)"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "statements_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026-10.csv",
+        "policy": "fixtures/statement-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "statements"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "statements_draft_request",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "policy": "fixtures/statement-policy.json",
+        "owner": "Pine Street"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "statements_draft_request",
+      "approve": "Dana Example",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "policy": "fixtures/statement-policy.json",
+        "owner": "Pine Street"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "statements_draft_request",
+      "mode": "review",
+      "args": {
+        "statements": "fixtures/owner-statements-2026.csv",
+        "policy": "fixtures/statement-policy.json",
+        "owner": "Pine Street"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "missing-month-duplicate-and-negative-signs",
+      "tool": "statements_check",
+      "args": {
+        "statements": "fixtures/owner-statements-edge-cases.csv",
+        "ledger": "fixtures/owner-ledger-edge-cases.csv",
+        "policy": "fixtures/statement-policy-edge-cases.json"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "period_missing",
+          "No statement for 2026-08 to 2026-09",
+          "duplicate_statement",
+          "fee_rate_differs",
+          "0 math, 0 beginning balance, 0 negative, 0 not matching the ledger"
+        ],
+        "not_contains": [
+          "math_error",
+          "beginning_differs",
+          "expenses_differ",
+          "distribution_differs"
+        ]
+      }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "statements_check",
+      "args": {
+        "statements": "fixtures/missing-export.csv",
+        "ledger": "fixtures/owner-ledger-2026-10.csv",
+        "policy": "fixtures/statement-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
+    }
+  ]
+}

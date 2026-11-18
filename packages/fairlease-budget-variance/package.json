@@ -1,0 +1,55 @@
+{
+  "name": "fairlease-budget-variance",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-budget-variance",
+  "description": "Fairlease Budget Variance: compares actuals with the budget by account for the month and year to date, flags the variances your management agreement says must be explained, unbudgeted spend and the year-end forecast, and drafts the owner's variance memo.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-budget-variance": "bin/fairlease-budget-variance.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-budget-variance.js demo",
+    "eval": "node bin/fairlease-budget-variance.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-budget-variance"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-budget-variance#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "budgets"
+  ]
+}

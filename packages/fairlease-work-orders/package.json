@@ -1,0 +1,57 @@
+{
+  "name": "fairlease-work-orders",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-work-orders",
+  "description": "Fairlease Work Orders: ages open work orders against your own targets by priority, finds repeat problems in the same unit, likely emergencies filed as routine, slow vendors and cost outliers.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-work-orders": "bin/fairlease-work-orders.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-work-orders.js demo",
+    "eval": "node bin/fairlease-work-orders.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-work-orders"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-work-orders#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "work-orders",
+    "maintenance",
+    "service-requests"
+  ]
+}

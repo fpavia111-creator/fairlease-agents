@@ -1,0 +1,58 @@
+{
+  "name": "fairlease-cam-reconciliation",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-cam-reconciliation",
+  "description": "Fairlease CAM Reconciliation: reconciles common area maintenance and operating expenses for commercial leases: expense pools, pro-rata shares, gross-ups, caps, base years, admin fees and tenant estimates, with statement drafts.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-cam-reconciliation": "bin/fairlease-cam-reconciliation.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-cam-reconciliation.js demo",
+    "eval": "node bin/fairlease-cam-reconciliation.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-cam-reconciliation"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-cam-reconciliation#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "cam",
+    "cam-reconciliation",
+    "operating-expenses",
+    "commercial-real-estate"
+  ]
+}

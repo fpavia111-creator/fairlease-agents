@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-lease-abstracts": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-lease-abstracts@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

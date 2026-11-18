@@ -1,6 +1,6 @@
 // Rewrite an English fixture the way an export from another market writes it
 // (used by intl-check.mjs). Values and units are kept; only the way they are written changes.
-import { parseCsvRows, findHeaderRow, normHeader, namesFor, conceptOf } from '../../packages/keystone-core/src/index.js';
+import { parseCsvRows, findHeaderRow, normHeader, namesFor, conceptOf } from '../../packages/fairlease-core/src/index.js';
 
 // How each market writes a file. Dates: d = day-first with the separator, y = year-first.
 export const MARKETS = {

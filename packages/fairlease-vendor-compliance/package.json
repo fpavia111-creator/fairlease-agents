@@ -1,0 +1,57 @@
+{
+  "name": "fairlease-vendor-compliance",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-vendor-compliance",
+  "description": "Fairlease Vendor Compliance: checks every vendor's liability and workers' comp insurance, licence and tax form against your own requirements, finds payments made while a vendor was out of compliance, and drafts certificate requests.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-vendor-compliance": "bin/fairlease-vendor-compliance.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-vendor-compliance.js demo",
+    "eval": "node bin/fairlease-vendor-compliance.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-vendor-compliance"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-vendor-compliance#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "vendor-compliance",
+    "coi",
+    "insurance-certificates"
+  ]
+}

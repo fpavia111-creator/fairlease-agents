@@ -1,0 +1,57 @@
+{
+  "name": "fairlease-tenant-insurance",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-tenant-insurance",
+  "description": "Fairlease Tenant Insurance: checks every tenant's insurance certificate against the limits, additional insured and dates their lease requires, and drafts requests for updated certificates.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-tenant-insurance": "bin/fairlease-tenant-insurance.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-tenant-insurance.js demo",
+    "eval": "node bin/fairlease-tenant-insurance.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-tenant-insurance"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-tenant-insurance#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "tenant-insurance",
+    "coi",
+    "certificates"
+  ]
+}

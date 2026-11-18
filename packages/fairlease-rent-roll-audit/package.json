@@ -1,0 +1,58 @@
+{
+  "name": "fairlease-rent-roll-audit",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-rent-roll-audit",
+  "description": "Fairlease Rent Roll Audit: checks a rent roll against your lease abstracts: rents, escalations, dates, deposits, areas, tenants, vacancies and holdovers, unit by unit.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-rent-roll-audit": "bin/fairlease-rent-roll-audit.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-rent-roll-audit.js demo",
+    "eval": "node bin/fairlease-rent-roll-audit.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-rent-roll-audit"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-rent-roll-audit#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "rent-roll",
+    "lease-audit",
+    "commercial-real-estate",
+    "multifamily"
+  ]
+}

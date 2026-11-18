@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-affordable-recerts": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-affordable-recerts@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

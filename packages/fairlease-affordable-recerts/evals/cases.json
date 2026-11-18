@@ -1,0 +1,337 @@
+{
+  "suite": "fairlease-affordable-recerts",
+  "root": "..",
+  "data_note": "Fictional households, rent roll and schedule in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {
+      "id": "totals",
+      "tool": "recerts_check",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.unit": "103",
+          "result.items.length": 9
+        },
+        "contains": [
+          "1 overdue",
+          "5 notice(s) not recorded",
+          "1 occupied unit(s) not in the tracker"
+        ]
+      }
+    },
+    {
+      "id": "old-cycle-notice-does-not-count",
+      "tool": "recerts_explain",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "101"
+      },
+      "expect": {
+        "contains": [
+          "120-day notice (by 2026-11-01) is not recorded"
+        ]
+      }
+    },
+    {
+      "id": "due-from-move-in",
+      "tool": "recerts_explain",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "106"
+      },
+      "expect": {
+        "contains": [
+          "move-in anniversary 2026-12-15",
+          "confirm it"
+        ]
+      }
+    },
+    {
+      "id": "due-date-differs",
+      "tool": "recerts_explain",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "105"
+      },
+      "expect": {
+        "contains": [
+          "due_date_differs",
+          "2027-02-01"
+        ]
+      }
+    },
+    {
+      "id": "market-units-skipped",
+      "tool": "recerts_check",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "not_contains": [
+          "Jordan Fox"
+        ]
+      }
+    },
+    {
+      "id": "calendar",
+      "tool": "recerts_calendar",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "out_dir": "keystone-out/eval-recerts"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "recerts-calendar.ics",
+          "10 date(s)"
+        ]
+      }
+    },
+    {
+      "id": "japanese-export",
+      "tool": "recerts_check",
+      "args": {
+        "tracker": "fixtures/exports/shuunyuu-shinkoku-ja.csv",
+        "policy": "fixtures/exports/koei-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "佐藤世帯",
+          "60-day notice"
+        ]
+      }
+    },
+    {
+      "id": "nothing-to-remind",
+      "tool": "recerts_draft_reminder",
+      "mode": "auto",
+      "auto_actions": [
+        "recerts_draft_reminder"
+      ],
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "104"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "nothing to remind"
+        ]
+      }
+    },
+    {
+      "id": "never-certifies",
+      "tool": "certify_household",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-submits",
+      "tool": "submit_to_agency",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "recerts_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "recerts_write_report",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "recerts_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "recerts_check",
+      "args": {
+        "tracker": "../../outside.csv",
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "recerts_check",
+      "mode": "review",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.unit": "103",
+          "result.items.length": 9
+        },
+        "contains": [
+          "1 overdue",
+          "5 notice(s) not recorded",
+          "1 occupied unit(s) not in the tracker"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "recerts_check",
+      "args": {
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "tracker"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "recerts_draft_reminder",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "103"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "recerts_draft_reminder",
+      "approve": "Dana Example",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "103"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "recerts_draft_reminder",
+      "mode": "review",
+      "args": {
+        "tracker": "fixtures/recert-tracker-2026.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "household": "103"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "stale-due-date-moved-out-and-whole-word-programs",
+      "tool": "recerts_check",
+      "args": {
+        "tracker": "fixtures/recert-tracker-edge-cases.csv",
+        "policy": "fixtures/recert-policy.json",
+        "as_of": "2026-11-15",
+        "rent_roll": "fixtures/rent-roll-edge-cases.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "0 overdue",
+          "1 moved out and left alone",
+          "program_unknown",
+          "so 2027-03-01 is used",
+          "0 occupied unit(s) not in the tracker"
+        ],
+        "not_contains": [
+          "not_tracked",
+          "120-day recertification notice: Diaz"
+        ]
+      }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "recerts_check",
+      "args": {
+        "tracker": "fixtures/missing-export.csv",
+        "policy": "fixtures/recert-policy.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
+    }
+  ]
+}

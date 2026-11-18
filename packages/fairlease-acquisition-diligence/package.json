@@ -1,0 +1,55 @@
+{
+  "name": "fairlease-acquisition-diligence",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-acquisition-diligence",
+  "description": "Fairlease Acquisition Diligence: reconciles a seller's rent roll with the trailing-twelve-month income statement before you buy or lend: rent roll against rent collected, occupancy, expired leases still billed, months missing or out of line, and NOI.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-acquisition-diligence": "bin/fairlease-acquisition-diligence.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-acquisition-diligence.js demo",
+    "eval": "node bin/fairlease-acquisition-diligence.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-acquisition-diligence"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-acquisition-diligence#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "diligence"
+  ]
+}

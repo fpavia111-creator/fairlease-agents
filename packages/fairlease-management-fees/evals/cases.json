@@ -1,0 +1,303 @@
+{
+  "suite": "fairlease-management-fees",
+  "root": "..",
+  "data_note": "Fictional owner ledgers, agreement terms and rent roll in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {
+      "id": "totals",
+      "tool": "fees_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.overcharge_total": 8689,
+          "result.items.length": 4,
+          "result.items.0.property": "Harbor Point Plaza"
+        }
+      }
+    },
+    {
+      "id": "excluded-income-and-duplicate",
+      "tool": "fees_explain",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "contains": [
+          "charged 2 times",
+          "4% of 100000 collected",
+          "Over by 2050",
+          "Technology fee 95"
+        ]
+      }
+    },
+    {
+      "id": "deposit-excluded",
+      "tool": "fees_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "period": "2026-09"
+      },
+      "expect": {
+        "contains": [
+          "Management fee charged 2466; the agreement gives 2256",
+          "Over by 210"
+        ]
+      }
+    },
+    {
+      "id": "renewal-flat-leasing-pct",
+      "tool": "fees_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "period": "2026-10"
+      },
+      "expect": {
+        "contains": [
+          "Renewal fee - unit 102: charged 250; the agreement gives 150"
+        ]
+      }
+    },
+    {
+      "id": "leasing-unverified-without-roll",
+      "tool": "fees_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "period": "2026-10"
+      },
+      "expect": {
+        "contains": [
+          "leasing_fee_unverified"
+        ]
+      }
+    },
+    {
+      "id": "minimum-and-markup",
+      "tool": "fees_explain",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Pine Street"
+      },
+      "expect": {
+        "contains": [
+          "minimum 150",
+          "10% of 1180 in maintenance bills is 118"
+        ]
+      }
+    },
+    {
+      "id": "french-ledger",
+      "tool": "fees_check",
+      "args": {
+        "ledger": "fixtures/exports/grand-livre-fr.csv",
+        "agreements": "fixtures/exports/agreements-fr.json"
+      },
+      "expect": {
+        "contains": [
+          "8% of 12400 collected",
+          "Over by 84"
+        ]
+      }
+    },
+    {
+      "id": "credit-draft",
+      "tool": "fees_draft_credit",
+      "mode": "auto",
+      "auto_actions": [
+        "fees_draft_credit"
+      ],
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "status": "executed"
+      }
+    },
+    {
+      "id": "never-credits",
+      "tool": "post_owner_credit",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "fees_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "fees_write_report",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "fees_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "fees_check",
+      "args": {
+        "ledger": "../../outside.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "fees_check",
+      "mode": "review",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.overcharge_total": 8689,
+          "result.items.length": 4,
+          "result.items.0.property": "Harbor Point Plaza"
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "fees_check",
+      "args": {
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "ledger"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "fees_draft_credit",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "fees_draft_credit",
+      "approve": "Dana Example",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "fees_draft_credit",
+      "mode": "review",
+      "args": {
+        "ledger": "fixtures/owner-ledger-2026.csv",
+        "agreements": "fixtures/agreements.json",
+        "owner": "Harbor Point Plaza"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "bounced-rent-pass-through-fees-and-duplicate-renewal",
+      "tool": "fees_check",
+      "args": {
+        "ledger": "fixtures/owner-ledger-edge-cases.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "management_fee_over",
+          "duplicate_fee",
+          "270 to refund or explain"
+        ],
+        "not_contains": [
+          "fee_not_in_agreement"
+        ],
+        "equals": {
+          "result.items.0.fee_base": 38000,
+          "result.overcharge_total": 270
+        }
+      }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "fees_check",
+      "args": {
+        "ledger": "fixtures/missing-export.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-cam-reconciliation": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-cam-reconciliation@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

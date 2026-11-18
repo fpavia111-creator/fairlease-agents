@@ -1,0 +1,55 @@
+{
+  "name": "fairlease-short-term-rental-payouts",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-short-term-rental-payouts",
+  "description": "Fairlease Short Term Rental Payouts: reconciles short-term rental payouts from Airbnb, Vrbo and other channels against your reservations and bank deposits: missing, short or duplicate payouts, channel fees and cleaning fees off your rates, nights that do not match, and payouts that never reached the bank; drafts payout inquiries.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-short-term-rental-payouts": "bin/fairlease-short-term-rental-payouts.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-short-term-rental-payouts.js demo",
+    "eval": "node bin/fairlease-short-term-rental-payouts.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-short-term-rental-payouts"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-short-term-rental-payouts#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "payouts"
+  ]
+}

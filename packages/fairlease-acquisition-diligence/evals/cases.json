@@ -1,0 +1,340 @@
+{
+  "suite": "fairlease-acquisition-diligence",
+  "root": "..",
+  "data_note": "Fictional seller rent roll and T-12 in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {
+      "id": "totals",
+      "tool": "diligence_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.rent_roll.scheduled_monthly": 35500,
+          "result.t12.noi": 193006.96,
+          "result.t12.months": 12,
+          "result.items.0.subject": "reconciliation"
+        },
+        "contains": [
+          "1850 below the roll"
+        ]
+      }
+    },
+    {
+      "id": "gap",
+      "tool": "diligence_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "subject": "reconciliation"
+      },
+      "expect": {
+        "contains": [
+          "1850 (5.21%) less",
+          "5.71% below"
+        ]
+      }
+    },
+    {
+      "id": "expired-lease",
+      "tool": "diligence_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "subject": "101"
+      },
+      "expect": {
+        "contains": [
+          "Lease ended 2026-10-31"
+        ]
+      }
+    },
+    {
+      "id": "outlier",
+      "tool": "diligence_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "subject": "5000"
+      },
+      "expect": {
+        "contains": [
+          "2026-07: 18500"
+        ]
+      }
+    },
+    {
+      "id": "blank-month",
+      "tool": "diligence_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "subject": "5400"
+      },
+      "expect": {
+        "contains": [
+          "No amount in 2026-03"
+        ]
+      }
+    },
+    {
+      "id": "lumpy-account-quiet",
+      "tool": "diligence_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "equals": {
+          "result.items.length": 8
+        }
+      }
+    },
+    {
+      "id": "spanish-long-t12",
+      "tool": "diligence_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/exports/t12-es.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "t12_months_missing",
+          "Last month's rent income 33650"
+        ]
+      }
+    },
+    {
+      "id": "questions-draft",
+      "tool": "diligence_draft_questions",
+      "mode": "auto",
+      "auto_actions": [
+        "diligence_draft_questions"
+      ],
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "property": "Maple Court (fictional)"
+      },
+      "expect": {
+        "status": "executed"
+      }
+    },
+    {
+      "id": "never-offers",
+      "tool": "submit_offer",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "diligence_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "diligence_write_report",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "diligence_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "diligence_check",
+      "args": {
+        "rent_roll": "../../outside.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "diligence_check",
+      "mode": "review",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.rent_roll.scheduled_monthly": 35500,
+          "result.t12.noi": 193006.96,
+          "result.t12.months": 12,
+          "result.items.0.subject": "reconciliation"
+        },
+        "contains": [
+          "1850 below the roll"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "diligence_check",
+      "args": {
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "rent_roll"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "diligence_draft_questions",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "property": "Maple Court (fictional)"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "diligence_draft_questions",
+      "approve": "Dana Example",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "property": "Maple Court (fictional)"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "diligence_draft_questions",
+      "mode": "review",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15",
+        "property": "Maple Court (fictional)"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "names-only-t12-with-gross-potential-rent",
+      "tool": "diligence_check",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-names-only.csv",
+        "as_of": "2026-11-30"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "accounts_by_name",
+          "rent_income_net_of"
+        ],
+        "not_contains": [
+          "roll_above_collections",
+          "t12_empty",
+          "negative_rent_month",
+          "rent_account_not_found"
+        ],
+        "equals": {
+          "result.t12.months": 12,
+          "result.t12.income": 427800,
+          "result.t12.expenses": 157512,
+          "result.t12.noi": 270288,
+          "result.t12.rent_income_last_month": 35500
+        }
+      }
+    },
+    {
+      "id": "last-month-rent-not-posted",
+      "tool": "diligence_explain",
+      "args": {
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "t12": "fixtures/t12-last-month-not-posted.csv",
+        "as_of": "2026-11-30",
+        "subject": "reconciliation"
+      },
+      "expect": {
+        "contains": [
+          "roll_above_collections",
+          "35500"
+        ],
+        "equals": {
+          "result.item.status": "issue",
+          "result.item.amount": 35500
+        }
+      }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "diligence_check",
+      "args": {
+        "rent_roll": "fixtures/missing-export.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
+    }
+  ]
+}

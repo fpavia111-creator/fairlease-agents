@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-vendor-compliance": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-vendor-compliance@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

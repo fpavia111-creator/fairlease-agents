@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.fpavia111-creator/fairlease-occupancy-and-vacancy",
+  "title": "Fairlease Occupancy and Vacancy",
+  "description": "Fairlease Occupancy and Vacancy: reads a rent roll and shows occupancy, leased percentage, exposure, vacancy loss…",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents",
+    "source": "github",
+    "subfolder": "packages/fairlease-occupancy-and-vacancy"
+  },
+  "websiteUrl": "https://fair-agents.com/fairlease.html",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "fairlease-occupancy-and-vacancy",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "positional",
+          "value": "mcp"
+        },
+        {
+          "type": "named",
+          "name": "--root",
+          "description": "Folder holding the exports this agent may read and write (it cannot reach outside it)",
+          "isRequired": true,
+          "format": "filepath",
+          "valueHint": "exports_folder"
+        }
+      ]
+    }
+  ]
+}

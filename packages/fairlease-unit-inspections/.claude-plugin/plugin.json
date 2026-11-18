@@ -1,0 +1,18 @@
+{
+  "name": "fairlease-unit-inspections",
+  "version": "0.1.0",
+  "description": "Compares move-out inspections with move-in item by item, flags units overdue for their periodic inspection and poor items with no work order, and drafts inspection notices.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-unit-inspections#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "inspections"
+  ]
+}

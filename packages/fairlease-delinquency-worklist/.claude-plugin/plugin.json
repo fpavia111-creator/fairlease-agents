@@ -1,0 +1,21 @@
+{
+  "name": "fairlease-delinquency-worklist",
+  "version": "0.1.0",
+  "description": "Turns an aging report or tenant ledger into a delinquency worklist with stages from your own policy, late-fee checks and reminder drafts. Never serves notices or files evictions.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-delinquency-worklist#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "delinquency",
+    "collections",
+    "aging",
+    "late-fees"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "name": "fairlease-estoppel-review",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-estoppel-review",
+  "description": "Fairlease Estoppel Review: checks returned tenant estoppel certificates against your lease abstracts before a sale or refinancing (rent, dates, deposit, area, options, amendments, landlord defaults claimed), tracks which are missing or stale, and drafts follow-up requests.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-estoppel-review": "bin/fairlease-estoppel-review.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-estoppel-review.js demo",
+    "eval": "node bin/fairlease-estoppel-review.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-estoppel-review"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-estoppel-review#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "estoppels"
+  ]
+}

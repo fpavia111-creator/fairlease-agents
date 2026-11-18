@@ -1,9 +1,0 @@
-Property,Unit,Tenant,Status,Sq Ft,Monthly Rent,Security Deposit,Lease Start,Lease End
-HPP,Suite 100,Acme Bagels LLC,Current,2000,"4,243.60","8,000.00",03/01/2023,02/29/2028
-HPP,Suite 110,Brightside Dental PC,Current,3000,"7,426.30","14,000.00",07/01/2022,06/30/2027
-HPP,Suite 120,Cobalt Fitness Inc,Current,8000,"14,038.64",0.00,01/01/2021,12/31/2030
-HPP,Suite 130,Delta Phone Repair,Current,1200,"2,704.00","2,600.00",05/01/2024,04/30/2026
-HPP,Suite 140,Evergreen Grocers Ltd,Current,21000,"32,400.00",0.00,01/01/2019,12/31/2033
-HPP,Suite 150,Fable Books & Cafe,Current,2500,"4,375.00","8,750.00",02/01/2025,01/31/2030
-HPP,Suite 160,,Vacant,3300,,,,
-HPP,Kiosk 1,Ghost Kiosk Co,Current,120,650.00,0.00,06/01/2025,05/31/2026

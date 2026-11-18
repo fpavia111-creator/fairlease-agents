@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-percentage-rent": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-percentage-rent@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

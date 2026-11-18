@@ -1,0 +1,311 @@
+{
+  "suite": "fairlease-tenant-insurance",
+  "root": "..",
+  "data_note": "Fictional leases and certificate logs in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {
+      "id": "totals",
+      "tool": "coi_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 5,
+          "result.unmatched_certificates.length": 1
+        },
+        "contains": [
+          "1 with no certificate",
+          "1 expired",
+          "2 short of the lease"
+        ]
+      }
+    },
+    {
+      "id": "limits-below",
+      "tool": "coi_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 120"
+      },
+      "expect": {
+        "contains": [
+          "liability_below",
+          "aggregate_below",
+          "4,000,000"
+        ]
+      }
+    },
+    {
+      "id": "additional-insured-and-expiring",
+      "tool": "coi_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "L-102"
+      },
+      "expect": {
+        "contains": [
+          "additional_insured_missing",
+          "expiring"
+        ],
+        "equals": {
+          "result.item.status": "issue"
+        }
+      }
+    },
+    {
+      "id": "expired",
+      "tool": "coi_explain",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 140"
+      },
+      "expect": {
+        "contains": [
+          "Expired 2026-10-31"
+        ]
+      }
+    },
+    {
+      "id": "ended-lease-unmatched",
+      "tool": "coi_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "lease L-104 not in force"
+        ]
+      }
+    },
+    {
+      "id": "spanish-log",
+      "tool": "coi_check",
+      "args": {
+        "leases": "fixtures/maple-leases.json",
+        "certificates": "fixtures/exports/seguros-inquilinos-es.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "Liability 50,000 is below the 100,000",
+          "Expired 2026-11-10",
+          "month-to-month"
+        ]
+      }
+    },
+    {
+      "id": "nothing-to-request",
+      "tool": "coi_draft_request",
+      "mode": "auto",
+      "auto_actions": [
+        "coi_draft_request"
+      ],
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 100"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "nothing missing"
+        ]
+      }
+    },
+    {
+      "id": "draft-request",
+      "tool": "coi_draft_request",
+      "mode": "auto",
+      "auto_actions": [
+        "coi_draft_request"
+      ],
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 150"
+      },
+      "expect": {
+        "status": "executed"
+      }
+    },
+    {
+      "id": "never-force-places",
+      "tool": "force_place_insurance",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-charges",
+      "tool": "post_tenant_charge",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "coi_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "coi_write_report",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "coi_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "coi_check",
+      "args": {
+        "leases": "../../outside.csv",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "coi_check",
+      "mode": "review",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 5,
+          "result.unmatched_certificates.length": 1
+        },
+        "contains": [
+          "1 with no certificate",
+          "1 expired",
+          "2 short of the lease"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "coi_check",
+      "args": {
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "leases"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "coi_draft_request",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 150"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "coi_draft_request",
+      "approve": "Dana Example",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 150"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "coi_draft_request",
+      "mode": "review",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/certificates-2026.csv",
+        "as_of": "2026-11-15",
+        "unit": "Suite 150"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "coi_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/missing-export.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
+    }
+  ]
+}

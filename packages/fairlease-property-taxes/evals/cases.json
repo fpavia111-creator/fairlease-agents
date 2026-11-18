@@ -1,0 +1,226 @@
+{
+  "suite": "fairlease-property-taxes",
+  "root": "..",
+  "data_note": "Fictional parcels, assessments and installments in ../fixtures. Appeal deadlines are fictional dates typed into the file. Deterministic checks; no model is called.",
+  "cases": [
+    {
+      "id": "totals",
+      "tool": "taxes_check",
+      "args": {
+        "taxes": "fixtures/tax-bills-2026.csv",
+        "policy": "fixtures/tax-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 4,
+          "result.events.length": 2
+        },
+        "contains": [
+          "billed 274000, paid 169000",
+          "7000 past due"
+        ]
+      }
+    },
+    {
+      "id": "jump-and-deadline",
+      "tool": "taxes_explain",
+      "args": {
+        "taxes": "fixtures/tax-bills-2026.csv",
+        "as_of": "2026-11-15",
+        "parcel": "14-22-301-001"
+      },
+      "expect": {
+        "contains": [
+          "21.57%",
+          "Appeal deadline you entered: 2026-12-04 (19 days)"
+        ]
+      }
+    },
+    {
+      "id": "deadline-never-computed",
+      "tool": "taxes_explain",
+      "args": {
+        "taxes": "fixtures/tax-bills-2026.csv",
+        "as_of": "2026-11-15",
+        "parcel": "08-115-020"
+      },
+      "expect": {
+        "contains": [
+          "appeal_deadline_unknown",
+          "does not work deadlines out",
+          "installment_short"
+        ]
+      }
+    },
+    {
+      "id": "policy-deadline-wins",
+      "tool": "taxes_explain",
+      "args": {
+        "taxes": "fixtures/tax-bills-2026.csv",
+        "as_of": "2026-11-15",
+        "parcel": "08-115-020",
+        "policy": "fixtures/tax-policy.json"
+      },
+      "expect": {
+        "equals": {
+          "result.item.appeal_deadline": null
+        }
+      }
+    },
+    {
+      "id": "overdue",
+      "tool": "taxes_explain",
+      "args": {
+        "taxes": "fixtures/tax-bills-2026.csv",
+        "as_of": "2026-11-15",
+        "parcel": "14-22-301-002"
+      },
+      "expect": {
+        "contains": [
+          "nothing paid; 6000 outstanding 75 days"
+        ]
+      }
+    },
+    {
+      "id": "french-file",
+      "tool": "taxes_check",
+      "args": {
+        "taxes": "fixtures/exports/taxe-fonciere-fr.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "billed 8570",
+          "1720 past due"
+        ],
+        "equals": {
+          "result.items.0.parcel": "AB 0123"
+        }
+      }
+    },
+    {
+      "id": "calendar",
+      "tool": "taxes_calendar",
+      "args": {
+        "taxes": "fixtures/tax-bills-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "taxes-calendar.ics",
+          "1 appeal deadline(s) you entered"
+        ]
+      }
+    },
+    {
+      "id": "never-files",
+      "tool": "file_tax_appeal",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-pays",
+      "tool": "pay_tax",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "taxes_write_report",
+      "args": {
+        "taxes": "fixtures/tax-bills-2026.csv",
+        "policy": "fixtures/tax-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "taxes_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "taxes_check",
+      "args": {
+        "taxes": "../../outside.csv",
+        "policy": "fixtures/tax-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "taxes_check",
+      "mode": "review",
+      "args": {
+        "taxes": "fixtures/tax-bills-2026.csv",
+        "policy": "fixtures/tax-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 4,
+          "result.events.length": 2
+        },
+        "contains": [
+          "billed 274000, paid 169000",
+          "7000 past due"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "taxes_check",
+      "args": {
+        "policy": "fixtures/tax-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "taxes"
+        ]
+      }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "taxes_check",
+      "args": {
+        "taxes": "fixtures/missing-export.csv",
+        "policy": "fixtures/tax-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
+    }
+  ]
+}

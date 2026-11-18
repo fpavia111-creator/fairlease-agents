@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-unit-turns": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-unit-turns@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

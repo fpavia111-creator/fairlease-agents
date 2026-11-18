@@ -1,0 +1,55 @@
+{
+  "name": "fairlease-affordable-recerts",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-affordable-recerts",
+  "description": "Fairlease Affordable Recerts: tracks affordable housing recertification dates against the schedule in your policy file: due dates, the notices your policy sends before each one, overdue and soon-due households, and households missing from the tracker or the rent roll; drafts reminder notices. It never decides eligibility or changes rent.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-affordable-recerts": "bin/fairlease-affordable-recerts.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-affordable-recerts.js demo",
+    "eval": "node bin/fairlease-affordable-recerts.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-affordable-recerts"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-affordable-recerts#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "recertifications"
+  ]
+}

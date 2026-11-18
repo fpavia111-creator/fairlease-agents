@@ -1,0 +1,20 @@
+{
+  "name": "fairlease-lease-abstracts",
+  "version": "0.1.0",
+  "description": "Abstracts commercial lease text into the Fairlease leases format with a citation for every term, and checks existing abstracts against the lease text.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-lease-abstracts#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "lease-abstraction",
+    "lease-abstract",
+    "commercial-real-estate"
+  ]
+}

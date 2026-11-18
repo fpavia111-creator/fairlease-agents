@@ -1,4 +1,4 @@
-# Keystone-Agenten für die Immobilienverwaltung
+# Fairlease-Agenten für die Immobilienverwaltung
 
 Dreißig kleine MCP-Agenten für die Immobilienverwaltung, gedacht für gewerbliche und mittelgroße Wohnungsverwalter. Jeder hat **genau eine Aufgabe**, etwa die Mieterliste gegen die Mietverträge prüfen, ein Treuhandkonto abstimmen, Nebenkosten (CAM) neu berechnen oder Versicherungsnachweise von Mietern anfordern, und kann nichts außerhalb davon tun. Sie lesen die Dateien, die Sie bereits aus AppFolio, Yardi, Buildium, Rent Manager und anderen Systemen exportieren, schreiben Berichte auf Ihrem Rechner, bewegen nie Geld und ändern nie ein Live-System, und warten auf eine namentlich genannte Person, bevor ein Schreiben oder eine Mitteilung hinausgeht.
 
@@ -12,11 +12,11 @@ Aus einem Klon dieses Repositorys:
 
 ```bash
 npm ci
-node packages/granite-of-rentrolls/bin/granite-of-rentrolls.js demo     # Mieterliste gegen Vertragsauszüge, fiktive Daten
-node packages/obsidian-of-trust/bin/obsidian-of-trust.js demo           # Dreifach-Abstimmung eines Treuhandkontos, fiktive Daten
+node packages/fairlease-rent-roll-audit/bin/fairlease-rent-roll-audit.js demo     # Mieterliste gegen Vertragsauszüge, fiktive Daten
+node packages/fairlease-trust-reconciliation/bin/fairlease-trust-reconciliation.js demo           # Dreifach-Abstimmung eines Treuhandkontos, fiktive Daten
 ```
 
-Sobald die Pakete auf npm sind, funktioniert dasselbe mit `npx -y granite-of-rentrolls demo`. Jeder Agent hat ein `demo` mit fiktiven Dateien, ein `eval`, das ihn gegen seine eigenen Testfälle prüft, ein `inspect <Datei>`, das zeigt, wie die Spalten einer Datei gelesen wurden, und einen MCP-Server (`<agent> mcp --root <Ordner>`) für Claude Desktop, Claude Code, Cursor und andere MCP-Hosts. Mit `--lang de` erscheinen Titel, Überschriften und Spaltennamen der Berichte sowie die Freigabeseite auf Deutsch (neun Sprachen verfügbar); die Sätze der Befunde und die Werkzeugergebnisse bleiben auf Englisch. Die README jedes Agenten listet seine Werkzeuge.
+Sobald die Pakete auf npm sind, funktioniert dasselbe mit `npx -y fairlease-rent-roll-audit demo`. Jeder Agent hat ein `demo` mit fiktiven Dateien, ein `eval`, das ihn gegen seine eigenen Testfälle prüft, ein `inspect <Datei>`, das zeigt, wie die Spalten einer Datei gelesen wurden, und einen MCP-Server (`<agent> mcp --root <Ordner>`) für Claude Desktop, Claude Code, Cursor und andere MCP-Hosts. Mit `--lang de` erscheinen Titel, Überschriften und Spaltennamen der Berichte sowie die Freigabeseite auf Deutsch (neun Sprachen verfügbar); die Sätze der Befunde und die Werkzeugergebnisse bleiben auf Englisch. Die README jedes Agenten listet seine Werkzeuge.
 
 ## Die Agenten
 
@@ -24,51 +24,51 @@ Sobald die Pakete auf npm sind, funktioniert dasselbe mit `npx -y granite-of-ren
 
 | Agent | Was er tut | Tut nie (gesperrt) |
 |---|---|---|
-| [`granite-of-rentrolls`](packages/granite-of-rentrolls) | Mieterliste gegen Ihre Vertragsauszüge, Einheit für Einheit: Mieten, Staffeln, Daten, Kautionen, Flächen, Mieter, Leerstand, Überziehungen | Das Verwaltungssystem ändern oder Belastungen buchen |
-| [`slate-of-leases`](packages/slate-of-leases) | Gewerbemietverträge Klausel für Klausel mit Fundstelle ausgezogen; bestehende Auszüge gegen den Text geprüft | Das System ändern oder zur Unterschrift senden |
-| [`jade-of-escalations`](packages/jade-of-escalations) | Berechnete Miete gegen die Staffel- und Indexregeln jedes Vertrags (Stufen, Prozente, Index mit Unter- und Obergrenze); anstehende Erhöhungen | Belastungen buchen |
-| [`garnet-of-renewals`](packages/garnet-of-renewals) | Anstehende Verlängerungen, Angebotsfristen, Mietvorschläge innerhalb Ihrer eigenen Obergrenze, Angebotsschreiben als Entwurf | Zur Unterschrift senden oder E-Mails schicken |
-| [`shale-of-vacancy`](packages/shale-of-vacancy) | Belegung, vermieteter Anteil, Risiko, Leerstandsverlust und Mindermiete aus einer Mieterliste | Das System ändern oder Inserate veröffentlichen |
-| [`talc-of-overage`](packages/talc-of-overage) | Umsatzmiete aus Umsatzmeldungen der Mieter, verspätete und fehlende Meldungen, Abrechnung als Entwurf | Belastungen buchen oder eine Umsatzprüfung beginnen |
-| [`feldspar-of-estoppels`](packages/feldspar-of-estoppels) | Zurückgesandte Mieterbestätigungen (Estoppels) gegen Ihre Vertragsauszüge vor Verkauf oder Refinanzierung | Zur Unterschrift senden oder in einen Datenraum hochladen |
-| [`zircon-of-diligence`](packages/zircon-of-diligence) | Mieterliste eines Verkäufers gegen die Erträge der letzten zwölf Monate vor Kauf oder Finanzierung | Ein Angebot abgeben oder in einen Datenraum hochladen |
-| [`tourmaline-of-migration`](packages/tourmaline-of-migration) | Mieterliste des alten Systems gegen die des neuen zum Stichtag: Einheiten, Mieter, Mieten, Kautionen, Salden, Daten, Summen, die nicht aufgehen | Den Go-live freigeben oder alte Daten löschen |
+| [`fairlease-rent-roll-audit`](packages/fairlease-rent-roll-audit) | Mieterliste gegen Ihre Vertragsauszüge, Einheit für Einheit: Mieten, Staffeln, Daten, Kautionen, Flächen, Mieter, Leerstand, Überziehungen | Das Verwaltungssystem ändern oder Belastungen buchen |
+| [`fairlease-lease-abstracts`](packages/fairlease-lease-abstracts) | Gewerbemietverträge Klausel für Klausel mit Fundstelle ausgezogen; bestehende Auszüge gegen den Text geprüft | Das System ändern oder zur Unterschrift senden |
+| [`fairlease-rent-escalations`](packages/fairlease-rent-escalations) | Berechnete Miete gegen die Staffel- und Indexregeln jedes Vertrags (Stufen, Prozente, Index mit Unter- und Obergrenze); anstehende Erhöhungen | Belastungen buchen |
+| [`fairlease-lease-renewals`](packages/fairlease-lease-renewals) | Anstehende Verlängerungen, Angebotsfristen, Mietvorschläge innerhalb Ihrer eigenen Obergrenze, Angebotsschreiben als Entwurf | Zur Unterschrift senden oder E-Mails schicken |
+| [`fairlease-occupancy-and-vacancy`](packages/fairlease-occupancy-and-vacancy) | Belegung, vermieteter Anteil, Risiko, Leerstandsverlust und Mindermiete aus einer Mieterliste | Das System ändern oder Inserate veröffentlichen |
+| [`fairlease-percentage-rent`](packages/fairlease-percentage-rent) | Umsatzmiete aus Umsatzmeldungen der Mieter, verspätete und fehlende Meldungen, Abrechnung als Entwurf | Belastungen buchen oder eine Umsatzprüfung beginnen |
+| [`fairlease-estoppel-review`](packages/fairlease-estoppel-review) | Zurückgesandte Mieterbestätigungen (Estoppels) gegen Ihre Vertragsauszüge vor Verkauf oder Refinanzierung | Zur Unterschrift senden oder in einen Datenraum hochladen |
+| [`fairlease-acquisition-diligence`](packages/fairlease-acquisition-diligence) | Mieterliste eines Verkäufers gegen die Erträge der letzten zwölf Monate vor Kauf oder Finanzierung | Ein Angebot abgeben oder in einen Datenraum hochladen |
+| [`fairlease-pms-migration`](packages/fairlease-pms-migration) | Mieterliste des alten Systems gegen die des neuen zum Stichtag: Einheiten, Mieter, Mieten, Kautionen, Salden, Daten, Summen, die nicht aufgehen | Den Go-live freigeben oder alte Daten löschen |
 
 **Mieter, Vermietung und Forderungen**
 
 | Agent | Was er tut | Tut nie (gesperrt) |
 |---|---|---|
-| [`quartz-of-delinquency`](packages/quartz-of-delinquency) | Offene-Posten-Liste oder Mieterkonto als Arbeitsliste mit Stufen aus Ihrer eigenen Richtlinie, Prüfung der Mahngebühren, Erinnerungen als Entwurf | Kündigungen zustellen, Räumungsklagen einreichen oder an Auskunfteien melden |
-| [`jasper-of-deposits`](packages/jasper-of-deposits) | Kautionsabrechnungen beim Auszug gegen Ihre eigenen Regeln (Frist, Aufstellung, Abnutzung, Nutzungsdauer); Abrechnung als Entwurf | Rückzahlungen leisten oder an ein Inkasso übergeben |
-| [`amber-of-insurance`](packages/amber-of-insurance) | Versicherungsnachweise der Mieter gegen Deckungssummen, Mitversicherte und Daten aus dem Mietvertrag | Eine Ersatzversicherung abschließen oder Abmahnungen zustellen |
-| [`topaz-of-utilities`](packages/topaz-of-utilities) | Umlage von Versorgungskosten (RUBS) nach Ihrer eigenen Methode neu gerechnet; Überdeckung, belastete Leerstände, Ausreißer | Belastungen buchen oder Versorgerportale ändern |
-| [`cobalt-of-listings`](packages/cobalt-of-listings) | Inserate auf allen Portalen gegen die Mieterliste; Formulierungen zur Prüfung durch eine Person markiert | Inserate veröffentlichen, Angebotsmieten ändern oder Interessenten antworten |
-| [`mica-of-leads`](packages/mica-of-leads) | Vermietungstrichter aus Interessentenkarten: langsame oder fehlende Antworten, fällige Nachfassungen, Abschlussquote und Kosten je Vertrag nach Quelle | Über Bewerbungen entscheiden, Bonitätsprüfungen starten oder Interessenten anschreiben |
-| [`malachite-of-recerts`](packages/malachite-of-recerts) | Fristen und Hinweise für Neuzertifizierungen im geförderten Wohnungsbau nach dem Plan in Ihrer Richtliniendatei. Nur Daten | Haushalte zertifizieren, an eine Behörde übermitteln oder Mieten ändern |
-| [`lapis-of-payouts`](packages/lapis-of-payouts) | Auszahlungen von Airbnb, Vrbo und anderen Kurzzeitvermietungs-Kanälen gegen Buchungen und Bankeingänge | Gästen erstatten, Eigentümer auszahlen oder Kanal-Inserate ändern |
+| [`fairlease-delinquency-worklist`](packages/fairlease-delinquency-worklist) | Offene-Posten-Liste oder Mieterkonto als Arbeitsliste mit Stufen aus Ihrer eigenen Richtlinie, Prüfung der Mahngebühren, Erinnerungen als Entwurf | Kündigungen zustellen, Räumungsklagen einreichen oder an Auskunfteien melden |
+| [`fairlease-security-deposits`](packages/fairlease-security-deposits) | Kautionsabrechnungen beim Auszug gegen Ihre eigenen Regeln (Frist, Aufstellung, Abnutzung, Nutzungsdauer); Abrechnung als Entwurf | Rückzahlungen leisten oder an ein Inkasso übergeben |
+| [`fairlease-tenant-insurance`](packages/fairlease-tenant-insurance) | Versicherungsnachweise der Mieter gegen Deckungssummen, Mitversicherte und Daten aus dem Mietvertrag | Eine Ersatzversicherung abschließen oder Abmahnungen zustellen |
+| [`fairlease-utility-billback`](packages/fairlease-utility-billback) | Umlage von Versorgungskosten (RUBS) nach Ihrer eigenen Methode neu gerechnet; Überdeckung, belastete Leerstände, Ausreißer | Belastungen buchen oder Versorgerportale ändern |
+| [`fairlease-listing-checks`](packages/fairlease-listing-checks) | Inserate auf allen Portalen gegen die Mieterliste; Formulierungen zur Prüfung durch eine Person markiert | Inserate veröffentlichen, Angebotsmieten ändern oder Interessenten antworten |
+| [`fairlease-leasing-funnel`](packages/fairlease-leasing-funnel) | Vermietungstrichter aus Interessentenkarten: langsame oder fehlende Antworten, fällige Nachfassungen, Abschlussquote und Kosten je Vertrag nach Quelle | Über Bewerbungen entscheiden, Bonitätsprüfungen starten oder Interessenten anschreiben |
+| [`fairlease-affordable-recerts`](packages/fairlease-affordable-recerts) | Fristen und Hinweise für Neuzertifizierungen im geförderten Wohnungsbau nach dem Plan in Ihrer Richtliniendatei. Nur Daten | Haushalte zertifizieren, an eine Behörde übermitteln oder Mieten ändern |
+| [`fairlease-short-term-rental-payouts`](packages/fairlease-short-term-rental-payouts) | Auszahlungen von Airbnb, Vrbo und anderen Kurzzeitvermietungs-Kanälen gegen Buchungen und Bankeingänge | Gästen erstatten, Eigentümer auszahlen oder Kanal-Inserate ändern |
 
 **Eigentümer, Treuhandkonten und Buchhaltung**
 
 | Agent | Was er tut | Tut nie (gesperrt) |
 |---|---|---|
-| [`obsidian-of-trust`](packages/obsidian-of-trust) | Dreifach-Abstimmung: Kontoauszug, Kassenbuch, Eigentümer- und Mieterkonten | Geld bewegen, Schecks stornieren oder ins Hauptbuch buchen |
-| [`onyx-of-statements`](packages/onyx-of-statements) | Eigentümerabrechnungen vor dem Versand geprüft: Rechnung, Vortrag, Rücklagen, Ausschüttungen | Eigentümer auszahlen oder Abrechnungen veröffentlichen |
-| [`pyrite-of-fees`](packages/pyrite-of-fees) | Verwaltungs-, Vermietungs- und Aufschlagsgebühren aus jedem Verwaltervertrag neu berechnet | Gutschriften buchen oder Gebühreneinstellungen ändern |
-| [`marble-of-cam`](packages/marble-of-cam) | Abrechnung von Nebenkosten (CAM): Kostenpools, Anteile, Hochrechnung, Deckel, Basisjahre, Verwaltungsaufschläge | Belastungen buchen oder das System ändern |
-| [`beryl-of-budgets`](packages/beryl-of-budgets) | Budget gegen Ist, Abweichungen, die laut Vertrag zu erklären sind, Jahresprognose, Eigentümer-Memo als Entwurf | Das Budget ändern oder ins Hauptbuch buchen |
-| [`pearl-of-filings`](packages/pearl-of-filings) | Vorbereitung der US-Formulare 1099: Summen je Empfänger gegen die von Ihnen genannte Schwelle, fehlende Steuernummern und Adressen; Steuernummern immer maskiert | 1099 einreichen, Steuernummern abgleichen lassen oder Quellensteuer einbehalten |
-| [`coral-of-associations`](packages/coral-of-associations) | Eigentümerkonten von Gemeinschaften (HOA, Wohnungseigentum) gegen Ihre Umlage- und Mahnrichtlinie; Verstöße gegen Ihre Hinweisschritte | Pfandrechte eintragen oder Bußgelder buchen |
-| [`chert-of-taxes`](packages/chert-of-taxes) | Grundsteuerbescheide, Raten und die von Ihnen eingetragenen Einspruchsfristen; Kalender der Fälligkeiten | Einsprüche einlegen oder Steuern zahlen |
+| [`fairlease-trust-reconciliation`](packages/fairlease-trust-reconciliation) | Dreifach-Abstimmung: Kontoauszug, Kassenbuch, Eigentümer- und Mieterkonten | Geld bewegen, Schecks stornieren oder ins Hauptbuch buchen |
+| [`fairlease-owner-statements`](packages/fairlease-owner-statements) | Eigentümerabrechnungen vor dem Versand geprüft: Rechnung, Vortrag, Rücklagen, Ausschüttungen | Eigentümer auszahlen oder Abrechnungen veröffentlichen |
+| [`fairlease-management-fees`](packages/fairlease-management-fees) | Verwaltungs-, Vermietungs- und Aufschlagsgebühren aus jedem Verwaltervertrag neu berechnet | Gutschriften buchen oder Gebühreneinstellungen ändern |
+| [`fairlease-cam-reconciliation`](packages/fairlease-cam-reconciliation) | Abrechnung von Nebenkosten (CAM): Kostenpools, Anteile, Hochrechnung, Deckel, Basisjahre, Verwaltungsaufschläge | Belastungen buchen oder das System ändern |
+| [`fairlease-budget-variance`](packages/fairlease-budget-variance) | Budget gegen Ist, Abweichungen, die laut Vertrag zu erklären sind, Jahresprognose, Eigentümer-Memo als Entwurf | Das Budget ändern oder ins Hauptbuch buchen |
+| [`fairlease-1099-filings`](packages/fairlease-1099-filings) | Vorbereitung der US-Formulare 1099: Summen je Empfänger gegen die von Ihnen genannte Schwelle, fehlende Steuernummern und Adressen; Steuernummern immer maskiert | 1099 einreichen, Steuernummern abgleichen lassen oder Quellensteuer einbehalten |
+| [`fairlease-hoa-accounts`](packages/fairlease-hoa-accounts) | Eigentümerkonten von Gemeinschaften (HOA, Wohnungseigentum) gegen Ihre Umlage- und Mahnrichtlinie; Verstöße gegen Ihre Hinweisschritte | Pfandrechte eintragen oder Bußgelder buchen |
+| [`fairlease-property-taxes`](packages/fairlease-property-taxes) | Grundsteuerbescheide, Raten und die von Ihnen eingetragenen Einspruchsfristen; Kalender der Fälligkeiten | Einsprüche einlegen oder Steuern zahlen |
 
 **Betrieb und Dienstleister**
 
 | Agent | Was er tut | Tut nie (gesperrt) |
 |---|---|---|
-| [`agate-of-workorders`](packages/agate-of-workorders) | Offene Aufträge nach Ihren Zielzeiten gealtert, Wiederholungen, als Routine erfasste Notfälle, langsame Dienstleister | Dienstleister beauftragen, Rechnungen freigeben oder Aufträge schließen |
-| [`basalt-of-turns`](packages/basalt-of-turns) | Wohnungswechsel vom Auszug bis zum Einzug: Tage, Kosten je Gewerk, weiterbelastbare Posten, entgangene Miete | Dienstleister beauftragen oder Belastungen buchen |
-| [`flint-of-inspections`](packages/flint-of-inspections) | Auszugs- gegen Einzugsprotokoll Punkt für Punkt, überfällige Begehungen, schlechte Punkte ohne Auftrag | Belastungen buchen oder Dienstleister beauftragen |
-| [`gypsum-of-capex`](packages/gypsum-of-capex) | Investitionsprojekte gegen Budget, Verpflichtungen, Zeitplan und Rücklagen | Nachträge oder Rechnungen freigeben |
-| [`opal-of-vendors`](packages/opal-of-vendors) | Versicherung, Lizenz und Steuerformular der Dienstleister gegen Ihre Anforderungen; Zahlungen ohne gültige Nachweise | Rechnungen freigeben oder den Dienstleisterstatus ändern |
+| [`fairlease-work-orders`](packages/fairlease-work-orders) | Offene Aufträge nach Ihren Zielzeiten gealtert, Wiederholungen, als Routine erfasste Notfälle, langsame Dienstleister | Dienstleister beauftragen, Rechnungen freigeben oder Aufträge schließen |
+| [`fairlease-unit-turns`](packages/fairlease-unit-turns) | Wohnungswechsel vom Auszug bis zum Einzug: Tage, Kosten je Gewerk, weiterbelastbare Posten, entgangene Miete | Dienstleister beauftragen oder Belastungen buchen |
+| [`fairlease-unit-inspections`](packages/fairlease-unit-inspections) | Auszugs- gegen Einzugsprotokoll Punkt für Punkt, überfällige Begehungen, schlechte Punkte ohne Auftrag | Belastungen buchen oder Dienstleister beauftragen |
+| [`fairlease-capital-projects`](packages/fairlease-capital-projects) | Investitionsprojekte gegen Budget, Verpflichtungen, Zeitplan und Rücklagen | Nachträge oder Rechnungen freigeben |
+| [`fairlease-vendor-compliance`](packages/fairlease-vendor-compliance) | Versicherung, Lizenz und Steuerformular der Dienstleister gegen Ihre Anforderungen; Zahlungen ohne gültige Nachweise | Rechnungen freigeben oder den Dienstleisterstatus ändern |
 
 ## Wie sie sicher bleiben
 
@@ -86,13 +86,13 @@ Dieses Repository ist ein Plugin-Marktplatz für Claude Code. Jeder Agent ist ei
 
 ```text
 /plugin marketplace add <Pfad oder Git-URL dieses Repositorys>
-/plugin install granite-of-rentrolls@keystone-property
+/plugin install fairlease-rent-roll-audit@keystone-property
 ```
 
 Die Plugins starten `npx -y <agent>@<version>` und brauchen daher diese Version auf npm. Bis dahin einen Agenten aus einem lokalen Klon hinzufügen:
 
 ```bash
-claude mcp add granite-of-rentrolls -- node /pfad/zu/keystone-agents/packages/granite-of-rentrolls/bin/granite-of-rentrolls.js mcp --root .
+claude mcp add fairlease-rent-roll-audit -- node /pfad/zu/fairlease-agents/packages/fairlease-rent-roll-audit/bin/fairlease-rent-roll-audit.js mcp --root .
 ```
 
 ## Entwickeln

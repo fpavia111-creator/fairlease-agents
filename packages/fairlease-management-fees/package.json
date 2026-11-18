@@ -1,0 +1,55 @@
+{
+  "name": "fairlease-management-fees",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-management-fees",
+  "description": "Fairlease Management Fees: recomputes the management, leasing, renewal and markup fees you charged each owner from the terms of their management agreement, and flags overcharges, undercharges, duplicates and fees the agreement does not provide for.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-management-fees": "bin/fairlease-management-fees.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-management-fees.js demo",
+    "eval": "node bin/fairlease-management-fees.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-management-fees"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-management-fees#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "fees"
+  ]
+}

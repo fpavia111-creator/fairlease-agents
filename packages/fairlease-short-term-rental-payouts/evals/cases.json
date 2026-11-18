@@ -1,0 +1,389 @@
+{
+  "suite": "fairlease-short-term-rental-payouts",
+  "root": "..",
+  "data_note": "Fictional listings, guests, channel payouts and bank lines in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {
+      "id": "totals",
+      "tool": "payouts_check",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv",
+          "fixtures/vrbo-payouts-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "bank": "fixtures/bank-operating-2026.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.id": "HMF6PA3S",
+          "result.short_or_missing": 787.5
+        },
+        "contains": [
+          "1 missing a payout",
+          "5 with differences",
+          "1 not found",
+          "1 channel deposit(s) with no payout"
+        ]
+      }
+    },
+    {
+      "id": "fee-rate",
+      "tool": "payouts_explain",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15",
+        "id": "HMC3WE9P"
+      },
+      "expect": {
+        "contains": [
+          "fee_rate_differs",
+          "15%",
+          "short 60"
+        ]
+      }
+    },
+    {
+      "id": "airbnb-gross-includes-cleaning",
+      "tool": "payouts_explain",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15",
+        "id": "HMA1QX7Z"
+      },
+      "expect": {
+        "equals": {
+          "result.item.status": "ok"
+        }
+      }
+    },
+    {
+      "id": "duplicate",
+      "tool": "payouts_explain",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "as_of": "2026-11-15",
+        "id": "HME5IO8N"
+      },
+      "expect": {
+        "contains": [
+          "duplicate_payout",
+          "payout_over"
+        ]
+      }
+    },
+    {
+      "id": "listing-alias-from-policy",
+      "tool": "payouts_explain",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15",
+        "id": "HMA1QX7Z"
+      },
+      "expect": {
+        "equals": {
+          "result.item.listing": "Lakeview Cabin"
+        }
+      }
+    },
+    {
+      "id": "cancelled-not-missing",
+      "tool": "payouts_explain",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "as_of": "2026-11-15",
+        "id": "HMH8FG1B"
+      },
+      "expect": {
+        "equals": {
+          "result.item.status": "cancelled"
+        }
+      }
+    },
+    {
+      "id": "german-export",
+      "tool": "payouts_check",
+      "args": {
+        "payouts": [
+          "fixtures/exports/fewo-direkt-auszahlungen-de.csv"
+        ],
+        "policy": "fixtures/exports/fewo-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "your rates work out 386.4",
+          "12%"
+        ]
+      }
+    },
+    {
+      "id": "nothing-to-ask",
+      "tool": "payouts_draft_inquiry",
+      "mode": "auto",
+      "auto_actions": [
+        "payouts_draft_inquiry"
+      ],
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "as_of": "2026-11-15",
+        "id": "HMA1QX7Z"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "no payout difference"
+        ]
+      }
+    },
+    {
+      "id": "never-refunds",
+      "tool": "issue_guest_refund",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-pays-owners",
+      "tool": "owner_payout",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "payouts_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "payouts_write_report",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv",
+          "fixtures/vrbo-payouts-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "bank": "fixtures/bank-operating-2026.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "recall-empty-memory",
+      "tool": "payouts_recall",
+      "args": {},
+      "expect": {
+        "contains": [
+          "memory is empty",
+          "verifies"
+        ]
+      }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "payouts_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "payouts_check",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv",
+          "fixtures/vrbo-payouts-2026-10.csv"
+        ],
+        "bookings": "../../outside.csv",
+        "bank": "fixtures/bank-operating-2026.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "payouts_check",
+      "mode": "review",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv",
+          "fixtures/vrbo-payouts-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "bank": "fixtures/bank-operating-2026.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.id": "HMF6PA3S",
+          "result.short_or_missing": 787.5
+        },
+        "contains": [
+          "1 missing a payout",
+          "5 with differences",
+          "1 not found",
+          "1 channel deposit(s) with no payout"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "payouts_check",
+      "args": {
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "bank": "fixtures/bank-operating-2026.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "payouts"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "payouts_draft_inquiry",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "as_of": "2026-11-15",
+        "id": "HMC3WE9P"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "payouts_draft_inquiry",
+      "approve": "Dana Example",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "as_of": "2026-11-15",
+        "id": "HMC3WE9P"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "payouts_draft_inquiry",
+      "mode": "review",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "as_of": "2026-11-15",
+        "id": "HMC3WE9P"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "same-export-twice-counted-once",
+      "tool": "payouts_check",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv",
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-2026-10.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "appear in more than one file and were counted once"
+        ]
+      }
+    },
+    {
+      "id": "lower-case-codes-and-payroll-direct-deposit",
+      "tool": "payouts_check",
+      "args": {
+        "payouts": [
+          "fixtures/airbnb-transactions-2026-10.csv"
+        ],
+        "bookings": "fixtures/reservations-edge-cases.csv",
+        "bank": "fixtures/bank-edge-cases.csv",
+        "policy": "fixtures/str-policy.json",
+        "as_of": "2026-10-14"
+      },
+      "expect": {
+        "status": "executed",
+        "not_contains": [
+          "PAYROLL",
+          "missing_payout"
+        ],
+        "contains": [
+          "HMA1QX7Z"
+        ]
+      }
+    }
+  ]
+}

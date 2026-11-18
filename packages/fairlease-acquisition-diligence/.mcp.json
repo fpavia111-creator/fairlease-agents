@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-acquisition-diligence": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-acquisition-diligence@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

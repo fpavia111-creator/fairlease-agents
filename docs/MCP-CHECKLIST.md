@@ -1,7 +1,7 @@
-# MCP quality checklist for Keystone-style agent families
+# MCP quality checklist for Fairlease-style agent families
 
-The Keystone core carries the MCP fixes first made for the earlier agent families in this
-project. Keystone's own result, 17 Nov 2026, running all 30 agents through the official MCP
+The Fairlease core carries the MCP fixes first made for the earlier agent families in this
+project. Fairlease's own result, 17 Nov 2026, running all 30 agents through the official MCP
 SDK client over real stdio (`npm run mcp:check`):
 
 | Check | Result |

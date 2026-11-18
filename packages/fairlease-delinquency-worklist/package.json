@@ -1,0 +1,58 @@
+{
+  "name": "fairlease-delinquency-worklist",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-delinquency-worklist",
+  "description": "Fairlease Delinquency Worklist: turns an aging report or tenant ledger into a delinquency worklist with stages from your own policy, late-fee checks and reminder drafts. Never serves notices or files evictions.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-delinquency-worklist": "bin/fairlease-delinquency-worklist.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-delinquency-worklist.js demo",
+    "eval": "node bin/fairlease-delinquency-worklist.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-delinquency-worklist"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-delinquency-worklist#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "delinquency",
+    "collections",
+    "aging",
+    "late-fees"
+  ]
+}

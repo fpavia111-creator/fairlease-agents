@@ -1,0 +1,18 @@
+{
+  "name": "fairlease-estoppel-review",
+  "version": "0.1.0",
+  "description": "Checks returned tenant estoppel certificates against your lease abstracts before a sale or refinancing (rent, dates, deposit, area, options, amendments, landlord defaults claimed), tracks which are missing or stale, and drafts follow-up requests.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-estoppel-review#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "estoppels"
+  ]
+}

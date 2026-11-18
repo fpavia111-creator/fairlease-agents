@@ -1,0 +1,18 @@
+{
+  "name": "fairlease-budget-variance",
+  "version": "0.1.0",
+  "description": "Compares actuals with the budget by account for the month and year to date, flags the variances your management agreement says must be explained, unbudgeted spend and the year-end forecast, and drafts the owner's variance memo.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-budget-variance#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "budgets"
+  ]
+}

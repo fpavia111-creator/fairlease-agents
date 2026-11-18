@@ -1,0 +1,58 @@
+{
+  "name": "fairlease-rent-escalations",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-rent-escalations",
+  "description": "Fairlease Rent Escalations: checks rent billed against each lease's escalation schedule (fixed steps, percentages, amounts and CPI with floors and caps) and lists the increases coming up.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-rent-escalations": "bin/fairlease-rent-escalations.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-rent-escalations.js demo",
+    "eval": "node bin/fairlease-rent-escalations.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-rent-escalations"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-rent-escalations#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "rent-escalation",
+    "cpi",
+    "lease-audit",
+    "commercial-real-estate"
+  ]
+}

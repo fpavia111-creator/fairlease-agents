@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-tenant-insurance": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-tenant-insurance@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

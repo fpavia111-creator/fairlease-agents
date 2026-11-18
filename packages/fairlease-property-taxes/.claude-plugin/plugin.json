@@ -1,0 +1,18 @@
+{
+  "name": "fairlease-property-taxes",
+  "version": "0.1.0",
+  "description": "Tracks property tax assessments, installments and the appeal deadlines you enter, flags large assessment increases, unpaid or short installments, and writes a calendar of due dates.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-property-taxes#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "taxes"
+  ]
+}

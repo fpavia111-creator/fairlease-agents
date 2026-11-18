@@ -1,0 +1,335 @@
+{
+  "suite": "fairlease-leasing-funnel",
+  "root": "..",
+  "data_note": "Fictional prospects and guest cards in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {
+      "id": "totals",
+      "tool": "leads_check",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "policy": "fixtures/lead-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.id": "GC-1014",
+          "result.sources.1.cost_per_lease": 300
+        },
+        "contains": [
+          "18 lead(s) (1 duplicate(s) set aside)",
+          "2 with no response",
+          "1 approved with no lease",
+          "Rent.com: spend with no leads"
+        ]
+      }
+    },
+    {
+      "id": "alias-from-policy",
+      "tool": "leads_check",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "policy": "fixtures/lead-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "equals": {
+          "result.sources.1.source": "Zillow",
+          "result.sources.1.count": 6
+        }
+      }
+    },
+    {
+      "id": "alias-absent-without-policy",
+      "tool": "leads_check",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "equals": {
+          "result.sources.1.source": "Zillow",
+          "result.sources.1.count": 5
+        }
+      }
+    },
+    {
+      "id": "duplicate",
+      "tool": "leads_explain",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "as_of": "2026-11-15",
+        "id": "GC-1015"
+      },
+      "expect": {
+        "contains": [
+          "Same person as lead GC-1007"
+        ]
+      }
+    },
+    {
+      "id": "dates-out-of-order",
+      "tool": "leads_explain",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "as_of": "2026-11-15",
+        "id": "GC-1019"
+      },
+      "expect": {
+        "contains": [
+          "tour dated before the lead came in"
+        ]
+      }
+    },
+    {
+      "id": "spanish-export",
+      "tool": "leads_check",
+      "args": {
+        "leads": "fixtures/exports/interesados-es.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "4 lead(s)",
+          "Portal inmobiliario",
+          "P-04"
+        ]
+      }
+    },
+    {
+      "id": "nothing-to-follow-up",
+      "tool": "leads_draft_followup",
+      "mode": "auto",
+      "auto_actions": [
+        "leads_draft_followup"
+      ],
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "as_of": "2026-11-15",
+        "id": "GC-1015"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "nothing to follow up"
+        ]
+      }
+    },
+    {
+      "id": "draft-follow-up",
+      "tool": "leads_draft_followup",
+      "mode": "auto",
+      "auto_actions": [
+        "leads_draft_followup"
+      ],
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "as_of": "2026-11-15",
+        "id": "GC-1009"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "never-decides",
+      "tool": "decide_application",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-screens",
+      "tool": "run_screening",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "leads_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "leads_write_report",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "policy": "fixtures/lead-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "recall-empty-memory",
+      "tool": "leads_recall",
+      "args": {},
+      "expect": {
+        "contains": [
+          "memory is empty",
+          "verifies"
+        ]
+      }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "leads_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "leads_check",
+      "args": {
+        "leads": "../../outside.csv",
+        "policy": "fixtures/lead-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "leads_check",
+      "mode": "review",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "policy": "fixtures/lead-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.0.id": "GC-1014",
+          "result.sources.1.cost_per_lease": 300
+        },
+        "contains": [
+          "18 lead(s) (1 duplicate(s) set aside)",
+          "2 with no response",
+          "1 approved with no lease",
+          "Rent.com: spend with no leads"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "leads_check",
+      "args": {
+        "policy": "fixtures/lead-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "leads"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "leads_draft_followup",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "as_of": "2026-11-15",
+        "id": "GC-1009"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "leads_draft_followup",
+      "approve": "Dana Example",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "as_of": "2026-11-15",
+        "id": "GC-1009"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "leads_draft_followup",
+      "mode": "review",
+      "args": {
+        "leads": "fixtures/guest-cards-2026-11.csv",
+        "as_of": "2026-11-15",
+        "id": "GC-1009"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "repeat-inquiry-lease-counted-once-for-first-source",
+      "tool": "leads_check",
+      "args": {
+        "leads": "fixtures/guest-cards-edge-cases.csv",
+        "as_of": "2026-11-10"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "5 lead(s) (1 duplicate(s) set aside)",
+          "1 leased",
+          "0 with no response",
+          "lost_reason_missing"
+        ],
+        "equals": {
+          "result.sources.0.source": "Zillow",
+          "result.sources.0.count": 3,
+          "result.sources.0.leases": 1
+        }
+      }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "leads_check",
+      "args": {
+        "leads": "fixtures/missing-export.csv",
+        "policy": "fixtures/lead-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
+    }
+  ]
+}

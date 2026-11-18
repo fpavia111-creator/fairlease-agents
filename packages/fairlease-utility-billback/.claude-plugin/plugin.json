@@ -1,0 +1,20 @@
+{
+  "name": "fairlease-utility-billback",
+  "version": "0.1.0",
+  "description": "Re-works RUBS utility billbacks from the bills and occupancy, by your own method, and finds over-recovery, vacant units billed, bills that spike, and charges that differ from the split.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-utility-billback#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "rubs",
+    "utilities",
+    "billback"
+  ]
+}

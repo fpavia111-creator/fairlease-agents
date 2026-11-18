@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-occupancy-and-vacancy": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-occupancy-and-vacancy@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

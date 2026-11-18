@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-rent-roll-audit": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-rent-roll-audit@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "name": "fairlease-hoa-accounts",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-hoa-accounts",
+  "description": "Fairlease HOA Accounts: checks HOA and condo association owner accounts against your assessment and collection policy (missing or wrong assessments, late fees charged or missed, days delinquent and the next step your policy names) and tracks violations against your notice, cure and hearing steps; drafts owner notices.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-hoa-accounts": "bin/fairlease-hoa-accounts.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-hoa-accounts.js demo",
+    "eval": "node bin/fairlease-hoa-accounts.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-hoa-accounts"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-hoa-accounts#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "associations"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "fairlease-rent-escalations",
+  "version": "0.1.0",
+  "description": "Checks rent billed against each lease's escalation schedule (fixed steps, percentages, amounts and CPI with floors and caps) and lists the increases coming up.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-rent-escalations#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "rent-escalation",
+    "cpi",
+    "lease-audit",
+    "commercial-real-estate"
+  ]
+}

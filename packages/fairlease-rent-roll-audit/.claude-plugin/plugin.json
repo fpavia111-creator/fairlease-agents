@@ -1,0 +1,21 @@
+{
+  "name": "fairlease-rent-roll-audit",
+  "version": "0.1.0",
+  "description": "Fairlease Rent Roll Audit: checks a rent roll against your lease abstracts: rents, escalations, dates, deposits, areas, tenants, vacancies and holdovers, unit by unit.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-rent-roll-audit#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "rent-roll",
+    "lease-audit",
+    "commercial-real-estate",
+    "multifamily"
+  ]
+}

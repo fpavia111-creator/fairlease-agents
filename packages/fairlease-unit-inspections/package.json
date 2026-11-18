@@ -1,0 +1,55 @@
+{
+  "name": "fairlease-unit-inspections",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-unit-inspections",
+  "description": "Fairlease Unit Inspections: compares move-out inspections with move-in item by item, flags units overdue for their periodic inspection and poor items with no work order, and drafts inspection notices.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-unit-inspections": "bin/fairlease-unit-inspections.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-unit-inspections.js demo",
+    "eval": "node bin/fairlease-unit-inspections.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-unit-inspections"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-unit-inspections#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "inspections"
+  ]
+}

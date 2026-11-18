@@ -23,11 +23,11 @@ import { readdirSync, readFileSync, writeFileSync, cpSync, mkdtempSync, statSync
 import { join, relative, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { AgentRuntime, parseCsv, toCsv, neutraliseFormula, safeMarkdown } from '../packages/keystone-core/src/index.js';
+import { AgentRuntime, parseCsv, toCsv, neutraliseFormula, safeMarkdown } from '../packages/fairlease-core/src/index.js';
 
 const PK = join(dirname(fileURLToPath(import.meta.url)), '..', 'packages');
 const argv = process.argv.slice(2); const withArgs = argv.includes('--args'); const only = argv.filter((a) => !a.startsWith('--'));
-const agents = readdirSync(PK).filter((n) => n !== 'keystone-core' && existsSync(join(PK, n, 'src', 'manifest.js')) && (!only.length || only.includes(n))).sort();
+const agents = readdirSync(PK).filter((n) => n !== 'fairlease-core' && existsSync(join(PK, n, 'src', 'manifest.js')) && (!only.length || only.includes(n))).sort();
 
 const PLANT = {
   formula: '=HYPERLINK("http://evil.example/x","click")',

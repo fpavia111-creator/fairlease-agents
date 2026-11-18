@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-short-term-rental-payouts": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-short-term-rental-payouts@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

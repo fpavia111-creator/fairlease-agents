@@ -1,0 +1,323 @@
+{
+  "suite": "fairlease-utility-billback",
+  "root": "..",
+  "data_note": "Fictional utility bills, occupancy and RUBS charges for a fictional 24-unit building in ../fixtures. Deterministic checks; no model is called.",
+  "bench": {
+    "fixed": [
+      "bills"
+    ],
+    "why": "A building has one utility bill per utility per month, and every bill is split across every unit, so the scale test grows occupancy and charges and keeps the bills file at its fixture size."
+  },
+  "cases": [
+    {
+      "id": "totals",
+      "tool": "utilities_check",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.overbilled_total": 416.12,
+          "result.periods.4.residents_share": 4901.76,
+          "result.periods.4.owner_share": 518.24,
+          "result.periods.0.billed": 3781
+        }
+      }
+    },
+    {
+      "id": "spike-and-over-recovery",
+      "tool": "utilities_check",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "contains": [
+          "bill_spike",
+          "32.76% above",
+          "over_recovery",
+          "330 more than their share"
+        ]
+      }
+    },
+    {
+      "id": "vacant-billed",
+      "tool": "utilities_explain",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv",
+        "unit": "204"
+      },
+      "expect": {
+        "contains": [
+          "billed_while_vacant"
+        ],
+        "equals": {
+          "result.item.difference": 180
+        }
+      }
+    },
+    {
+      "id": "duplicate",
+      "tool": "utilities_explain",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv",
+        "unit": "Farah Haddad"
+      },
+      "expect": {
+        "contains": [
+          "duplicate_charge"
+        ],
+        "equals": {
+          "result.item.difference": 236.12
+        }
+      }
+    },
+    {
+      "id": "not-billed",
+      "tool": "utilities_explain",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv",
+        "unit": "401"
+      },
+      "expect": {
+        "contains": [
+          "not_billed",
+          "trash 2026-08"
+        ]
+      }
+    },
+    {
+      "id": "part-month-move-out",
+      "tool": "utilities_check",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json"
+      },
+      "expect": {
+        "contains": [
+          "No billing file"
+        ],
+        "equals": {
+          "result.periods.5.owner_share": 36.13,
+          "result.items.0.status": "review"
+        }
+      }
+    },
+    {
+      "id": "japanese-bills",
+      "tool": "utilities_check",
+      "args": {
+        "bills": "fixtures/exports/bills-ja.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json"
+      },
+      "expect": {
+        "equals": {
+          "result.periods.length": 2,
+          "result.skipped_bills.length": 0,
+          "result.periods.0.residents_share": 3781
+        }
+      }
+    },
+    {
+      "id": "rubs-file-validated",
+      "tool": "utilities_check",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/bills-2026.csv"
+      },
+      "expect": {
+        "status": "error"
+      }
+    },
+    {
+      "id": "never-posts",
+      "tool": "post_tenant_charge",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-changes-system",
+      "tool": "utility_portal_update",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "utilities_write_report",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "utilities_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "utilities_check",
+      "args": {
+        "bills": "../../outside.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "utilities_check",
+      "mode": "review",
+      "args": {
+        "bills": "fixtures/bills-2026.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.overbilled_total": 416.12,
+          "result.periods.4.residents_share": 4901.76,
+          "result.periods.4.owner_share": 518.24,
+          "result.periods.0.billed": 3781
+        }
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "utilities_check",
+      "args": {
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "bills"
+        ]
+      }
+    },
+    {
+      "id": "messy-exports-same-answer",
+      "tool": "utilities_check",
+      "args": {
+        "bills": "fixtures/bills-edge-cases.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed-edge-cases.csv"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "listed twice",
+          "ends before it starts"
+        ],
+        "equals": {
+          "result.overbilled_total": 416.12,
+          "result.periods.length": 6,
+          "result.skipped_bills.length": 2,
+          "result.unmatched_charges.length": 0
+        }
+      }
+    },
+    {
+      "id": "roommates-and-two-meters",
+      "tool": "utilities_check",
+      "args": {
+        "bills": "fixtures/bills-two-meters.csv",
+        "occupancy": "fixtures/occupancy-roommates.csv",
+        "rubs": "fixtures/rubs-units.json"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "overlapping_tenancies"
+        ],
+        "equals": {
+          "result.periods.length": 1,
+          "result.periods.0.amount": 400,
+          "result.periods.0.owner_share": 0,
+          "result.periods.0.lines.0.share": 100,
+          "result.periods.0.lines.3.share": 103.23,
+          "result.items.length": 2
+        }
+      }
+    },
+    {
+      "id": "explain-shared-unit",
+      "tool": "utilities_explain",
+      "args": {
+        "bills": "fixtures/bills-two-meters.csv",
+        "occupancy": "fixtures/occupancy-roommates.csv",
+        "rubs": "fixtures/rubs-units.json",
+        "unit": "1A"
+      },
+      "expect": {
+        "contains": [
+          "Maya Brooks, Noor Haddad",
+          "split 200"
+        ]
+      }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "utilities_check",
+      "args": {
+        "bills": "fixtures/missing-export.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
+    }
+  ]
+}

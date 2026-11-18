@@ -5,13 +5,13 @@
 import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { describeSources, EXPORTS_BASIS_NOTE } from '../packages/keystone-core/src/index.js';
+import { describeSources, EXPORTS_BASIS_NOTE } from '../packages/fairlease-core/src/index.js';
 
 const PK = join(dirname(fileURLToPath(import.meta.url)), '..', 'packages');
 const check = process.argv.includes('--check');
 const START = '<!-- sources:start -->', END = '<!-- sources:end -->';
 let stale = 0;
-for (const n of readdirSync(PK).filter((x) => /-of-/.test(x)).sort()) {
+for (const n of readdirSync(PK).filter((x) => /^fair[a-z]+-(?!core$)/.test(x)).sort()) {
   const { manifest } = await import(pathToFileURL(join(PK, n, 'src', 'index.js')).href);
   const list = describeSources(manifest); const f = join(PK, n, 'README.md');
   if (!list.length || !existsSync(f)) continue;

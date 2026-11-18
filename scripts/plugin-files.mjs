@@ -8,7 +8,7 @@ import { join } from 'node:path';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const check = process.argv.includes('--check');
-const pkgs = readdirSync(join(root, 'packages')).filter((n) => n !== 'keystone-core' && existsSync(join(root, 'packages', n, 'package.json'))).sort();
+const pkgs = readdirSync(join(root, 'packages')).filter((n) => n !== 'fairlease-core' && existsSync(join(root, 'packages', n, 'package.json'))).sort();
 const want = new Map();
 const plugins = [];
 for (const n of pkgs) {
@@ -18,7 +18,7 @@ for (const n of pkgs) {
   want.set(join('packages', n, '.mcp.json'), { mcpServers: { [n]: { command: 'npx', args: ['-y', `${n}@${p.version}`, 'mcp'] } } });
   plugins.push({ name: n, source: `./packages/${n}`, description: desc, version: p.version, category: 'property-management', keywords: [...new Set(p.keywords.filter((k) => !['mcp', 'mcp-server', 'keystone'].includes(k)))] });
 }
-want.set(join('.claude-plugin', 'marketplace.json'), { name: 'keystone-property', owner: { name: 'Keystone' }, metadata: { description: 'Thirty property management agents for commercial and mid-size operators. Each reads your exported files, writes reports locally, never moves money or changes a live system, and waits for a named person before any letter or notice goes out.' }, plugins });
+want.set(join('.claude-plugin', 'marketplace.json'), { name: 'keystone-property', owner: { name: 'Fairlease' }, metadata: { description: 'Thirty property management agents for commercial and mid-size operators. Each reads your exported files, writes reports locally, never moves money or changes a live system, and waits for a named person before any letter or notice goes out.' }, plugins });
 let stale = 0;
 for (const [rel, obj] of want) {
   const f = join(root, rel); const text = JSON.stringify(obj, null, 2) + '\n';

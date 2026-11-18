@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-security-deposits": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-security-deposits@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

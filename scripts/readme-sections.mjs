@@ -14,7 +14,7 @@ import { join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { describeSources, EXPORTS_BASIS_NOTE, namesFor, conceptOf, ONE_CLICK_CATEGORIES } from '../packages/keystone-core/src/index.js';
+import { describeSources, EXPORTS_BASIS_NOTE, namesFor, conceptOf, ONE_CLICK_CATEGORIES } from '../packages/fairlease-core/src/index.js';
 
 const PK = join(dirname(fileURLToPath(import.meta.url)), '..', 'packages');
 const check = process.argv.includes('--check');
@@ -82,7 +82,7 @@ function section(n, m, demo) {
 }
 
 let stale = 0;
-for (const n of readdirSync(PK).filter((x) => /-of-/.test(x) && (!only.length || only.includes(x))).sort()) {
+for (const n of readdirSync(PK).filter((x) => /^fair[a-z]+-(?!core$)/.test(x) && (!only.length || only.includes(x))).sort()) {
   const { manifest } = await import(pathToFileURL(join(PK, n, 'src', 'index.js')).href);
   const f = join(PK, n, 'README.md'); if (!existsSync(f)) continue;
   const block = section(n, manifest, demoText(n));

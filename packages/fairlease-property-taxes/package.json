@@ -1,0 +1,55 @@
+{
+  "name": "fairlease-property-taxes",
+  "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/fairlease-property-taxes",
+  "description": "Fairlease Property Taxes: tracks property tax assessments, installments and the appeal deadlines you enter, flags large assessment increases, unpaid or short installments, and writes a calendar of due dates.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kurt Francisco",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "fairlease-property-taxes": "bin/fairlease-property-taxes.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "fixtures",
+    "evals",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "test": "node scripts/run-tests.cjs",
+    "demo": "node bin/fairlease-property-taxes.js demo",
+    "eval": "node bin/fairlease-property-taxes.js eval"
+  },
+  "dependencies": {
+    "fairlease-core": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
+    "directory": "packages/fairlease-property-taxes"
+  },
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-property-taxes#readme",
+  "bugs": {
+    "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "taxes"
+  ]
+}

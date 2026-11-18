@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-rent-escalations": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-rent-escalations@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

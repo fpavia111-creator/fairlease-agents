@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-lease-renewals": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-lease-renewals@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

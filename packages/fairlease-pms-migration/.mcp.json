@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-pms-migration": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-pms-migration@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}

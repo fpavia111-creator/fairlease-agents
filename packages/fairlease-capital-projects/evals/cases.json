@@ -1,0 +1,333 @@
+{
+  "suite": "fairlease-capital-projects",
+  "root": "..",
+  "data_note": "Fictional capital projects and reserves in ../fixtures. Deterministic checks; no model is called.",
+  "cases": [
+    {
+      "id": "totals",
+      "tool": "capex_check",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 8,
+          "result.reserves.0.short": 154000
+        },
+        "contains": [
+          "budget 658500",
+          "Replacement reserve by 154000"
+        ]
+      }
+    },
+    {
+      "id": "forecast-over-and-late",
+      "tool": "capex_explain",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15",
+        "project": "P-01"
+      },
+      "expect": {
+        "contains": [
+          "forecast_over",
+          "past_finish",
+          "8.33%"
+        ]
+      }
+    },
+    {
+      "id": "over-budget",
+      "tool": "capex_explain",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "as_of": "2026-11-15",
+        "project": "Parking"
+      },
+      "expect": {
+        "contains": [
+          "7500 (7.89%) over"
+        ]
+      }
+    },
+    {
+      "id": "spending-ahead",
+      "tool": "capex_explain",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15",
+        "project": "P-08"
+      },
+      "expect": {
+        "equals": {
+          "result.item.state": "watch"
+        },
+        "contains": [
+          "75% of the budget spent"
+        ]
+      }
+    },
+    {
+      "id": "unbudgeted-noted",
+      "tool": "capex_check",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "1 open project(s) with no budget are not counted"
+        ]
+      }
+    },
+    {
+      "id": "japanese-list",
+      "tool": "capex_check",
+      "args": {
+        "projects": "fixtures/exports/koji-ja.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          "budget 8300000",
+          "1 over budget"
+        ],
+        "equals": {
+          "result.items.0.project_id": "K-01"
+        }
+      }
+    },
+    {
+      "id": "within-budget-no-request",
+      "tool": "capex_draft_request",
+      "mode": "auto",
+      "auto_actions": [
+        "capex_draft_request"
+      ],
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "as_of": "2026-11-15",
+        "project": "P-03"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "within its budget"
+        ]
+      }
+    },
+    {
+      "id": "never-approves-change-order",
+      "tool": "approve_change_order",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "never-posts",
+      "tool": "gl_post",
+      "mode": "auto",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "send-is-one-click",
+      "tool": "capex_request_send",
+      "mode": "auto",
+      "args": {
+        "draft": "x.md",
+        "draft_sha256": "0"
+      },
+      "expect": {
+        "status": "needs_approval"
+      }
+    },
+    {
+      "id": "writes-report",
+      "tool": "capex_write_report",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "contains": [
+          ".csv",
+          ".html"
+        ]
+      }
+    },
+    {
+      "id": "invented-tool-name-refused",
+      "tool": "capex_fix_everything_now",
+      "args": {},
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "file-outside-root-refused",
+      "tool": "capex_check",
+      "args": {
+        "projects": "../../outside.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "outside"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-still-reads",
+      "tool": "capex_check",
+      "mode": "review",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "equals": {
+          "result.items.length": 8,
+          "result.reserves.0.short": 154000
+        },
+        "contains": [
+          "budget 658500",
+          "Replacement reserve by 154000"
+        ]
+      }
+    },
+    {
+      "id": "missing-argument-named",
+      "tool": "capex_check",
+      "args": {
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "projects"
+        ]
+      }
+    },
+    {
+      "id": "draft-waits-for-a-person",
+      "tool": "capex_draft_request",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15",
+        "project": "P-01"
+      },
+      "expect": {
+        "status": "needs_approval",
+        "decision": "ask"
+      }
+    },
+    {
+      "id": "draft-after-approval",
+      "tool": "capex_draft_request",
+      "approve": "Dana Example",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15",
+        "project": "P-01"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "Nothing was sent"
+        ]
+      }
+    },
+    {
+      "id": "review-mode-drafts-nothing",
+      "tool": "capex_draft_request",
+      "mode": "review",
+      "args": {
+        "projects": "fixtures/capex-projects-2026.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15",
+        "project": "P-01"
+      },
+      "expect": {
+        "status": "blocked"
+      }
+    },
+    {
+      "id": "on-hold-is-not-late-and-done-with-punch-list-is-done",
+      "tool": "capex_check",
+      "args": {
+        "projects": "fixtures/capex-edge-cases.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "executed",
+        "contains": [
+          "on_hold",
+          "budget_repeated",
+          "120000 appears on 2 lines and was added up to 240000",
+          "forecast_over"
+        ],
+        "not_contains": [
+          "past_finish"
+        ],
+        "equals": {
+          "result.items.length": 4
+        }
+      }
+    },
+    {
+      "id": "committed-as-contract-total-is-not-double-counted",
+      "tool": "capex_explain",
+      "args": {
+        "projects": "fixtures/capex-edge-cases.csv",
+        "policy": "fixtures/capex-policy-contract-totals.json",
+        "as_of": "2026-11-15",
+        "project": "E-04"
+      },
+      "expect": {
+        "status": "executed",
+        "not_contains": [
+          "forecast_over"
+        ],
+        "equals": {
+          "result.item.forecast": 95000
+        }
+      }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "capex_check",
+      "args": {
+        "projects": "fixtures/missing-export.csv",
+        "policy": "fixtures/capex-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
+    }
+  ]
+}

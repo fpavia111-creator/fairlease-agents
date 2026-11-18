@@ -1,0 +1,20 @@
+{
+  "name": "fairlease-percentage-rent",
+  "version": "0.1.0",
+  "description": "Works out percentage rent from tenant sales reports (natural or fixed breakpoints, exclusions, partial years), flags late and missing reports and drafts the tenant statement.",
+  "author": {
+    "name": "Kurt Francisco"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-percentage-rent#readme",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "property-management",
+    "real-estate",
+    "keystone",
+    "percentage-rent",
+    "retail",
+    "sales-reports"
+  ]
+}

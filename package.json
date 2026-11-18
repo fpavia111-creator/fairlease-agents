@@ -1,10 +1,10 @@
 {
-  "name": "keystone-agents",
+  "name": "fairlease-agents",
   "private": true,
-  "description": "Keystone: 30 MCP agents for property management (rent rolls, leases, CAM, deposits, trust accounts and more).",
+  "description": "Fairlease: 30 MCP agents for property management (rent rolls, leases, CAM, deposits, trust accounts and more).",
   "license": "MIT",
   "workspaces": [
-    "packages/keystone-core",
+    "packages/fairlease-core",
     "packages/*"
   ],
   "scripts": {

@@ -1,4 +1,4 @@
-# Agentes Keystone para administração de imóveis
+# Agentes Fairlease para administração de imóveis
 
 Trinta pequenos agentes MCP para administração de imóveis, pensados para administradoras de imóveis comerciais e de carteiras residenciais de porte médio. Cada um tem **uma única tarefa**, como conferir o rent roll com os contratos, conciliar uma conta de terceiros, recalcular as despesas comuns (CAM) ou cobrar os certificados de seguro dos inquilinos, e não pode agir fora dela. Eles leem os arquivos que você já exporta do AppFolio, Yardi, Buildium, Rent Manager e outros sistemas, gravam relatórios na sua máquina, nunca movimentam dinheiro nem alteram um sistema em produção, e esperam uma pessoa identificada antes que qualquer carta ou aviso seja enviado.
 
@@ -12,11 +12,11 @@ A partir de uma cópia deste repositório:
 
 ```bash
 npm ci
-node packages/granite-of-rentrolls/bin/granite-of-rentrolls.js demo     # rent roll contra resumos de contrato, dados fictícios
-node packages/obsidian-of-trust/bin/obsidian-of-trust.js demo           # conciliação tripla de conta de terceiros, dados fictícios
+node packages/fairlease-rent-roll-audit/bin/fairlease-rent-roll-audit.js demo     # rent roll contra resumos de contrato, dados fictícios
+node packages/fairlease-trust-reconciliation/bin/fairlease-trust-reconciliation.js demo           # conciliação tripla de conta de terceiros, dados fictícios
 ```
 
-Quando os pacotes estiverem no npm, o mesmo funciona com `npx -y granite-of-rentrolls demo`. Cada agente tem um `demo` com arquivos fictícios, um `eval` que o verifica com seus próprios casos de teste, um `inspect <arquivo>` que mostra como as colunas foram lidas e um servidor MCP (`<agente> mcp --root <pasta>`) para Claude Desktop, Claude Code, Cursor e outros hosts MCP. Com `--lang pt-BR` os títulos, cabeçalhos e nomes de coluna dos relatórios e a página de aprovações saem em português (nove idiomas disponíveis); as frases dos achados e os resultados das ferramentas continuam em inglês. O README de cada agente lista suas ferramentas.
+Quando os pacotes estiverem no npm, o mesmo funciona com `npx -y fairlease-rent-roll-audit demo`. Cada agente tem um `demo` com arquivos fictícios, um `eval` que o verifica com seus próprios casos de teste, um `inspect <arquivo>` que mostra como as colunas foram lidas e um servidor MCP (`<agente> mcp --root <pasta>`) para Claude Desktop, Claude Code, Cursor e outros hosts MCP. Com `--lang pt-BR` os títulos, cabeçalhos e nomes de coluna dos relatórios e a página de aprovações saem em português (nove idiomas disponíveis); as frases dos achados e os resultados das ferramentas continuam em inglês. O README de cada agente lista suas ferramentas.
 
 ## Os agentes
 
@@ -24,51 +24,51 @@ Quando os pacotes estiverem no npm, o mesmo funciona com `npx -y granite-of-rent
 
 | Agente | O que faz | Nunca faz (bloqueado) |
 |---|---|---|
-| [`granite-of-rentrolls`](packages/granite-of-rentrolls) | Rent roll contra seus resumos de contrato, unidade por unidade: aluguéis, reajustes escalonados, datas, cauções, áreas, inquilinos, vagas, permanências após o vencimento | Alterar o sistema de administração ou lançar cobranças |
-| [`slate-of-leases`](packages/slate-of-leases) | Contratos comerciais resumidos cláusula por cláusula com a citação de cada termo; resumos existentes conferidos com o texto | Alterar o sistema ou enviar para assinatura |
-| [`jade-of-escalations`](packages/jade-of-escalations) | Aluguel cobrado contra o cronograma de reajuste de cada contrato (degraus, percentuais, índice com piso e teto); reajustes a vencer | Lançar cobranças |
-| [`garnet-of-renewals`](packages/garnet-of-renewals) | Contratos a renovar, prazos de proposta, aluguéis propostos dentro do seu próprio teto, cartas de proposta em rascunho | Enviar para assinatura ou por e-mail |
-| [`shale-of-vacancy`](packages/shale-of-vacancy) | Ocupação, percentual locado, exposição, perda por vacância e perda frente ao mercado a partir de um rent roll | Alterar o sistema ou publicar anúncios |
-| [`talc-of-overage`](packages/talc-of-overage) | Aluguel percentual sobre vendas a partir dos relatórios dos lojistas, relatórios atrasados ou ausentes, demonstrativo em rascunho | Lançar cobranças ou iniciar auditoria de vendas |
-| [`feldspar-of-estoppels`](packages/feldspar-of-estoppels) | Declarações de inquilinos (estoppels) devolvidas, contra seus resumos de contrato antes de venda ou refinanciamento | Enviar para assinatura ou subir em data room |
-| [`zircon-of-diligence`](packages/zircon-of-diligence) | Rent roll do vendedor contra os últimos doze meses de receita antes de comprar ou financiar | Enviar proposta ou subir em data room |
-| [`tourmaline-of-migration`](packages/tourmaline-of-migration) | Rent roll do sistema antigo contra o do novo na virada: unidades, inquilinos, aluguéis, cauções, saldos, datas, totais que não batem | Aprovar a entrada em produção ou apagar dados antigos |
+| [`fairlease-rent-roll-audit`](packages/fairlease-rent-roll-audit) | Rent roll contra seus resumos de contrato, unidade por unidade: aluguéis, reajustes escalonados, datas, cauções, áreas, inquilinos, vagas, permanências após o vencimento | Alterar o sistema de administração ou lançar cobranças |
+| [`fairlease-lease-abstracts`](packages/fairlease-lease-abstracts) | Contratos comerciais resumidos cláusula por cláusula com a citação de cada termo; resumos existentes conferidos com o texto | Alterar o sistema ou enviar para assinatura |
+| [`fairlease-rent-escalations`](packages/fairlease-rent-escalations) | Aluguel cobrado contra o cronograma de reajuste de cada contrato (degraus, percentuais, índice com piso e teto); reajustes a vencer | Lançar cobranças |
+| [`fairlease-lease-renewals`](packages/fairlease-lease-renewals) | Contratos a renovar, prazos de proposta, aluguéis propostos dentro do seu próprio teto, cartas de proposta em rascunho | Enviar para assinatura ou por e-mail |
+| [`fairlease-occupancy-and-vacancy`](packages/fairlease-occupancy-and-vacancy) | Ocupação, percentual locado, exposição, perda por vacância e perda frente ao mercado a partir de um rent roll | Alterar o sistema ou publicar anúncios |
+| [`fairlease-percentage-rent`](packages/fairlease-percentage-rent) | Aluguel percentual sobre vendas a partir dos relatórios dos lojistas, relatórios atrasados ou ausentes, demonstrativo em rascunho | Lançar cobranças ou iniciar auditoria de vendas |
+| [`fairlease-estoppel-review`](packages/fairlease-estoppel-review) | Declarações de inquilinos (estoppels) devolvidas, contra seus resumos de contrato antes de venda ou refinanciamento | Enviar para assinatura ou subir em data room |
+| [`fairlease-acquisition-diligence`](packages/fairlease-acquisition-diligence) | Rent roll do vendedor contra os últimos doze meses de receita antes de comprar ou financiar | Enviar proposta ou subir em data room |
+| [`fairlease-pms-migration`](packages/fairlease-pms-migration) | Rent roll do sistema antigo contra o do novo na virada: unidades, inquilinos, aluguéis, cauções, saldos, datas, totais que não batem | Aprovar a entrada em produção ou apagar dados antigos |
 
 **Inquilinos, locação e cobrança**
 
 | Agente | O que faz | Nunca faz (bloqueado) |
 |---|---|---|
-| [`quartz-of-delinquency`](packages/quartz-of-delinquency) | Aging ou conta do inquilino transformados em lista de trabalho com as etapas da sua própria política, conferência de multas, lembretes em rascunho | Notificar judicialmente, ajuizar despejos ou negativar em birôs de crédito |
-| [`jasper-of-deposits`](packages/jasper-of-deposits) | Cauções na saída contra suas próprias regras (prazo, discriminação, desgaste normal, vida útil); demonstrativo em rascunho | Devolver dinheiro ou enviar para cobrança |
-| [`amber-of-insurance`](packages/amber-of-insurance) | Certificados de seguro dos inquilinos contra limites, segurados adicionais e datas exigidos no contrato | Contratar seguro por conta do inquilino ou notificar inadimplemento |
-| [`topaz-of-utilities`](packages/topaz-of-utilities) | Rateio de consumo (RUBS) refeito pelo seu próprio método; recuperação a maior, unidades vagas cobradas, picos | Lançar cobranças ou alterar portais de concessionárias |
-| [`cobalt-of-listings`](packages/cobalt-of-listings) | Anúncios em todos os portais contra o rent roll; redação sinalizada para revisão por uma pessoa | Publicar anúncios, mudar o aluguel pedido ou responder interessados |
-| [`mica-of-leads`](packages/mica-of-leads) | Funil de locação a partir das fichas de interessados: respostas lentas ou ausentes, follow-ups vencidos, conversão e custo por contrato por origem | Decidir propostas, rodar análise cadastral ou mandar mensagens a interessados |
-| [`malachite-of-recerts`](packages/malachite-of-recerts) | Datas e avisos de recertificação em habitação subsidiada pelo calendário do seu arquivo de política. Somente datas | Certificar famílias, enviar a um órgão ou mudar aluguéis |
-| [`lapis-of-payouts`](packages/lapis-of-payouts) | Repasses de locação por temporada do Airbnb, Vrbo e outros contra reservas e créditos bancários | Reembolsar hóspedes, pagar proprietários ou alterar anúncios do canal |
+| [`fairlease-delinquency-worklist`](packages/fairlease-delinquency-worklist) | Aging ou conta do inquilino transformados em lista de trabalho com as etapas da sua própria política, conferência de multas, lembretes em rascunho | Notificar judicialmente, ajuizar despejos ou negativar em birôs de crédito |
+| [`fairlease-security-deposits`](packages/fairlease-security-deposits) | Cauções na saída contra suas próprias regras (prazo, discriminação, desgaste normal, vida útil); demonstrativo em rascunho | Devolver dinheiro ou enviar para cobrança |
+| [`fairlease-tenant-insurance`](packages/fairlease-tenant-insurance) | Certificados de seguro dos inquilinos contra limites, segurados adicionais e datas exigidos no contrato | Contratar seguro por conta do inquilino ou notificar inadimplemento |
+| [`fairlease-utility-billback`](packages/fairlease-utility-billback) | Rateio de consumo (RUBS) refeito pelo seu próprio método; recuperação a maior, unidades vagas cobradas, picos | Lançar cobranças ou alterar portais de concessionárias |
+| [`fairlease-listing-checks`](packages/fairlease-listing-checks) | Anúncios em todos os portais contra o rent roll; redação sinalizada para revisão por uma pessoa | Publicar anúncios, mudar o aluguel pedido ou responder interessados |
+| [`fairlease-leasing-funnel`](packages/fairlease-leasing-funnel) | Funil de locação a partir das fichas de interessados: respostas lentas ou ausentes, follow-ups vencidos, conversão e custo por contrato por origem | Decidir propostas, rodar análise cadastral ou mandar mensagens a interessados |
+| [`fairlease-affordable-recerts`](packages/fairlease-affordable-recerts) | Datas e avisos de recertificação em habitação subsidiada pelo calendário do seu arquivo de política. Somente datas | Certificar famílias, enviar a um órgão ou mudar aluguéis |
+| [`fairlease-short-term-rental-payouts`](packages/fairlease-short-term-rental-payouts) | Repasses de locação por temporada do Airbnb, Vrbo e outros contra reservas e créditos bancários | Reembolsar hóspedes, pagar proprietários ou alterar anúncios do canal |
 
 **Proprietários, contas de terceiros e contabilidade**
 
 | Agente | O que faz | Nunca faz (bloqueado) |
 |---|---|---|
-| [`obsidian-of-trust`](packages/obsidian-of-trust) | Conciliação tripla: extrato bancário, razão do caixa, contas de proprietários e inquilinos | Movimentar recursos, cancelar cheques ou lançar no razão |
-| [`onyx-of-statements`](packages/onyx-of-statements) | Prestações de contas a proprietários conferidas antes do envio: cálculos, saldo anterior, reservas, repasses | Pagar proprietários ou publicar prestações de contas |
-| [`pyrite-of-fees`](packages/pyrite-of-fees) | Taxas de administração, locação e acréscimos recalculados a partir de cada contrato de administração | Lançar créditos ou mudar a configuração de taxas |
-| [`marble-of-cam`](packages/marble-of-cam) | Conciliação de despesas comuns (CAM): grupos de despesa, frações, ajuste de ocupação, tetos, anos-base, taxa de administração | Lançar cobranças ou alterar o sistema |
-| [`beryl-of-budgets`](packages/beryl-of-budgets) | Orçado contra realizado, variações que o contrato manda explicar, projeção de fim de ano, memorando ao proprietário em rascunho | Mudar o orçamento ou lançar no razão |
-| [`pearl-of-filings`](packages/pearl-of-filings) | Preparação dos formulários 1099 dos EUA: totais por favorecido contra o limite que você informa, números fiscais e endereços faltantes; números fiscais sempre mascarados | Transmitir 1099, consultar números fiscais ou iniciar retenção na fonte |
-| [`coral-of-associations`](packages/coral-of-associations) | Contas de condôminos (HOA, condomínio) contra sua política de rateio e cobrança; infrações contra suas etapas de notificação | Registrar ônus ou lançar multas |
-| [`chert-of-taxes`](packages/chert-of-taxes) | Lançamentos de imposto predial, parcelas e os prazos de recurso que você cadastra; calendário de vencimentos | Apresentar recursos ou pagar impostos |
+| [`fairlease-trust-reconciliation`](packages/fairlease-trust-reconciliation) | Conciliação tripla: extrato bancário, razão do caixa, contas de proprietários e inquilinos | Movimentar recursos, cancelar cheques ou lançar no razão |
+| [`fairlease-owner-statements`](packages/fairlease-owner-statements) | Prestações de contas a proprietários conferidas antes do envio: cálculos, saldo anterior, reservas, repasses | Pagar proprietários ou publicar prestações de contas |
+| [`fairlease-management-fees`](packages/fairlease-management-fees) | Taxas de administração, locação e acréscimos recalculados a partir de cada contrato de administração | Lançar créditos ou mudar a configuração de taxas |
+| [`fairlease-cam-reconciliation`](packages/fairlease-cam-reconciliation) | Conciliação de despesas comuns (CAM): grupos de despesa, frações, ajuste de ocupação, tetos, anos-base, taxa de administração | Lançar cobranças ou alterar o sistema |
+| [`fairlease-budget-variance`](packages/fairlease-budget-variance) | Orçado contra realizado, variações que o contrato manda explicar, projeção de fim de ano, memorando ao proprietário em rascunho | Mudar o orçamento ou lançar no razão |
+| [`fairlease-1099-filings`](packages/fairlease-1099-filings) | Preparação dos formulários 1099 dos EUA: totais por favorecido contra o limite que você informa, números fiscais e endereços faltantes; números fiscais sempre mascarados | Transmitir 1099, consultar números fiscais ou iniciar retenção na fonte |
+| [`fairlease-hoa-accounts`](packages/fairlease-hoa-accounts) | Contas de condôminos (HOA, condomínio) contra sua política de rateio e cobrança; infrações contra suas etapas de notificação | Registrar ônus ou lançar multas |
+| [`fairlease-property-taxes`](packages/fairlease-property-taxes) | Lançamentos de imposto predial, parcelas e os prazos de recurso que você cadastra; calendário de vencimentos | Apresentar recursos ou pagar impostos |
 
 **Operação e fornecedores**
 
 | Agente | O que faz | Nunca faz (bloqueado) |
 |---|---|---|
-| [`agate-of-workorders`](packages/agate-of-workorders) | Ordens de serviço abertas envelhecidas contra suas metas, problemas repetidos, emergências registradas como rotina, fornecedores lentos | Acionar fornecedores, aprovar faturas ou encerrar ordens |
-| [`basalt-of-turns`](packages/basalt-of-turns) | Preparação de unidades entre a saída e a entrada: dias, custo por especialidade, itens cobráveis, aluguel perdido | Acionar fornecedores ou lançar cobranças |
-| [`flint-of-inspections`](packages/flint-of-inspections) | Vistoria de saída contra a de entrada, item por item, vistorias atrasadas, itens ruins sem ordem de serviço | Lançar cobranças ou acionar fornecedores |
-| [`gypsum-of-capex`](packages/gypsum-of-capex) | Projetos de investimento contra orçamento, compromissos, cronograma e reservas | Aprovar aditivos ou faturas |
-| [`opal-of-vendors`](packages/opal-of-vendors) | Seguro, licença e formulário fiscal dos fornecedores contra seus requisitos; pagamentos feitos fora de conformidade | Aprovar faturas ou mudar o status do fornecedor |
+| [`fairlease-work-orders`](packages/fairlease-work-orders) | Ordens de serviço abertas envelhecidas contra suas metas, problemas repetidos, emergências registradas como rotina, fornecedores lentos | Acionar fornecedores, aprovar faturas ou encerrar ordens |
+| [`fairlease-unit-turns`](packages/fairlease-unit-turns) | Preparação de unidades entre a saída e a entrada: dias, custo por especialidade, itens cobráveis, aluguel perdido | Acionar fornecedores ou lançar cobranças |
+| [`fairlease-unit-inspections`](packages/fairlease-unit-inspections) | Vistoria de saída contra a de entrada, item por item, vistorias atrasadas, itens ruins sem ordem de serviço | Lançar cobranças ou acionar fornecedores |
+| [`fairlease-capital-projects`](packages/fairlease-capital-projects) | Projetos de investimento contra orçamento, compromissos, cronograma e reservas | Aprovar aditivos ou faturas |
+| [`fairlease-vendor-compliance`](packages/fairlease-vendor-compliance) | Seguro, licença e formulário fiscal dos fornecedores contra seus requisitos; pagamentos feitos fora de conformidade | Aprovar faturas ou mudar o status do fornecedor |
 
 ## Como eles se mantêm seguros
 
@@ -86,13 +86,13 @@ Este repositório é um marketplace de plugins do Claude Code. Cada agente é um
 
 ```text
 /plugin marketplace add <caminho ou URL git deste repositório>
-/plugin install granite-of-rentrolls@keystone-property
+/plugin install fairlease-rent-roll-audit@keystone-property
 ```
 
 Os plugins iniciam `npx -y <agente>@<versão>`, então precisam dessa versão no npm. Até lá, adicione um agente a partir de uma cópia local:
 
 ```bash
-claude mcp add granite-of-rentrolls -- node /caminho/para/keystone-agents/packages/granite-of-rentrolls/bin/granite-of-rentrolls.js mcp --root .
+claude mcp add fairlease-rent-roll-audit -- node /caminho/para/fairlease-agents/packages/fairlease-rent-roll-audit/bin/fairlease-rent-roll-audit.js mcp --root .
 ```
 
 ## Desenvolver

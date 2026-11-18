@@ -21,7 +21,7 @@ jobs:
       - name: Evals (every agent)
         shell: bash
         run: |
-          for p in packages/*/; do n=$(basename "$p"); [ "$n" = keystone-core ] && continue
+          for p in packages/*/; do n=$(basename "$p"); [ "$n" = fairlease-core ] && continue
             (cd "$p" && node "bin/$n.js" eval) || exit 1; done
       - name: Plugin files match the packages
         run: npm run plugin:check

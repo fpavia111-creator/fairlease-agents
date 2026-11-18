@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fairlease-trust-reconciliation": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "fairlease-trust-reconciliation@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}
