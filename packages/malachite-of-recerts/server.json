@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.fpavia111-creator/malachite-of-recerts",
+  "title": "Malachite of Recerts",
+  "description": "Malachite of Recerts: tracks affordable housing recertification dates against the schedule in your…",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/fpavia111-creator/keystone-agents",
+    "source": "github",
+    "subfolder": "packages/malachite-of-recerts"
+  },
+  "websiteUrl": "https://fair-agents.com/fairlease.html",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "malachite-of-recerts",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "positional",
+          "value": "mcp"
+        },
+        {
+          "type": "named",
+          "name": "--root",
+          "description": "Folder holding the exports this agent may read and write (it cannot reach outside it)",
+          "isRequired": true,
+          "format": "filepath",
+          "valueHint": "exports_folder"
+        }
+      ]
+    }
+  ]
+}

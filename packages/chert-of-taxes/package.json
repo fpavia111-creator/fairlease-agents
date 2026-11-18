@@ -1,6 +1,7 @@
 {
   "name": "chert-of-taxes",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/chert-of-taxes",
   "description": "Chert of Taxes: tracks property tax assessments, installments and the appeal deadlines you enter, flags large assessment increases, unpaid or short installments, and writes a calendar of due dates.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

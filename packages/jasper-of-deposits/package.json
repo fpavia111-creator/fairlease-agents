@@ -1,6 +1,7 @@
 {
   "name": "jasper-of-deposits",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/jasper-of-deposits",
   "description": "Jasper of Deposits: checks every move-out deposit against your own rules (deadline, itemisation, wear and tear, useful-life proration) and drafts the itemised deposit statement. Refunds are a person's job.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

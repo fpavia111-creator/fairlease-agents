@@ -1,6 +1,7 @@
 {
   "name": "pearl-of-filings",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/pearl-of-filings",
   "description": "Pearl of Filings: gets vendor and owner 1099s ready: totals each payee's payments for the tax year against the threshold you give, leaves out card payments, flags missing or malformed tax IDs, missing addresses, shared tax IDs and payees not in the directory, and drafts W-9 requests. Tax IDs are always masked.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

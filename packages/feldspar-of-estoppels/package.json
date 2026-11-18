@@ -1,6 +1,7 @@
 {
   "name": "feldspar-of-estoppels",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/feldspar-of-estoppels",
   "description": "Feldspar of Estoppels: checks returned tenant estoppel certificates against your lease abstracts before a sale or refinancing (rent, dates, deposit, area, options, amendments, landlord defaults claimed), tracks which are missing or stale, and drafts follow-up requests.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

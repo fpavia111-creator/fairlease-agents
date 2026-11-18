@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 // Writes the Claude Code plugin marketplace (.claude-plugin/marketplace.json) and, in every
 // agent package, .claude-plugin/plugin.json plus .mcp.json. Each plugin starts its agent with
 // npx at the pinned version, so it works once that version is on npm.
@@ -5,7 +6,7 @@
 import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const check = process.argv.includes('--check');
 const pkgs = readdirSync(join(root, 'packages')).filter((n) => n !== 'keystone-core' && existsSync(join(root, 'packages', n, 'package.json'))).sort();
 const want = new Map();

@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 // MCP interop check. Drives every agent through the OFFICIAL MCP SDK client over real
 // stdio (the way Claude Desktop, Claude Code and Cursor connect), and checks what a
 // model sees: spec-valid tool names, schemas that compile, a description on every
@@ -25,7 +26,7 @@ try {
   process.exit(2);
 }
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const only = process.argv.slice(2);
 const pk = join(root, 'packages');
 const agents = readdirSync(pk).filter((d) => d !== 'keystone-core' && (!only.length || only.includes(d)));

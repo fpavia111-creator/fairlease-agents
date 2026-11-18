@@ -1,6 +1,7 @@
 {
   "name": "topaz-of-utilities",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/topaz-of-utilities",
   "description": "Topaz of Utilities: re-works RUBS utility billbacks from the bills and occupancy, by your own method, and finds over-recovery, vacant units billed, bills that spike, and charges that differ from the split.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

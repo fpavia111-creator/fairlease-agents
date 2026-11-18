@@ -1,6 +1,7 @@
 {
   "name": "amber-of-insurance",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/amber-of-insurance",
   "description": "Amber of Insurance: checks every tenant's insurance certificate against the limits, additional insured and dates their lease requires, and drafts requests for updated certificates.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

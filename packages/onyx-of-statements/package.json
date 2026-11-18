@@ -1,6 +1,7 @@
 {
   "name": "onyx-of-statements",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/onyx-of-statements",
   "description": "Onyx of Statements: checks owner statements before they go out: the math, beginning against last month's ending, reserves held, distributions made below the reserve, negative balances, and totals against the owner ledger; drafts contribution requests.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

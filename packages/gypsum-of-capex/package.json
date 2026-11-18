@@ -1,6 +1,7 @@
 {
   "name": "gypsum-of-capex",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/gypsum-of-capex",
   "description": "Gypsum of Capex: tracks capital projects against budget, commitments, schedule and reserve balances, flags overruns, late and stalled projects, and drafts budget change requests for owners.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

@@ -1,6 +1,7 @@
 {
   "name": "coral-of-associations",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/coral-of-associations",
   "description": "Coral of Associations: checks HOA and condo association owner accounts against your assessment and collection policy (missing or wrong assessments, late fees charged or missed, days delinquent and the next step your policy names) and tracks violations against your notice, cure and hearing steps; drafts owner notices.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

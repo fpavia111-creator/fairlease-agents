@@ -1,6 +1,7 @@
 {
   "name": "obsidian-of-trust",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/obsidian-of-trust",
   "description": "Obsidian of Trust: three-way reconciliation of a trust or escrow bank account: bank statement against the book register against the owner and tenant ledgers, with outstanding checks, deposits in transit, unrecorded bank items and negative ledgers.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

@@ -1,6 +1,7 @@
 {
   "name": "tourmaline-of-migration",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/tourmaline-of-migration",
   "description": "Tourmaline of Migration: checks a property management system migration by comparing the old system's rent roll with the new one's at cutover: units missing or added, tenants, rents, deposits, balances, areas and lease dates that changed, and totals that do not tie; drafts a punch list for the implementation team. Go-live is a person's call.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

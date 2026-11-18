@@ -1,6 +1,7 @@
 {
   "name": "talc-of-overage",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/talc-of-overage",
   "description": "Talc of Overage: works out percentage rent from tenant sales reports (natural or fixed breakpoints, exclusions, partial years), flags late and missing reports and drafts the tenant statement.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

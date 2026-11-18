@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 // Property helpers: dates, rent schedules, CPI, CAM, RUBS, matching, export layouts, report languages.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -124,7 +125,7 @@ test('a German rent roll reads by its own column names', () => {
 });
 
 test('a Japanese ledger in Shift_JIS reads (encoding, headers, amounts)', () => {
-  const t = readTable(new URL('./fixtures/intl/ja-ledger-sjis.csv', import.meta.url).pathname);
+  const t = readTable(fileURLToPath(new URL('./fixtures/intl/ja-ledger-sjis.csv', import.meta.url)));
   const { rows, report } = adaptRecords(t, { fields: LEDGER_FIELDS }, { kind: 'ledger' });
   assert.equal(report.encoding, 'shift_jis');
   assert.equal(rows[0].date, '2026-04-01'); assert.equal(rows[0].unit, '101号室'); assert.equal(rows[0].payment, '120000');

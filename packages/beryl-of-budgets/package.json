@@ -1,6 +1,7 @@
 {
   "name": "beryl-of-budgets",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/beryl-of-budgets",
   "description": "Beryl of Budgets: compares actuals with the budget by account for the month and year to date, flags the variances your management agreement says must be explained, unbudgeted spend and the year-end forecast, and drafts the owner's variance memo.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

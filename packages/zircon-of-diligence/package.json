@@ -1,6 +1,7 @@
 {
   "name": "zircon-of-diligence",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/zircon-of-diligence",
   "description": "Zircon of Diligence: reconciles a seller's rent roll with the trailing-twelve-month income statement before you buy or lend: rent roll against rent collected, occupancy, expired leases still billed, months missing or out of line, and NOI.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

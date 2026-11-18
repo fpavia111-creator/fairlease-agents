@@ -1,6 +1,7 @@
 {
   "name": "marble-of-cam",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/marble-of-cam",
   "description": "Marble of CAM: reconciles common area maintenance and operating expenses for commercial leases: expense pools, pro-rata shares, gross-ups, caps, base years, admin fees and tenant estimates, with statement drafts.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

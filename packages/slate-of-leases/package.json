@@ -1,6 +1,7 @@
 {
   "name": "slate-of-leases",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/slate-of-leases",
   "description": "Slate of Leases: abstracts commercial lease text into the Keystone leases format with a citation for every term, and checks existing abstracts against the lease text.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

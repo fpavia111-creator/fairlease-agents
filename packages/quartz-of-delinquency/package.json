@@ -1,6 +1,7 @@
 {
   "name": "quartz-of-delinquency",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/quartz-of-delinquency",
   "description": "Quartz of Delinquency: turns an aging report or tenant ledger into a delinquency worklist with stages from your own policy, late-fee checks and reminder drafts. Never serves notices or files evictions.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

@@ -1,6 +1,7 @@
 {
   "name": "opal-of-vendors",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/opal-of-vendors",
   "description": "Opal of Vendors: checks every vendor's liability and workers' comp insurance, licence and tax form against your own requirements, finds payments made while a vendor was out of compliance, and drafts certificate requests.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",

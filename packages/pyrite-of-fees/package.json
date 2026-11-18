@@ -1,6 +1,7 @@
 {
   "name": "pyrite-of-fees",
   "version": "0.1.0",
+  "mcpName": "io.github.fpavia111-creator/pyrite-of-fees",
   "description": "Pyrite of Fees: recomputes the management, leasing, renewal and markup fees you charged each owner from the terms of their management agreement, and flags overcharges, undercharges, duplicates and fees the agreement does not provide for.",
   "type": "module",
   "license": "MIT",
@@ -23,7 +24,8 @@
     "evals",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json"
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",
