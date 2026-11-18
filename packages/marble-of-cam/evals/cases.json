@@ -375,6 +375,23 @@
           "result.pools_total": 433000
         }
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "marble_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "cam": "fixtures/cam-2025.json",
+        "gl": "fixtures/missing-export.csv",
+        "billed": "fixtures/cam-billed-2025.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

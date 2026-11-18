@@ -232,6 +232,22 @@
           "result.items.length": 3
         }
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "basalt_check",
+      "args": {
+        "turns": "fixtures/missing-export.csv",
+        "policy": "fixtures/turn-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

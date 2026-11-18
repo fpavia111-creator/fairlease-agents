@@ -301,6 +301,23 @@
           "split 200"
         ]
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "topaz_check",
+      "args": {
+        "bills": "fixtures/missing-export.csv",
+        "occupancy": "fixtures/occupancy.csv",
+        "rubs": "fixtures/rubs.json",
+        "billed": "fixtures/rubs-billed.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

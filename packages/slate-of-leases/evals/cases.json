@@ -248,6 +248,21 @@
           "result.lease.tenant": "Evergreen Design Studio, Inc."
         }
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "slate_abstract",
+      "args": {
+        "text": "fixtures/missing-export.csv",
+        "lease_id": "L-101"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

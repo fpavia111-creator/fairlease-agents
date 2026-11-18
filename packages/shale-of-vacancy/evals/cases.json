@@ -265,6 +265,21 @@
           "below_market"
         ]
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "shale_check",
+      "args": {
+        "rent_roll": "fixtures/missing-export.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

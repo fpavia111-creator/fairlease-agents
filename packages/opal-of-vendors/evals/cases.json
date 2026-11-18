@@ -290,6 +290,23 @@
           "result.unlisted_payees.0.payee": "Cash Handyman (fictional)"
         }
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "opal_check",
+      "args": {
+        "vendors": "fixtures/missing-export.csv",
+        "requirements": "fixtures/vendor-requirements.json",
+        "payments": "fixtures/payments-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

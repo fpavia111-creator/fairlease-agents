@@ -308,6 +308,24 @@
           "result.item.net_difference": 4506.25
         }
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "jade_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "ledger": "fixtures/missing-export.csv",
+        "from": "2025-01",
+        "to": "2026-01",
+        "indexes": "fixtures/indexes.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

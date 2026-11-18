@@ -282,6 +282,22 @@
           "result.overcharge_total": 270
         }
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "pyrite_check",
+      "args": {
+        "ledger": "fixtures/missing-export.csv",
+        "agreements": "fixtures/agreements.json",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

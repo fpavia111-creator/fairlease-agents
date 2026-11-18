@@ -301,6 +301,23 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "cobalt_check",
+      "args": {
+        "listings": "fixtures/missing-export.csv",
+        "rent_roll": "fixtures/rent-roll-2026-11.csv",
+        "policy": "fixtures/listing-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

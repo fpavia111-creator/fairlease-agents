@@ -301,6 +301,23 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "coral_check",
+      "args": {
+        "policy": "fixtures/association-policy.json",
+        "ledger": "fixtures/missing-export.csv",
+        "violations": "fixtures/violations-2026.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

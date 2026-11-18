@@ -358,6 +358,23 @@
           "result.items.0.stage": "manager_review"
         }
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "quartz_check",
+      "args": {
+        "ledger": "fixtures/missing-export.csv",
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

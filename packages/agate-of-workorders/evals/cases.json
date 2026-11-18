@@ -209,6 +209,22 @@
           "work_orders"
         ]
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "agate_check",
+      "args": {
+        "work_orders": "fixtures/missing-export.csv",
+        "policy": "fixtures/workorder-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

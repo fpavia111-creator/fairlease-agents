@@ -364,6 +364,24 @@
           "report_late"
         ]
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "talc_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "sales": "fixtures/missing-export.csv",
+        "year": 2025,
+        "billed": "fixtures/billed-2025.csv",
+        "as_of": "2026-06-30"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

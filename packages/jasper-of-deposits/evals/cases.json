@@ -328,6 +328,24 @@
           "result.unmatched_deductions.length": 0
         }
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "jasper_check",
+      "args": {
+        "move_outs": "fixtures/move-outs.json",
+        "deductions": "fixtures/missing-export.csv",
+        "leases": "fixtures/leases.json",
+        "ledger": "fixtures/final-ledger.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

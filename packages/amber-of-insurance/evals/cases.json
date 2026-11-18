@@ -290,6 +290,22 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "amber_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "certificates": "fixtures/missing-export.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

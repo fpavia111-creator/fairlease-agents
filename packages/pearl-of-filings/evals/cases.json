@@ -357,6 +357,23 @@
           "rents collected"
         ]
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "pearl_check",
+      "args": {
+        "payments": "fixtures/missing-export.csv",
+        "vendors": "fixtures/vendors-2026.csv",
+        "tax_year": 2026,
+        "threshold": 2000
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

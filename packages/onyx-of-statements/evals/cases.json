@@ -278,6 +278,22 @@
           "distribution_differs"
         ]
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "onyx_check",
+      "args": {
+        "statements": "fixtures/missing-export.csv",
+        "ledger": "fixtures/owner-ledger-2026-10.csv",
+        "policy": "fixtures/statement-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

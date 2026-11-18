@@ -245,6 +245,23 @@
           "cleared for -1150; the book has -1100"
         ]
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "obsidian_check",
+      "args": {
+        "bank": "fixtures/missing-export.csv",
+        "book": "fixtures/trust-register-2026.csv",
+        "ledgers": "fixtures/trust-ledgers-2026-10.csv",
+        "policy": "fixtures/trust-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

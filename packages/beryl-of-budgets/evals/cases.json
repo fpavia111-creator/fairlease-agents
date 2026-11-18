@@ -270,6 +270,23 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "beryl_check",
+      "args": {
+        "budget": "fixtures/missing-export.csv",
+        "actuals": "fixtures/actuals-t12-2026-11.csv",
+        "policy": "fixtures/budget-policy.json",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

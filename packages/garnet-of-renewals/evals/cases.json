@@ -319,6 +319,24 @@
       "expect": {
         "status": "blocked"
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "garnet_check",
+      "args": {
+        "leases": "fixtures/leases.json",
+        "policy": "fixtures/renewal-policy.json",
+        "rent_roll": "fixtures/missing-export.csv",
+        "offers": "fixtures/offers.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

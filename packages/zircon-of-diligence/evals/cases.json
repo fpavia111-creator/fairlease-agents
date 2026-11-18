@@ -319,6 +319,22 @@
           "result.item.amount": 35500
         }
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "zircon_check",
+      "args": {
+        "rent_roll": "fixtures/missing-export.csv",
+        "t12": "fixtures/t12-2026-11.csv",
+        "as_of": "2026-11-15"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }

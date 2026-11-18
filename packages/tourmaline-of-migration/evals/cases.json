@@ -331,6 +331,22 @@
           "result.item.status": "ok"
         }
       }
+    },
+    {
+      "id": "missing-file-named",
+      "tool": "tourmaline_check",
+      "args": {
+        "before": "fixtures/missing-export.csv",
+        "after": "fixtures/rent-roll-new-system.csv",
+        "policy": "fixtures/migration-policy.json"
+      },
+      "expect": {
+        "status": "error",
+        "contains": [
+          "not found",
+          "missing-export.csv"
+        ]
+      }
     }
   ]
 }
