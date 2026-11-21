@@ -1,7 +1,7 @@
 {
   "name": "fairlease-estoppel-review",
   "version": "0.1.0",
-  "description": "Checks returned tenant estoppel certificates against your lease abstracts before a sale or refinancing (rent, dates, deposit, area, options, amendments, landlord defaults claimed), tracks which are missing or stale, and drafts follow-up requests.",
+  "description": "Fairlease Estoppel Review: checks returned tenant estoppel certificates against your lease abstracts before a sale or refinancing (rent, dates, deposit, area, options, amendments, landlord defaults claimed), tracks which are missing or stale, and drafts follow-up requests.",
   "author": {
     "name": "Kurt Francisco"
   },

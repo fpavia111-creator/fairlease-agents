@@ -1,7 +1,7 @@
 {
   "name": "fairlease-1099-filings",
   "version": "0.1.0",
-  "description": "Gets vendor and owner 1099s ready: totals each payee's payments for the tax year against the threshold you give, leaves out card payments, flags missing or malformed tax IDs, missing addresses, shared tax IDs and payees not in the directory, and drafts W-9 requests. Tax IDs are always masked.",
+  "description": "Fairlease 1099 Filings: gets vendor and owner 1099s ready: totals each payee's payments for the tax year against the threshold you give, leaves out card payments, flags missing or malformed tax IDs, missing addresses, shared tax IDs and payees not in the directory, and drafts W-9 requests. Tax IDs are always masked.",
   "author": {
     "name": "Kurt Francisco"
   },

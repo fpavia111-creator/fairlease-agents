@@ -48,7 +48,7 @@ Fairlease Rent Roll Audit demo (fictional shopping center) in <demo folder>
     Suite 110  Brightside Dental PC      7426.3   7649.09  issue  rent_under_lease
     Suite 120  Cobalt Fitness Inc      14038.64  14038.64  ok     deposit_not_cash
     Suite 130  Delta Phone Repair          2704      2704  issue  deposit_mismatch
-    Suite 140  Fairstay Grocers Ltd      32400     32400  issue  area_mismatch
+    Suite 140  Fairstay Grocers Ltd       32400     32400  issue  area_mismatch
     Suite 150  Fable Books & Cafe          4375      4375  issue  tenant_mismatch
     Suite 160  (vacant)                                    ok     
     Kiosk 1    Ghost Kiosk Co               650            issue  no_lease
@@ -63,7 +63,7 @@ Fairlease Rent Roll Audit demo (fictional shopping center) in <demo folder>
 
 ▶ Learn that charge code MERCH (merchants association dues) counts as CAM (waits for a person)
   status: executed  decision: allow
-  Stored MEM-cf76835e12be as waiting. It changes nothing until a named person accepts it with rentroll_accept_learning (id "MEM-cf76835e12be", decision "accept").
+  Stored MEM-499127930323 as waiting. It changes nothing until a named person accepts it with rentroll_accept_learning (id "MEM-499127930323", decision "accept").
 
 ▶ Read a German rent roll (Objekt, Einheit, Nettokaltmiete)
   status: executed  decision: allow

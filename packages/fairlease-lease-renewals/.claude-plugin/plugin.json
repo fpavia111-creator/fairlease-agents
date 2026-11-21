@@ -1,7 +1,7 @@
 {
   "name": "fairlease-lease-renewals",
   "version": "0.1.0",
-  "description": "Lists leases coming up for renewal with offer deadlines, proposes rents within your own increase cap, checks offers already made and drafts renewal offer letters.",
+  "description": "Fairlease Lease Renewals: lists leases coming up for renewal with offer deadlines, proposes rents within your own increase cap, checks offers already made and drafts renewal offer letters.",
   "author": {
     "name": "Kurt Francisco"
   },

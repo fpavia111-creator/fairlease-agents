@@ -1,7 +1,7 @@
 {
   "name": "fairlease-vendor-compliance",
   "version": "0.1.0",
-  "description": "Checks every vendor's liability and workers' comp insurance, licence and tax form against your own requirements, finds payments made while a vendor was out of compliance, and drafts certificate requests.",
+  "description": "Fairlease Vendor Compliance: checks every vendor's liability and workers' comp insurance, licence and tax form against your own requirements, finds payments made while a vendor was out of compliance, and drafts certificate requests.",
   "author": {
     "name": "Kurt Francisco"
   },

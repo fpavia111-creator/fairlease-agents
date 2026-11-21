@@ -41,7 +41,7 @@ Fairlease Estoppel Review demo (fictional sale of a fictional plaza) in <demo fo
   4 of 5 estoppel(s) returned, 92.96% of leased area (meets the 75% required). 3 with discrepancies against the lease abstracts, 1 claiming a landlord default, 0 to follow up (unsigned, stale or minor differences), 1 clean. 1 estoppel(s) match no lease in force.
     Suite 110  Brightside Dental PC     discrepancy stale, rent_differs
     Suite 120  Cobalt Fitness Inc       discrepancy default_claimed
-    Suite 140  Fairstay Grocers Ltd    discrepancy expiration_differs, amendment_not_in_file, rent_prepaid
+    Suite 140  Fairstay Grocers Ltd     discrepancy expiration_differs, amendment_not_in_file, rent_prepaid
     Suite 150  Fable Books              missing     not_returned
     Suite 100  Acme Bagels LLC          clean       
 

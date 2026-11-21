@@ -39,7 +39,7 @@ Fairlease Tenant Insurance demo (fictional tenants) in <demo folder>
   5 lease(s) in force on 2026-11-15: 1 with no certificate, 1 expired, 2 short of the lease's limits or wording, 1 expiring within 30 days. 1 certificate(s) match no lease in force.
     Suite 110  Brightside Dental PC     issue     expiring, additional_insured_missing
     Suite 120  Cobalt Fitness Inc       issue     liability_below, aggregate_below
-    Suite 140  Fairstay Grocers Ltd    issue     expired
+    Suite 140  Fairstay Grocers Ltd     issue     expired
     Suite 150  Fable Books              issue     certificate_missing
     Suite 100  Acme Bagels LLC          ok        
 

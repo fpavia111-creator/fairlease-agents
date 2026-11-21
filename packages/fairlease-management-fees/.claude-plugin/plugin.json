@@ -1,7 +1,7 @@
 {
   "name": "fairlease-management-fees",
   "version": "0.1.0",
-  "description": "Recomputes the management, leasing, renewal and markup fees you charged each owner from the terms of their management agreement, and flags overcharges, undercharges, duplicates and fees the agreement does not provide for.",
+  "description": "Fairlease Management Fees: recomputes the management, leasing, renewal and markup fees you charged each owner from the terms of their management agreement, and flags overcharges, undercharges, duplicates and fees the agreement does not provide for.",
   "author": {
     "name": "Kurt Francisco"
   },

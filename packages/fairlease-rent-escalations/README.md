@@ -45,7 +45,7 @@ Fairlease Rent Escalations demo (fictional shopping center) in <demo folder>
     L-102 Brightside Dental PC   expected   98101.43  billed   98101.43          0  
     L-103 Cobalt Fitness Inc     expected  179101.64  billed  178735.41    -366.23  escalation_missed
     L-104 Delta Phone Repair     expected      34736  billed      34736          0  
-    L-105 Fairstay Grocers Ltd  expected     421200  billed     388800     -32400  not_billed
+    L-105 Fairstay Grocers Ltd   expected     421200  billed     388800     -32400  not_billed
     L-106 Fable Books            expected      52500  billed      52500          0  
 
 ▶ Explain Cobalt Fitness (CPI escalation with a 2% floor and 4% cap)

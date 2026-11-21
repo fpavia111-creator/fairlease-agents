@@ -1,7 +1,7 @@
 {
   "name": "fairlease-trust-reconciliation",
   "version": "0.1.0",
-  "description": "Three-way reconciliation of a trust or escrow bank account: bank statement against the book register against the owner and tenant ledgers, with outstanding checks, deposits in transit, unrecorded bank items and negative ledgers.",
+  "description": "Fairlease Trust Reconciliation: three-way reconciliation of a trust or escrow bank account: bank statement against the book register against the owner and tenant ledgers, with outstanding checks, deposits in transit, unrecorded bank items and negative ledgers.",
   "author": {
     "name": "Kurt Francisco"
   },

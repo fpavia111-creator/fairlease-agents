@@ -54,7 +54,7 @@ Fairlease CAM Reconciliation demo (fictional shopping center, tenants and ledger
     L-102 Brightside Dental PC     7.5%  due      36025  billed     31900  tenant owes           4125  gross_up_applied, estimate_months_missing
     L-103 Cobalt Fitness Inc        20%  due   84333.33  billed     87600  credit to tenant   3266.67  pool_excluded, gross_up_applied
     L-104 Delta Phone Repair         3%  due      14410  billed     13800  tenant owes            610  gross_up_applied
-    L-105 Fairstay Grocers Ltd     50%  due   28333.34  billed     30000  credit to tenant   1666.66  gross_up_applied, expense_stop
+    L-105 Fairstay Grocers Ltd      50%  due   28333.34  billed     30000  credit to tenant   1666.66  gross_up_applied, expense_stop
     L-106 Fable Books             6.25%  due   27471.13  billed     24750  tenant owes        2721.13  gross_up_applied, cap_needs_data
 
 ▶ Explain Acme Bagels (cumulative 5% cap on controllable expenses)
@@ -63,7 +63,7 @@ Fairlease CAM Reconciliation demo (fictional shopping center, tenants and ledger
 
 ▶ Propose that GL 6150 belongs in a pool (waits for a person)
   status: executed  decision: allow
-  Stored MEM-29108cdfc89f as waiting. It changes nothing until a named person accepts it with cam_accept_learning (id "MEM-29108cdfc89f", decision "accept").
+  Stored MEM-49670c3e3612 as waiting. It changes nothing until a named person accepts it with cam_accept_learning (id "MEM-49670c3e3612", decision "accept").
 
 ▶ Write the worklist in German (--lang de)
   status: executed  decision: allow

@@ -1,7 +1,7 @@
 {
   "name": "fairlease-acquisition-diligence",
   "version": "0.1.0",
-  "description": "Reconciles a seller's rent roll with the trailing-twelve-month income statement before you buy or lend: rent roll against rent collected, occupancy, expired leases still billed, months missing or out of line, and NOI.",
+  "description": "Fairlease Acquisition Diligence: reconciles a seller's rent roll with the trailing-twelve-month income statement before you buy or lend: rent roll against rent collected, occupancy, expired leases still billed, months missing or out of line, and NOI.",
   "author": {
     "name": "Kurt Francisco"
   },

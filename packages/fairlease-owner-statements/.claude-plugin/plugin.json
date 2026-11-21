@@ -1,7 +1,7 @@
 {
   "name": "fairlease-owner-statements",
   "version": "0.1.0",
-  "description": "Checks owner statements before they go out: the math, beginning against last month's ending, reserves held, distributions made below the reserve, negative balances, and totals against the owner ledger; drafts contribution requests.",
+  "description": "Fairlease Owner Statements: checks owner statements before they go out: the math, beginning against last month's ending, reserves held, distributions made below the reserve, negative balances, and totals against the owner ledger; drafts contribution requests.",
   "author": {
     "name": "Kurt Francisco"
   },

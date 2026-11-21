@@ -1,7 +1,7 @@
 {
   "name": "fairlease-utility-billback",
   "version": "0.1.0",
-  "description": "Re-works RUBS utility billbacks from the bills and occupancy, by your own method, and finds over-recovery, vacant units billed, bills that spike, and charges that differ from the split.",
+  "description": "Fairlease Utility Billback: re-works RUBS utility billbacks from the bills and occupancy, by your own method, and finds over-recovery, vacant units billed, bills that spike, and charges that differ from the split.",
   "author": {
     "name": "Kurt Francisco"
   },
