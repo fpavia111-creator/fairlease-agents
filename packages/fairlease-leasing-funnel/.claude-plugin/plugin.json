@@ -1,7 +1,7 @@
 {
   "name": "fairlease-leasing-funnel",
   "version": "0.1.0",
-  "description": "Checks the leasing funnel from guest cards and lead exports: leads not answered or answered late, follow-ups due, approved applicants with no lease, stale and duplicate leads, and conversion and cost per lease by source; drafts follow-up messages for a person to send.",
+  "description": "Fairlease Leasing Funnel: checks the leasing funnel from guest cards and lead exports: leads not answered or answered late, follow-ups due, approved applicants with no lease, stale and duplicate leads, and conversion and cost per lease by source; drafts follow-up messages for a person to send.",
   "author": {
     "name": "Kurt Francisco"
   },

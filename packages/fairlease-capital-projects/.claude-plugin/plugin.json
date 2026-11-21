@@ -1,7 +1,7 @@
 {
   "name": "fairlease-capital-projects",
   "version": "0.1.0",
-  "description": "Tracks capital projects against budget, commitments, schedule and reserve balances, flags overruns, late and stalled projects, and drafts budget change requests for owners.",
+  "description": "Fairlease Capital Projects: tracks capital projects against budget, commitments, schedule and reserve balances, flags overruns, late and stalled projects, and drafts budget change requests for owners.",
   "author": {
     "name": "Kurt Francisco"
   },

@@ -51,7 +51,7 @@ Fairlease Percentage Rent demo (fictional shopping center) in <demo folder>
   status: executed  decision: allow
   3 lease(s) with percentage rent, lease year 2025: 2 owe 6367.5 in total after amounts billed; 1 to review (Fable Books). Percentage rent earned 24367.5. 1 sales row(s) matched no lease.
     L-101 Acme Bagels LLC        net sales       905850  breakpoint       844600  earned      3675  owes
-    L-105 Fairstay Grocers Ltd  net sales     31379500  breakpoint     30000000  earned   20692.5  owes
+    L-105 Fairstay Grocers Ltd   net sales     31379500  breakpoint     30000000  earned   20692.5  owes
     L-106 Fable Books            net sales       962360  breakpoint      1050000  earned         -  review
 
 ▶ Explain Fairstay Grocers (fixed breakpoint, monthly estimates billed, a late report)

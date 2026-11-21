@@ -1,7 +1,7 @@
 {
   "name": "fairlease-pms-migration",
   "version": "0.1.0",
-  "description": "Checks a property management system migration by comparing the old system's rent roll with the new one's at cutover: units missing or added, tenants, rents, deposits, balances, areas and lease dates that changed, and totals that do not tie; drafts a punch list for the implementation team. Go-live is a person's call.",
+  "description": "Fairlease PMS Migration: checks a property management system migration by comparing the old system's rent roll with the new one's at cutover: units missing or added, tenants, rents, deposits, balances, areas and lease dates that changed, and totals that do not tie; drafts a punch list for the implementation team. Go-live is a person's call.",
   "author": {
     "name": "Kurt Francisco"
   },

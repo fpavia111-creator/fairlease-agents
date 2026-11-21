@@ -1,7 +1,7 @@
 {
   "name": "fairlease-tenant-insurance",
   "version": "0.1.0",
-  "description": "Checks every tenant's insurance certificate against the limits, additional insured and dates their lease requires, and drafts requests for updated certificates.",
+  "description": "Fairlease Tenant Insurance: checks every tenant's insurance certificate against the limits, additional insured and dates their lease requires, and drafts requests for updated certificates.",
   "author": {
     "name": "Kurt Francisco"
   },

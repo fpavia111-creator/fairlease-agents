@@ -1,7 +1,7 @@
 {
   "name": "fairlease-unit-turns",
   "version": "0.1.0",
-  "description": "Tracks unit turns from move-out to make-ready to move-in: days against your target, cost by trade against your budget, tenant-chargeable items and the rent lost while the unit sits.",
+  "description": "Fairlease Unit Turns: tracks unit turns from move-out to make-ready to move-in: days against your target, cost by trade against your budget, tenant-chargeable items and the rent lost while the unit sits.",
   "author": {
     "name": "Kurt Francisco"
   },

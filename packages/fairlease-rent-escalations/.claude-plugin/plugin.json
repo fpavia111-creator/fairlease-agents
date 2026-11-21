@@ -1,7 +1,7 @@
 {
   "name": "fairlease-rent-escalations",
   "version": "0.1.0",
-  "description": "Checks rent billed against each lease's escalation schedule (fixed steps, percentages, amounts and CPI with floors and caps) and lists the increases coming up.",
+  "description": "Fairlease Rent Escalations: checks rent billed against each lease's escalation schedule (fixed steps, percentages, amounts and CPI with floors and caps) and lists the increases coming up.",
   "author": {
     "name": "Kurt Francisco"
   },

@@ -4,6 +4,7 @@
   "description": "Fairlease: 30 MCP agents for property management (rent rolls, leases, CAM, deposits, trust accounts and more).",
   "license": "MIT",
   "workspaces": [
+    "vendor/fair-agent-core",
     "packages/fairlease-core",
     "packages/*"
   ],

@@ -1,7 +1,7 @@
 {
   "name": "fairlease-percentage-rent",
   "version": "0.1.0",
-  "description": "Works out percentage rent from tenant sales reports (natural or fixed breakpoints, exclusions, partial years), flags late and missing reports and drafts the tenant statement.",
+  "description": "Fairlease Percentage Rent: works out percentage rent from tenant sales reports (natural or fixed breakpoints, exclusions, partial years), flags late and missing reports and drafts the tenant statement.",
   "author": {
     "name": "Kurt Francisco"
   },

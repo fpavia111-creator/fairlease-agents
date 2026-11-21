@@ -1,7 +1,7 @@
 {
   "name": "fairlease-short-term-rental-payouts",
   "version": "0.1.0",
-  "description": "Reconciles short-term rental payouts from Airbnb, Vrbo and other channels against your reservations and bank deposits: missing, short or duplicate payouts, channel fees and cleaning fees off your rates, nights that do not match, and payouts that never reached the bank; drafts payout inquiries.",
+  "description": "Fairlease Short Term Rental Payouts: reconciles short-term rental payouts from Airbnb, Vrbo and other channels against your reservations and bank deposits: missing, short or duplicate payouts, channel fees and cleaning fees off your rates, nights that do not match, and payouts that never reached the bank; drafts payout inquiries.",
   "author": {
     "name": "Kurt Francisco"
   },

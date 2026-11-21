@@ -1,7 +1,7 @@
 {
   "name": "fairlease-lease-abstracts",
   "version": "0.1.0",
-  "description": "Abstracts commercial lease text into the Fairlease leases format with a citation for every term, and checks existing abstracts against the lease text.",
+  "description": "Fairlease Lease Abstracts: abstracts commercial lease text into the Fairlease leases format with a citation for every term, and checks existing abstracts against the lease text.",
   "author": {
     "name": "Kurt Francisco"
   },
