@@ -40,7 +40,7 @@
     "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
     "directory": "packages/fairlease-rent-escalations"
   },
-  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-rent-escalations#readme",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/master/packages/fairlease-rent-escalations#readme",
   "bugs": {
     "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
   },

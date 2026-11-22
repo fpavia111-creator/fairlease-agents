@@ -40,7 +40,7 @@
     "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
     "directory": "packages/fairlease-lease-renewals"
   },
-  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-lease-renewals#readme",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/master/packages/fairlease-lease-renewals#readme",
   "bugs": {
     "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
   },

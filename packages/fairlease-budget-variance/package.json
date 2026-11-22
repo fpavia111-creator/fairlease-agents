@@ -40,7 +40,7 @@
     "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
     "directory": "packages/fairlease-budget-variance"
   },
-  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-budget-variance#readme",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/master/packages/fairlease-budget-variance#readme",
   "bugs": {
     "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
   },

@@ -40,7 +40,7 @@
     "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
     "directory": "packages/fairlease-acquisition-diligence"
   },
-  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-acquisition-diligence#readme",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/master/packages/fairlease-acquisition-diligence#readme",
   "bugs": {
     "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
   },

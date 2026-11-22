@@ -40,7 +40,7 @@
     "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
     "directory": "packages/fairlease-1099-filings"
   },
-  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/main/packages/fairlease-1099-filings#readme",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/master/packages/fairlease-1099-filings#readme",
   "bugs": {
     "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
   },
