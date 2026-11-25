@@ -1,7 +1,7 @@
 {
-  "name": "fairlease-1099-filings",
+  "name": "fairlease-tax-forms",
   "version": "0.1.0",
-  "mcpName": "io.github.fpavia111-creator/fairlease-1099-filings",
+  "mcpName": "io.github.fpavia111-creator/fairlease-tax-forms",
   "description": "Fairlease 1099 Filings: gets vendor and owner 1099s ready: totals each payee's payments for the tax year against the threshold you give, leaves out card payments, flags missing or malformed tax IDs, missing addresses, shared tax IDs and payees not in the directory, and drafts W-9 requests. Tax IDs are always masked.",
   "type": "module",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "fairlease-1099-filings": "bin/fairlease-1099-filings.js"
+    "fairlease-tax-forms": "bin/fairlease-tax-forms.js"
   },
   "files": [
     "src",
@@ -29,8 +29,8 @@
   ],
   "scripts": {
     "test": "node scripts/run-tests.cjs",
-    "demo": "node bin/fairlease-1099-filings.js demo",
-    "eval": "node bin/fairlease-1099-filings.js eval"
+    "demo": "node bin/fairlease-tax-forms.js demo",
+    "eval": "node bin/fairlease-tax-forms.js eval"
   },
   "dependencies": {
     "fairlease-core": "^0.1.0"
@@ -38,9 +38,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fpavia111-creator/fairlease-agents.git",
-    "directory": "packages/fairlease-1099-filings"
+    "directory": "packages/fairlease-tax-forms"
   },
-  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/master/packages/fairlease-1099-filings#readme",
+  "homepage": "https://github.com/fpavia111-creator/fairlease-agents/tree/master/packages/fairlease-tax-forms#readme",
   "bugs": {
     "url": "https://github.com/fpavia111-creator/fairlease-agents/issues"
   },

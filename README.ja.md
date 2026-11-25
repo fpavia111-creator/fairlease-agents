@@ -56,7 +56,7 @@ npm に公開された後は `npx -y fairlease-rent-roll-audit demo` でも同�
 | [`fairlease-management-fees`](packages/fairlease-management-fees) | 管理料・仲介料・上乗せ手数料を各管理委託契約から再計算 | オーナーへの返金計上、手数料設定の変更 |
 | [`fairlease-cam-reconciliation`](packages/fairlease-cam-reconciliation) | 共益費（CAM）の精算: 費用区分、按分率、稼働率補正、上限、基準年、管理手数料 | 請求の計上、システムの変更 |
 | [`fairlease-budget-variance`](packages/fairlease-budget-variance) | 予算と実績の比較、契約上説明が必要な差異、年末予測、オーナー向けメモの下書き | 予算の変更、総勘定元帳への記帳 |
-| [`fairlease-1099-filings`](packages/fairlease-1099-filings) | 米国の 1099 の準備: 指定した基準額に対する受取人ごとの合計、納税者番号や住所の不足。納税者番号は常にマスク | 1099 の提出、番号照合の申請、源泉徴収の開始 |
+| [`fairlease-tax-forms`](packages/fairlease-tax-forms) | 米国の 1099 の準備: 指定した基準額に対する受取人ごとの合計、納税者番号や住所の不足。納税者番号は常にマスク | 1099 の提出、番号照合の申請、源泉徴収の開始 |
 | [`fairlease-hoa-accounts`](packages/fairlease-hoa-accounts) | 管理組合（HOA・マンション）の区分所有者口座を、お客様の管理費・回収方針と照合。規約違反を通知手順と照合 | 先取特権の登記、制裁金の計上 |
 | [`fairlease-property-taxes`](packages/fairlease-property-taxes) | 固定資産税の評価、納期、お客様が入力した不服申立ての期限。納期のカレンダー | 不服申立ての提出、税金の支払い |
 

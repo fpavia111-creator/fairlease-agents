@@ -16,4 +16,5 @@ Added: eight hand-written domain tests (`test/domain.test.js`), edge-case fixtur
 
 ## 0.1.0 (unreleased)
 
+- Renamed from `fairlease-1099-filings`, because npm does not accept that name. What the agent does, its tools and its report files are unchanged.
 - First version (Fairlease ver 1).

@@ -56,7 +56,7 @@ node packages/fairlease-trust-reconciliation/bin/fairlease-trust-reconciliation.
 | [`fairlease-management-fees`](packages/fairlease-management-fees) | 按每份委托管理合同重算管理费、招租费和加价 | 记入业主贷项或修改费用设置 |
 | [`fairlease-cam-reconciliation`](packages/fairlease-cam-reconciliation) | 公共区域费用（CAM）结算：费用池、分摊比例、出租率调整、上限、基准年、管理费 | 记入费用或修改系统 |
 | [`fairlease-budget-variance`](packages/fairlease-budget-variance) | 预算与实际对比，合同要求说明的差异，年末预测，给业主的说明草稿 | 修改预算或过账到总账 |
-| [`fairlease-1099-filings`](packages/fairlease-1099-filings) | 美国 1099 表准备：按您给出的门槛汇总每位收款人，缺失或格式错误的税号与地址；税号始终打码 | 申报 1099、提交税号比对或开始预扣 |
+| [`fairlease-tax-forms`](packages/fairlease-tax-forms) | 美国 1099 表准备：按您给出的门槛汇总每位收款人，缺失或格式错误的税号与地址；税号始终打码 | 申报 1099、提交税号比对或开始预扣 |
 | [`fairlease-hoa-accounts`](packages/fairlease-hoa-accounts) | 业主协会（HOA、共管公寓）业主账户与您的收费和催收政策核对；违规事项与您的通知步骤核对 | 登记留置权或记入罚款 |
 | [`fairlease-property-taxes`](packages/fairlease-property-taxes) | 房产税评估、分期缴款和您录入的申诉截止日；到期日历 | 提起申诉或缴税 |
 

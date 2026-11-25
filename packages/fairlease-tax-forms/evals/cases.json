@@ -1,5 +1,5 @@
 {
-  "suite": "fairlease-1099-filings",
+  "suite": "fairlease-tax-forms",
   "root": "..",
   "data_note": "Fictional vendors, owners and payments in ../fixtures. Deterministic checks; no model is called.",
   "cases": [
