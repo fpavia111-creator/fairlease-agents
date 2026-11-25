@@ -56,7 +56,7 @@ Once the packages are on npm, the same works as `npx -y fairlease-rent-roll-audi
 | [`fairlease-management-fees`](packages/fairlease-management-fees) | Management, leasing and markup fees recomputed from each management agreement | Post owner credits or change fee setup |
 | [`fairlease-cam-reconciliation`](packages/fairlease-cam-reconciliation) | CAM and operating expense reconciliation: pools, shares, gross-ups, caps, base years, admin fees | Post charges or change the system |
 | [`fairlease-budget-variance`](packages/fairlease-budget-variance) | Budget against actuals, variances your agreement says must be explained, year-end forecast, owner memo drafted | Change the budget or post to the ledger |
-| [`fairlease-1099-filings`](packages/fairlease-1099-filings) | 1099 readiness: payee totals against the threshold you give, tax ID and address gaps; tax IDs always masked | File 1099s, submit TIN matching or start backup withholding |
+| [`fairlease-tax-forms`](packages/fairlease-tax-forms) | 1099 readiness: payee totals against the threshold you give, tax ID and address gaps; tax IDs always masked | File 1099s, submit TIN matching or start backup withholding |
 | [`fairlease-hoa-accounts`](packages/fairlease-hoa-accounts) | HOA and condo owner accounts against your assessment and collection policy; violations against your notice steps | Record liens or post fines |
 | [`fairlease-property-taxes`](packages/fairlease-property-taxes) | Property tax assessments, installments and the appeal deadlines you enter; a calendar of due dates | File appeals or pay taxes |
 

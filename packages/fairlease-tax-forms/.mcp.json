@@ -1,10 +1,10 @@
 {
   "mcpServers": {
-    "fairlease-1099-filings": {
+    "fairlease-tax-forms": {
       "command": "npx",
       "args": [
         "-y",
-        "fairlease-1099-filings@0.1.0",
+        "fairlease-tax-forms@0.1.0",
         "mcp"
       ]
     }

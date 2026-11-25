@@ -1,12 +1,12 @@
-# Fairlease 1099 Filings (`fairlease-1099-filings`)
+# Fairlease 1099 Filings (`fairlease-tax-forms`)
 
 Gets year-end 1099s for vendors and owners ready. It totals each payee's payments for the tax year, leaves out the payment methods you exclude (card and payment apps by default), and compares each total with **the threshold you give it**. It flags what would stop a form going out: a missing or malformed tax ID, no mailing address, no W-9, several directory records on one tax ID, and payees who are not in the directory at all. It drafts W-9 requests. Tax IDs are always masked. It never files anything.
 
 MIT · Node 20 or newer · local files only · no credentials · built on [`fairlease-core`](../fairlease-core)
 
 ```bash
-npx -y fairlease-1099-filings demo
-npx -y fairlease-1099-filings mcp --root ./year-end
+npx -y fairlease-tax-forms demo
+npx -y fairlease-tax-forms mcp --root ./year-end
 ```
 
 ## What it checks
@@ -32,7 +32,7 @@ Status is `fix`, `confirm`, `ready`, `below_threshold` or `excluded_only`. The s
 
 ## A demo run
 
-`npx -y fairlease-1099-filings demo` runs the agent on the fictional files in [`fixtures/`](fixtures) in a temporary folder. Captured output:
+`npx -y fairlease-tax-forms demo` runs the agent on the fictional files in [`fixtures/`](fixtures) in a temporary folder. Captured output:
 
 ```text
 Fairlease 1099 Filings demo (fictional payees) in <demo folder>
@@ -139,7 +139,7 @@ Where a layout says "checked", its column names were compared with the vendor's 
 
 ### Files from other countries
 
-A German export in Windows-1252 with semicolons, `1.234,56` and `03.11.2026`, or a Japanese one in Shift_JIS with `2026/11/03`, is read the same way as the English file. The repository's `npm run intl` runs this agent's eval cases again on German, French, Spanish, Portuguese, Italian, Japanese, Chinese and Korean versions of the fixture files and requires the same results. Columns named differently? Run `npx fairlease-1099-filings inspect <file>` (names and shapes only, never values) and name them in `keystone-sources.json`:
+A German export in Windows-1252 with semicolons, `1.234,56` and `03.11.2026`, or a Japanese one in Shift_JIS with `2026/11/03`, is read the same way as the English file. The repository's `npm run intl` runs this agent's eval cases again on German, French, Spanish, Portuguese, Italian, Japanese, Chinese and Korean versions of the fixture files and requires the same results. Columns named differently? Run `npx fairlease-tax-forms inspect <file>` (names and shapes only, never values) and name them in `keystone-sources.json`:
 
 ```json
 { "files": { "exports/rent-roll.csv": { "columns": { "unit": "Einheit" }, "date_order": "dmy" } } }
@@ -150,8 +150,8 @@ A German export in Windows-1252 with semicolons, `1.234,56` and `03.11.2026`, or
 Node 20 or newer. No other dependencies.
 
 ```bash
-npx -y fairlease-1099-filings demo
-npx -y fairlease-1099-filings mcp --root /path/to/your/files
+npx -y fairlease-tax-forms demo
+npx -y fairlease-tax-forms mcp --root /path/to/your/files
 ```
 
 Claude Desktop, Cursor and other MCP hosts:
@@ -159,11 +159,11 @@ Claude Desktop, Cursor and other MCP hosts:
 ```json
 {
   "mcpServers": {
-    "fairlease-1099-filings": {
+    "fairlease-tax-forms": {
       "command": "npx",
       "args": [
         "-y",
-        "fairlease-1099-filings",
+        "fairlease-tax-forms",
         "mcp",
         "--root",
         "/path/to/your/files"
@@ -173,23 +173,23 @@ Claude Desktop, Cursor and other MCP hosts:
 }
 ```
 
-Claude Code: `claude mcp add fairlease-1099-filings -- npx -y fairlease-1099-filings mcp --root .`, or install the `fairlease-1099-filings` plugin from this repository's marketplace.
+Claude Code: `claude mcp add fairlease-tax-forms -- npx -y fairlease-tax-forms mcp --root .`, or install the `fairlease-tax-forms` plugin from this repository's marketplace.
 
 ## Modes and approvals
 
 - **Review** (`--mode review`): reads and reports only.
-- **Assist** (default): the policy above. A tool that asks returns an `approval_id`; a person approves it once with `fairlease-1099-filings approve <id> --as "Your Name"` (or on the local approvals page, `fairlease-1099-filings approvals`), and the same call is repeated.
-- **Auto** (`--mode auto --auto <tool,...>`): opt-in per tool, with step caps and a kill switch (`fairlease-1099-filings kill`). Paying, sending, posting to a ledger or a live system and accepting a learned fact stay **one named click even in Auto**; an approval is tied to the sha256 of the reviewed draft, so a changed draft needs a new click.
+- **Assist** (default): the policy above. A tool that asks returns an `approval_id`; a person approves it once with `fairlease-tax-forms approve <id> --as "Your Name"` (or on the local approvals page, `fairlease-tax-forms approvals`), and the same call is repeated.
+- **Auto** (`--mode auto --auto <tool,...>`): opt-in per tool, with step caps and a kill switch (`fairlease-tax-forms kill`). Paying, sending, posting to a ledger or a live system and accepting a learned fact stay **one named click even in Auto**; an approval is tied to the sha256 of the reviewed draft, so a changed draft needs a new click.
 
 ## CLI
 
 ```bash
-fairlease-1099-filings tools                 # every tool, its policy and arguments
-fairlease-1099-filings sources               # the columns each input is read from
-fairlease-1099-filings inspect <file>        # how a file would be read (names and shapes, never values)
-fairlease-1099-filings call filings_check '{"payments":"<payments>","tax_year":"<tax_year>","threshold":"<threshold>"}'
-fairlease-1099-filings eval                  # the private eval cases on the fictional fixtures
-fairlease-1099-filings demo
+fairlease-tax-forms tools                 # every tool, its policy and arguments
+fairlease-tax-forms sources               # the columns each input is read from
+fairlease-tax-forms inspect <file>        # how a file would be read (names and shapes, never values)
+fairlease-tax-forms call filings_check '{"payments":"<payments>","tax_year":"<tax_year>","threshold":"<threshold>"}'
+fairlease-tax-forms eval                  # the private eval cases on the fictional fixtures
+fairlease-tax-forms demo
 ```
 
 ## Audit log and data

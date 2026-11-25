@@ -46,7 +46,7 @@ const refused = refusedTools([
 ]);
 
 export const manifest = defineManifest({
-  name: 'fairlease-1099-filings', version: pkg.version,
+  name: 'fairlease-tax-forms', version: pkg.version,
   description: 'Gets vendor and owner 1099s ready: totals each payee\'s payments for the tax year against the threshold you give, leaves out card payments, flags missing or malformed tax IDs, missing addresses, shared tax IDs and payees not in the directory, and drafts W-9 requests. Tax IDs are always masked. Filing is a person\'s job.',
   model: MODEL_PIN,
   caps: { maxSteps: 60, maxSpendUsd: 0 },
@@ -58,7 +58,7 @@ export const manifest = defineManifest({
     name: 'year_end_1099', title: 'Get 1099s ready',
     description: 'Walks the host model through a year-end 1099 readiness check with Fairlease 1099 Filings.',
     arguments: [{ name: 'payments', description: 'Payment file', required: true }, { name: 'vendors', description: 'Vendor directory', required: false }, { name: 'tax_year', description: 'Tax year', required: true }, { name: 'threshold', description: 'Threshold from the tax preparer', required: true }],
-    text: `You are helping a property manager get 1099s ready with fairlease-1099-filings. Payments: {{payments}}. Directory: {{vendors}}. Tax year {{tax_year}}, threshold {{threshold}}.
+    text: `You are helping a property manager get 1099s ready with fairlease-tax-forms. Payments: {{payments}}. Directory: {{vendors}}. Tax year {{tax_year}}, threshold {{threshold}}.
 
 Rules: Fairlease 1099 Filings never files, never submits tax IDs anywhere and never sends; file_1099, tin_match_submit, backup_withholding_start and email_send are blocked. Never print a full tax ID. Do not say a payee must or need not get a 1099; say what the files show and that the tax preparer confirms. If the person has not given a threshold, ask for the one their tax preparer uses; do not supply one.
 

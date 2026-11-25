@@ -56,7 +56,7 @@ node packages/fairlease-trust-reconciliation/bin/fairlease-trust-reconciliation.
 | [`fairlease-management-fees`](packages/fairlease-management-fees) | 관리 수수료, 임대 수수료, 가산 수수료를 각 관리 위탁 계약으로 재계산 | 소유주 대변 기록, 수수료 설정 변경 |
 | [`fairlease-cam-reconciliation`](packages/fairlease-cam-reconciliation) | 공용 관리비(CAM) 정산: 비용 풀, 분담 비율, 점유율 보정, 상한, 기준 연도, 관리 수수료 | 청구 기록, 시스템 변경 |
 | [`fairlease-budget-variance`](packages/fairlease-budget-variance) | 예산 대비 실적, 계약상 설명해야 하는 차이, 연말 전망, 소유주용 메모 초안 | 예산 변경, 총계정원장 기장 |
-| [`fairlease-1099-filings`](packages/fairlease-1099-filings) | 미국 1099 양식 준비: 사용자가 정한 기준액 대비 수취인별 합계, 누락되거나 형식이 틀린 납세자 번호와 주소. 납세자 번호는 항상 가림 | 1099 제출, 납세자 번호 조회 신청, 원천징수 시작 |
+| [`fairlease-tax-forms`](packages/fairlease-tax-forms) | 미국 1099 양식 준비: 사용자가 정한 기준액 대비 수취인별 합계, 누락되거나 형식이 틀린 납세자 번호와 주소. 납세자 번호는 항상 가림 | 1099 제출, 납세자 번호 조회 신청, 원천징수 시작 |
 | [`fairlease-hoa-accounts`](packages/fairlease-hoa-accounts) | 관리단(HOA, 집합건물) 소유자 계정을 사용자 부과·징수 정책과 대조. 위반 사항을 통지 단계와 대조 | 유치권 등기, 과태료 부과 |
 | [`fairlease-property-taxes`](packages/fairlease-property-taxes) | 재산세 평가, 분납, 사용자가 입력한 이의신청 기한. 납부 일정 달력 | 이의신청 제출, 세금 납부 |
 

@@ -8,18 +8,6 @@
   },
   "plugins": [
     {
-      "name": "fairlease-1099-filings",
-      "source": "./packages/fairlease-1099-filings",
-      "description": "Fairlease 1099 Filings: gets vendor and owner 1099s ready: totals each payee's payments for the tax year against the threshold you give, leaves out card payments, flags missing or malformed tax IDs, missing addresses, shared tax IDs and payees not in the directory, and drafts W-9 requests. Tax IDs are always masked.",
-      "version": "0.1.0",
-      "category": "property-management",
-      "keywords": [
-        "property-management",
-        "real-estate",
-        "filings"
-      ]
-    },
-    {
       "name": "fairlease-acquisition-diligence",
       "source": "./packages/fairlease-acquisition-diligence",
       "description": "Fairlease Acquisition Diligence: reconciles a seller's rent roll with the trailing-twelve-month income statement before you buy or lend: rent roll against rent collected, occupancy, expired leases still billed, months missing or out of line, and NOI.",
@@ -303,6 +291,18 @@
         "property-management",
         "real-estate",
         "payouts"
+      ]
+    },
+    {
+      "name": "fairlease-tax-forms",
+      "source": "./packages/fairlease-tax-forms",
+      "description": "Fairlease 1099 Filings: gets vendor and owner 1099s ready: totals each payee's payments for the tax year against the threshold you give, leaves out card payments, flags missing or malformed tax IDs, missing addresses, shared tax IDs and payees not in the directory, and drafts W-9 requests. Tax IDs are always masked.",
+      "version": "0.1.0",
+      "category": "property-management",
+      "keywords": [
+        "property-management",
+        "real-estate",
+        "filings"
       ]
     },
     {

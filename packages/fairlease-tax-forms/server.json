@@ -1,19 +1,19 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.fpavia111-creator/fairlease-1099-filings",
+  "name": "io.github.fpavia111-creator/fairlease-tax-forms",
   "title": "Fairlease 1099 Filings",
   "description": "Fairlease 1099 Filings: gets vendor and owner 1099s ready: totals each payee's payments for the tax year…",
   "version": "0.1.0",
   "repository": {
     "url": "https://github.com/fpavia111-creator/fairlease-agents",
     "source": "github",
-    "subfolder": "packages/fairlease-1099-filings"
+    "subfolder": "packages/fairlease-tax-forms"
   },
   "websiteUrl": "https://fair-agents.com/fairlease.html",
   "packages": [
     {
       "registryType": "npm",
-      "identifier": "fairlease-1099-filings",
+      "identifier": "fairlease-tax-forms",
       "version": "0.1.0",
       "transport": {
         "type": "stdio"
