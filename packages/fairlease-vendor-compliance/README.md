@@ -1,6 +1,6 @@
 # Fairlease Vendor Compliance (`fairlease-vendor-compliance`)
 
-Checks every vendor against **your** requirements before the next payment goes out: liability, workers' comp and auto insurance, licence and tax ID, with extra requirements per trade and exemptions per vendor. With a payments file it shows money already paid to a vendor while something was expired or missing. It drafts requests for updated certificates. It never pays, holds a payment or changes a vendor record. Tax IDs are masked in every result.
+Checks every vendor against **your** requirements before the next payment goes out: liability, workers' comp and auto insurance, license and tax ID, with extra requirements per trade and exemptions per vendor. With a payments file it shows money already paid to a vendor while something was expired or missing. It drafts requests for updated certificates. It never pays, holds a payment or changes a vendor record. Tax IDs are masked in every result.
 
 MIT · Node 20 or newer · local files only · no credentials · built on [`fairlease-core`](../fairlease-core)
 

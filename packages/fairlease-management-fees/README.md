@@ -19,7 +19,7 @@ npx -y fairlease-management-fees mcp --root ./fees
 | `markup_over`, `markup_not_in_agreement` | Markup against `maintenance_markup_pct` of maintenance bills (taxes, insurance, utility bills, payroll and fees are not marked up) |
 | `fee_not_in_agreement`, `other_fee_over` | A fee line the agreement's `other_fees` does not list, or above its amount |
 
-The fee base is what was actually collected: a bounced payment (a negative receipt, or an NSF or returned-payment line) comes off it. Bank, permit, court, licence and association fees are costs passed through to the owner, not fees of the manager, and are left alone. Fees are recognised by their wording in nine languages (management fee, Verwaltungsgebühr, honoraires de gestion, 管理手数料…). Owners in the ledger with no agreement entry are listed, never guessed.
+The fee base is what was actually collected: a bounced payment (a negative receipt, or an NSF or returned-payment line) comes off it. Bank, permit, court, license and association fees are costs passed through to the owner, not fees of the manager, and are left alone. Fees are recognised by their wording in nine languages (management fee, Verwaltungsgebühr, honoraires de gestion, 管理手数料…). Owners in the ledger with no agreement entry are listed, never guessed.
 
 
 <!-- generated:start -->
