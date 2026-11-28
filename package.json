@@ -19,7 +19,9 @@
     "plugin:check": "node scripts/plugin-files.mjs --check",
     "mcp:check": "node scripts/mcp-conformance.mjs",
     "intl": "node scripts/intl-check.mjs",
-    "readme:check": "node scripts/readme-sections.mjs --check"
+    "readme:check": "node scripts/readme-sections.mjs --check",
+    "skills": "node scripts/skill-files.mjs",
+    "skills:check": "node scripts/skill-files.mjs --check"
   },
   "engines": {
     "node": ">=20"

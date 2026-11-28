@@ -2,7 +2,7 @@
 
 Thirty small MCP agents for property management, aimed at commercial and mid-size residential operators. Each one owns **one job**, such as checking a rent roll against the leases, reconciling a trust account, recomputing CAM or chasing tenant insurance certificates, and cannot act outside it. They read the files you already export from AppFolio, Yardi, Buildium, Rent Manager and other systems, write reports on your machine, never move money or change a live system, and wait for a named person before any letter or notice goes out.
 
-MIT licence · Node 20 or newer · local files only · no credentials · no dependencies
+MIT license · Node 20 or newer · local files only · no credentials · no dependencies
 
 Also in: [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [Italiano](README.it.md) · [日本語](README.ja.md) · [简体中文](README.zh-Hans.md) · [한국어](README.ko.md) (translated by Claude; native review pending)
 
@@ -68,7 +68,7 @@ Once the packages are on npm, the same works as `npx -y fairlease-rent-roll-audi
 | [`fairlease-unit-turns`](packages/fairlease-unit-turns) | Unit turns from move-out to move-in: days, cost by trade, chargeable items, rent lost | Dispatch vendors or post charges |
 | [`fairlease-unit-inspections`](packages/fairlease-unit-inspections) | Move-out against move-in item by item, overdue inspections, poor items with no work order | Post charges or dispatch vendors |
 | [`fairlease-capital-projects`](packages/fairlease-capital-projects) | Capital projects against budget, commitments, schedule and reserves | Approve change orders or invoices |
-| [`fairlease-vendor-compliance`](packages/fairlease-vendor-compliance) | Vendor insurance, licence and tax form against your requirements; payments made while out of compliance | Approve invoices or change vendor status |
+| [`fairlease-vendor-compliance`](packages/fairlease-vendor-compliance) | Vendor insurance, license and tax form against your requirements; payments made while out of compliance | Approve invoices or change vendor status |
 
 ## How they stay safe
 
@@ -105,7 +105,7 @@ npm run bench                  # timings on 1,000 and 10,000 rows
 npm run plugin:check           # plugin files match the packages
 npm run intl                   # every eval again on files from eight other markets
 npm run mcp:check              # official MCP SDK client against every agent (npm i --no-save @modelcontextprotocol/sdk ajv ajv-formats first)
-npm run release:check:offline  # pack contents, licences, docs and versions
+npm run release:check:offline  # pack contents, licenses, docs and versions
 node scripts/new-agent.mjs <mineral>-of-<word> "<description>" kw1,kw2
 ```
 
